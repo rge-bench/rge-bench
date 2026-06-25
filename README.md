@@ -1,5 +1,7 @@
 # RGE-Bench external reproduction kit (v0)
 
+[![DOI](https://zenodo.org/badge/1280018754.svg)](https://doi.org/10.5281/zenodo.20842502)
+
 A self-contained, neutral conformance kit for **reviewer-grade evidence for agentic actions**: can a third
 party, from records + coverage + source-class alone, recompute and honestly conclude? It scores the
 **reviewability of the evidence**, not agent performance, safety, or compliance.
@@ -85,6 +87,9 @@ over the **canonical JSON of the `vectors` array** (`json.dumps(doc["vectors"], 
 separators=(",", ":"))` encoded UTF-8), NOT the SHA of the `vectors.json` file bytes (which differs).
 Recompute it that exact way to match. Snapshot of the canonical RGE-Bench v0 vector set; the digest pins
 it, so an external reproduction is over the same bytes.
+
+Zenodo archive: concept DOI `10.5281/zenodo.20842502`; v0.1.1 version DOI
+`10.5281/zenodo.20842503`.
 
 ## License
 
