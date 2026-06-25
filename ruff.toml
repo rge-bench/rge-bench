@@ -1,0 +1,2 @@
+# Lint/format config for RGE-Bench v0. line-length 100 matches the sibling lab experiments.
+line-length = 100

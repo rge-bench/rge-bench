@@ -1,0 +1,45 @@
+{
+  "axes": [
+    "format_equivalence",
+    "incomplete_visibility",
+    "recompute",
+    "source_class_ceiling",
+    "sufficiency",
+    "tamper_fail_closed"
+  ],
+  "matrix": {
+    "ref_example": {
+      "format_equivalence": {
+        "reproduced": 3,
+        "status": "pass",
+        "total": 3
+      },
+      "incomplete_visibility": {
+        "reproduced": 6,
+        "status": "pass",
+        "total": 6
+      },
+      "recompute": {
+        "reproduced": 7,
+        "status": "pass",
+        "total": 7
+      },
+      "source_class_ceiling": {
+        "reproduced": 5,
+        "status": "pass",
+        "total": 5
+      },
+      "sufficiency": {
+        "reproduced": 6,
+        "status": "pass",
+        "total": 6
+      },
+      "tamper_fail_closed": {
+        "reproduced": 5,
+        "status": "pass",
+        "total": 5
+      }
+    }
+  },
+  "vectors_digest": "sha256:26bff719142c31aa5a5cb2ebe621d1354961a3ac8a0cc77d7e79ad5eeb5d706f"
+}
