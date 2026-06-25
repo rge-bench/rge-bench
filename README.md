@@ -31,7 +31,7 @@ reproduction is independent.
 
 ## Vector format
 
-```
+```json
 { "vector_id", "axis", "property", "inputs", "expected", "non_claims" }
 ```
 `expected` is the outcome a correct reviewer must reach from `inputs` alone. v0 has 32 vectors across the

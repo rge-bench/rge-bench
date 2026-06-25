@@ -56,7 +56,7 @@ def _recompute(inp):
 
 def _format_equivalence(inp):
     # envelope shape is metadata; equivalence is over semantic fields, normalized across shapes
-    return "equivalent" if inp["a"].get("semantic") == inp["b"].get("semantic") else "distinct"
+    return "equivalent" if inp.get("a", {}).get("semantic") == inp.get("b", {}).get("semantic") else "distinct"
 
 
 def _tamper_fail_closed(inp):
