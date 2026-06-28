@@ -15,6 +15,8 @@ vectors from **candidate** to **conformance**. The kit needs nothing outside thi
 - `checker.py`: the commodity scorer, per-axis pass/partial/fail, **no aggregate score**.
 - `ref_example.py`: a clean-room worked example implementation.
 - `run.sh`: example impl -> checker.
+- `PROFILE-MAPPING.md`: how the axes can anchor the evidence-reviewability layer under a lifecycle
+  profile without replacing that profile.
 
 ## Reproduce in one contract
 
