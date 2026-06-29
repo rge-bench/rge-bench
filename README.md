@@ -9,6 +9,13 @@ A self-contained, neutral conformance kit for **reviewer-grade evidence for agen
 party, from records + coverage + source-class alone, recompute and honestly conclude? It scores the
 **reviewability of the evidence**, not agent performance, safety, or compliance.
 
+It is a **runnable conformance fixture, not a general theory of truth**: content-addressed vectors plus a commodity
+checker that grades **per axis, never a single scalar cleanliness score**. The axes encode what an honest
+conclusion is allowed to rest on, so **the source class and the coverage of a record bound what can be
+concluded from it** (an unobserved surface reads as incomplete, never clean; integrity fails closed). And it
+stays **candidate, not conformance, until a different author or organisation reproduces the vectors from
+inputs alone**. You run it rather than take it on trust.
+
 This kit exists so a **different author or organisation** can implement the spec and reproduce the vectors
 independently. Two independent, interoperable implementations are the RFC bar for spec maturity; an
 external-party reproduction (a different author/org, not the kit's author) is the step that graduates these
@@ -92,7 +99,8 @@ Neutrality here rests on what this repository demonstrably enforces, not on a cl
 
 Measures the **reviewability of evidence**, not agent safety, correctness, or compliance. A passing vector
 means "this evidence is reviewer-gradeable on this axis", never "the agent is safe / governed / compliant".
-No scalar winner. Candidate, not conformance, until an external party reproduces the vectors.
+No scalar winner. Candidate, not conformance, until an external party reproduces the vectors. Every claim in
+this kit is something you recompute from the bytes, not something you take on the kit's word.
 
 ## Provenance
 
