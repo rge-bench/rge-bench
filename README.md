@@ -1,6 +1,9 @@
 # RGE-Bench external reproduction kit (v0)
 
 [![DOI](https://zenodo.org/badge/1280018754.svg)](https://doi.org/10.5281/zenodo.20842502)
+[![CI](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml)
+![Code license: Apache-2.0](https://img.shields.io/badge/code%20license-Apache--2.0-blue)
+![Vectors and docs license: CC-BY-4.0](https://img.shields.io/badge/vectors%20%2B%20docs-CC--BY--4.0-green)
 
 A self-contained, neutral conformance kit for **reviewer-grade evidence for agentic actions**: can a third
 party, from records + coverage + source-class alone, recompute and honestly conclude? It scores the
@@ -95,7 +98,13 @@ Zenodo archive: concept DOI `10.5281/zenodo.20842502`; v0.1.1 version DOI
 
 ## License
 
-Code (`checker.py`, `ref_example.py`, `run.sh`): Apache-2.0. Vectors, spec, and docs (`vectors.json`, this
-README): CC-BY-4.0. Copyright 2026 RGE-Bench authors. Full canonical texts in `LICENSES/`; see
-`LICENSE`. CC-BY-4.0 reuse requires attribution to RGE-Bench. Authored by the Assay project lab; licensed as
-an RGE-Bench artifact.
+RGE-Bench uses an explicit dual-license layout, so GitHub may show the repository license as `Other`.
+That is expected; the intended split is:
+
+| material | license |
+| --- | --- |
+| Code (`checker.py`, `ref_example.py`, `run.sh`, CI helpers) | Apache-2.0 |
+| Vectors, spec, and docs (`vectors.json`, `README.md`, `PROFILE-MAPPING.md`) | CC-BY-4.0 |
+
+Copyright 2026 RGE-Bench authors. Full canonical texts live in `LICENSES/`; see `LICENSE` for the
+human-readable split. CC-BY-4.0 reuse requires attribution to RGE-Bench.
