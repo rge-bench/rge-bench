@@ -1,20 +1,39 @@
 {
   "axes": [
+    "delegated_scope",
     "format_equivalence",
+    "hard_soft_digest",
     "incomplete_visibility",
+    "mcp_description_code",
     "recompute",
+    "retained_replay",
     "source_class_ceiling",
     "sufficiency",
     "tamper_fail_closed"
   ],
   "matrix": {
     "ref_example": {
+      "delegated_scope": {
+        "reproduced": 6,
+        "status": "pass",
+        "total": 6
+      },
       "format_equivalence": {
         "reproduced": 3,
         "status": "pass",
         "total": 3
       },
+      "hard_soft_digest": {
+        "reproduced": 5,
+        "status": "pass",
+        "total": 5
+      },
       "incomplete_visibility": {
+        "reproduced": 6,
+        "status": "pass",
+        "total": 6
+      },
+      "mcp_description_code": {
         "reproduced": 6,
         "status": "pass",
         "total": 6
@@ -23,6 +42,11 @@
         "reproduced": 7,
         "status": "pass",
         "total": 7
+      },
+      "retained_replay": {
+        "reproduced": 6,
+        "status": "pass",
+        "total": 6
       },
       "source_class_ceiling": {
         "reproduced": 5,
@@ -41,5 +65,5 @@
       }
     }
   },
-  "vectors_digest": "sha256:26bff719142c31aa5a5cb2ebe621d1354961a3ac8a0cc77d7e79ad5eeb5d706f"
+  "vectors_digest": "sha256:575fe0769153c9f366fa7711c0c4243b6350cb54d5aa36b30459dad91dc67881"
 }

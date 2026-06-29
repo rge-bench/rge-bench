@@ -1,0 +1,31 @@
+{
+  "bench": "RGE-Bench",
+  "version": "v0",
+  "spec_owner": "RGE-Bench authors",
+  "vectors_file": "vectors.json",
+  "vectors_digest": "sha256:575fe0769153c9f366fa7711c0c4243b6350cb54d5aa36b30459dad91dc67881",
+  "digest_method": "sha256 over canonical JSON of the `vectors` array: json.dumps(doc['vectors'], sort_keys=True, separators=(',', ':')) encoded utf-8 (NOT the SHA of the vectors.json file bytes)",
+  "vector_count": 55,
+  "axes": [
+    "delegated_scope",
+    "format_equivalence",
+    "hard_soft_digest",
+    "incomplete_visibility",
+    "mcp_description_code",
+    "recompute",
+    "retained_replay",
+    "source_class_ceiling",
+    "sufficiency",
+    "tamper_fail_closed"
+  ],
+  "families": {
+    "base": "minimal vectors that define each axis",
+    "ca_": "coding-agent vectors that exercise each axis on file/command/tool/network/pack evidence"
+  },
+  "license": {
+    "code": "Apache-2.0",
+    "vectors_and_docs": "CC-BY-4.0"
+  },
+  "maturity": "candidate",
+  "non_claims": "This manifest attests the provenance and content-address of the spec-owned vector SET only. It is NOT a claim about any agent's behavior, safety, or compliance, and NOT an external-party reproduction. The vectors stay 'candidate' until a different author or organisation reproduces them from inputs alone. The vectors are spec-owned and independently producible: any program that emits the same canonical bytes yields the same digest, so no single generator is the required path."
+}
