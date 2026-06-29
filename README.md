@@ -39,10 +39,11 @@ reproduction is independent.
 ```json
 { "vector_id", "axis", "property", "inputs", "expected", "non_claims" }
 ```
-`expected` is the outcome a correct reviewer must reach from `inputs` alone. v0 has 32 vectors across the
-six axes (a `base` family that defines each axis minimally, and a `ca_*` coding-agent family).
+`expected` is the outcome a correct reviewer must reach from `inputs` alone. v0 has 55 vectors across the
+ten axes (a `base` family that defines each axis minimally, and a `ca_*` coding-agent family). The version
+stays `v0` until an external party reproduces the vectors; the count growing does not make it `v1`.
 
-## Axes (six; literature-anchored, with the rule and the outcome vocabulary)
+## Axes (ten; literature-anchored, with the rule and the outcome vocabulary)
 
 | axis | rule (recompute from `inputs`) | outcomes | anchor |
 | --- | --- | --- | --- |
@@ -52,6 +53,10 @@ six axes (a `base` family that defines each axis minimally, and a `ca_*` coding-
 | `format_equivalence` | `equivalent` iff `a.semantic == b.semantic` (the envelope `shape` is metadata, excluded); else `distinct` | equivalent / distinct | semantic-digest / equivalence-index |
 | `tamper_fail_closed` | `accepted` iff `stored_digest` and `recomputed_digest` are both present and equal; else `rejected` (missing digest fails closed) | accepted / rejected | integrity discipline |
 | `incomplete_visibility` | `observed` iff `observation == "present"`; else `incomplete` (absent / not-checked is never clean) | observed / incomplete | Evidence-Tracing 2606.04990 |
+| `delegated_scope` | `within_grant` iff `set(used) <= set(granted)`; else `exceeds_grant`; `invalid` if either is missing. An empty grant authorizes nothing; sub-delegation may narrow, never widen | within_grant / exceeds_grant / invalid | Agent delegation receipts draft-nelson-...; Partial Evidence Bench 2605.05379 |
+| `hard_soft_digest` | `rejected_hard` if the hard digest is missing or mismatched (fail closed, soft never consulted); else `soft_equivalent` iff `soft_a == soft_b`, else `soft_divergent` | rejected_hard / soft_equivalent / soft_divergent | C2PA hard/soft binding |
+| `retained_replay` | `rejected_carrier` if `carrier_valid` is false (an invalid carrier cannot support replay); else `incomplete` if `records_retained` is false (a valid carrier over absent records); else `replayed_match` iff `set(replayed) == set(recorded)`, else `replayed_mismatch`. Carrier validity is a precondition, not the verdict | replayed_match / replayed_mismatch / incomplete / rejected_carrier | gateway-path replay; SLSA VSA / SCITT |
+| `mcp_description_code` | `undeclared_effect` if `code_effects` exceeds `declared_interface`; `over_declared` if the interface declares effects the code never exercises; else `consistent`. When both hold, `undeclared_effect` takes precedence (pinned). The `description` prose is ignored | consistent / undeclared_effect / over_declared | MCP description-code inconsistency 2606.04769 |
 
 Ceiling order (RGE-Bench's proposed ranking, not a standard): `producer_reported` (1) < `issuer_attested`
 (2) < `receiver_receipt` (3) < `boundary_observed` (4) < `third_party_observed` (5). Claim strength:
@@ -74,10 +79,14 @@ author's own clean-room example, not an external reproduction.)
 
 ## Neutrality
 
-The axes derive from the literature, not from any one product's feature list. In the full bench the
-authoring lab's own implementation is **scored by these same criteria and is deliberately `partial` on
-`format_equivalence`** (a clean-room non-author implementation passes it). A bench that its own author does
-not top is the evidence that it is neutral and discriminating, not a rubber stamp.
+Neutrality here rests on what this repository demonstrably enforces, not on a claim about any private bench:
+
+- the axes derive from the literature (anchors above), not from any one product's feature list;
+- there is **no scalar / blended score** and so no "winner" — you read the per-axis matrix;
+- reference implementations are **scored, never blessed**; `ref_example.py` is the author's own clean-room
+  example, explicitly *not* an external reproduction;
+- the vectors stay **candidate, not conformance**, until a different author or organisation reproduces them
+  from inputs alone — the bench does not certify itself.
 
 ## Claim ceiling
 
@@ -87,11 +96,16 @@ No scalar winner. Candidate, not conformance, until an external party reproduces
 
 ## Provenance
 
-`vectors_digest: sha256:26bff719142c31aa5a5cb2ebe621d1354961a3ac8a0cc77d7e79ad5eeb5d706f`. This is `sha256`
+`vectors_digest: sha256:575fe0769153c9f366fa7711c0c4243b6350cb54d5aa36b30459dad91dc67881`. This is `sha256`
 over the **canonical JSON of the `vectors` array** (`json.dumps(doc["vectors"], sort_keys=True,
 separators=(",", ":"))` encoded UTF-8), NOT the SHA of the `vectors.json` file bytes (which differs).
 Recompute it that exact way to match. Snapshot of the canonical RGE-Bench v0 vector set; the digest pins
 it, so an external reproduction is over the same bytes.
+
+A machine-readable manifest is in [`provenance.json`](provenance.json) (digest, vector count, axis list,
+family layout, license split, and the candidate-not-conformance non-claim). `scripts/check_provenance.py`
+recomputes the digest from `vectors.json` and fails closed if the manifest is stale; it runs in `run.sh`
+and CI.
 
 Zenodo archive: concept DOI `10.5281/zenodo.20842502`; v0.1.1 version DOI
 `10.5281/zenodo.20842503`.

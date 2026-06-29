@@ -10,3 +10,7 @@ python3 ref_example.py
 echo
 echo "== checker (per-axis matrix; NO aggregate score) =="
 python3 checker.py
+
+echo
+echo "== provenance check (content-address pin) =="
+python3 scripts/check_provenance.py

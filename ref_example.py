@@ -68,6 +68,49 @@ def _incomplete_visibility(inp):
     return "observed" if inp.get("observation") == "present" else "incomplete"
 
 
+def _delegated_scope(inp):
+    # a delegation grants a scope; the used scope must stay within it. authorization narrows,
+    # never widens. an empty grant authorizes nothing (absent != permission, fail closed).
+    granted, used = inp.get("granted"), inp.get("used")
+    if granted is None or used is None:
+        return "invalid"
+    return "within_grant" if set(used) <= set(granted) else "exceeds_grant"
+
+
+def _hard_soft_digest(inp):
+    # hard integrity is the gate: any mismatch or missing hard digest fails closed and the soft
+    # (semantic-equivalence) digest is never consulted. soft sits BESIDE hard, never rescues it.
+    hs, hr = inp.get("hard_stored"), inp.get("hard_recomputed")
+    if not hs or not hr or hs != hr:
+        return "rejected_hard"
+    return "soft_equivalent" if inp.get("soft_a") == inp.get("soft_b") else "soft_divergent"
+
+
+def _retained_replay(inp):
+    # carrier validity is a PRECONDITION to trust the retained records, not the verdict itself.
+    # an invalid carrier cannot support replay of its records (rejected_carrier). a valid carrier
+    # still needs retained records AND a recompute: a valid carrier over absent records is
+    # incomplete, never a clean pass (carrier != verdict).
+    if not inp.get("carrier_valid"):
+        return "rejected_carrier"
+    if not inp.get("records_retained"):
+        return "incomplete"
+    return "replayed_match" if set(inp.get("replayed", [])) == set(inp.get("recorded", [])) else "replayed_mismatch"
+
+
+def _mcp_description_code(inp):
+    # compare the DECLARED interface against CODE-evident effects; the prose `description` is
+    # ignored. code doing more than declared -> undeclared_effect (hidden capability); the
+    # interface declaring effects the code never exercises -> over_declared; otherwise consistent.
+    declared = set(inp.get("declared_interface", []))
+    code = set(inp.get("code_effects", []))
+    if code - declared:
+        return "undeclared_effect"
+    if declared - code:
+        return "over_declared"
+    return "consistent"
+
+
 AXES = {
     "sufficiency": _sufficiency,
     "source_class_ceiling": _source_class_ceiling,
@@ -75,6 +118,10 @@ AXES = {
     "format_equivalence": _format_equivalence,
     "tamper_fail_closed": _tamper_fail_closed,
     "incomplete_visibility": _incomplete_visibility,
+    "delegated_scope": _delegated_scope,
+    "hard_soft_digest": _hard_soft_digest,
+    "retained_replay": _retained_replay,
+    "mcp_description_code": _mcp_description_code,
 }
 
 
