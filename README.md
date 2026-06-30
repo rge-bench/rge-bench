@@ -46,11 +46,12 @@ reproduction is independent.
 ```json
 { "vector_id", "axis", "property", "inputs", "expected", "non_claims" }
 ```
-`expected` is the outcome a correct reviewer must reach from `inputs` alone. v0 has 55 vectors across the
-ten axes (a `base` family that defines each axis minimally, and a `ca_*` coding-agent family). The version
-stays `v0` until an external party reproduces the vectors; the count growing does not make it `v1`.
+`expected` is the outcome a correct reviewer must reach from `inputs` alone. v0 has 60 vectors across the
+eleven axes (`base` minimal axis vectors, `ca_*` coding-agent vectors, and `cov.*` coverage-honesty
+vectors). The version stays `v0` until an external party reproduces the vectors; the count growing does not
+make it `v1`.
 
-## Axes (ten; literature-anchored, with the rule and the outcome vocabulary)
+## Axes (eleven; literature-anchored, with the rule and the outcome vocabulary)
 
 | axis | rule (recompute from `inputs`) | outcomes | anchor |
 | --- | --- | --- | --- |
@@ -60,6 +61,7 @@ stays `v0` until an external party reproduces the vectors; the count growing doe
 | `format_equivalence` | `equivalent` iff `a.semantic == b.semantic` (the envelope `shape` is metadata, excluded); else `distinct` | equivalent / distinct | semantic-digest / equivalence-index |
 | `tamper_fail_closed` | `accepted` iff `stored_digest` and `recomputed_digest` are both present and equal; else `rejected` (missing digest fails closed) | accepted / rejected | integrity discipline |
 | `incomplete_visibility` | `observed` iff `observation == "present"`; else `incomplete` (absent / not-checked is never clean) | observed / incomplete | Evidence-Tracing 2606.04990 |
+| `coverage_honesty` | Given `declared_cases` and retained `case_results`, `refuted` if any declared case explicitly failed; `confirmed` only if every declared case passed; `incomplete` for any not-run, errored, or missing-result case; `invalid` if the declared set is missing. Partial evidence can refute but never confirm | confirmed / refuted / incomplete / invalid | OTel GenAI eval/test telemetry coverage-honesty |
 | `delegated_scope` | `within_grant` iff `set(used) <= set(granted)`; else `exceeds_grant`; `invalid` if either is missing. An empty grant authorizes nothing; sub-delegation may narrow, never widen | within_grant / exceeds_grant / invalid | Agent delegation receipts draft-nelson-...; Partial Evidence Bench 2605.05379 |
 | `hard_soft_digest` | `rejected_hard` if the hard digest is missing or mismatched (fail closed, soft never consulted); else `soft_equivalent` iff `soft_a == soft_b`, else `soft_divergent` | rejected_hard / soft_equivalent / soft_divergent | C2PA hard/soft binding |
 | `retained_replay` | `rejected_carrier` if `carrier_valid` is false (an invalid carrier cannot support replay); else `incomplete` if `records_retained` is false (a valid carrier over absent records); else `replayed_match` iff `set(replayed) == set(recorded)`, else `replayed_mismatch`. Carrier validity is a precondition, not the verdict | replayed_match / replayed_mismatch / incomplete / rejected_carrier | gateway-path replay; SLSA VSA / SCITT |
@@ -84,6 +86,9 @@ each `expected` from `inputs`, imports nothing from this kit, and matches the pe
 step that graduates the vectors from candidate to conformance. (Within this kit, `ref_example.py` is the
 author's own clean-room example, not an external reproduction.)
 
+Reproduction is digest-scoped: this 60-vector corpus, including `coverage_honesty`, needs reproduction
+against the `vectors_digest` below. A match against an earlier digest does not graduate this corpus.
+
 ## Neutrality
 
 Neutrality here rests on what this repository demonstrably enforces, not on a claim about any private bench:
@@ -104,7 +109,7 @@ this kit is something you recompute from the bytes, not something you take on th
 
 ## Provenance
 
-`vectors_digest: sha256:575fe0769153c9f366fa7711c0c4243b6350cb54d5aa36b30459dad91dc67881`. This is `sha256`
+`vectors_digest: sha256:00f0feda78b35d911d2372646e7e759b61cfb41ae9c38a96fb34fd6263f34fd3`. This is `sha256`
 over the **canonical JSON of the `vectors` array** (`json.dumps(doc["vectors"], sort_keys=True,
 separators=(",", ":"))` encoded UTF-8), NOT the SHA of the `vectors.json` file bytes (which differs).
 Recompute it that exact way to match. Snapshot of the canonical RGE-Bench v0 vector set; the digest pins

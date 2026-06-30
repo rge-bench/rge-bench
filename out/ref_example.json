@@ -1,6 +1,11 @@
 {
   "impl": "ref_example",
   "outcomes": {
+    "cov.complete_all_pass": "confirmed",
+    "cov.explicit_fail_refutes": "refuted",
+    "cov.missing_declared_set": "invalid",
+    "cov.silent_not_run": "incomplete",
+    "cov.unresolved_result": "incomplete",
     "dsc.ca_subdelegation_narrows": "within_grant",
     "dsc.ca_subdelegation_widens": "exceeds_grant",
     "dsc.empty_grant_denies": "exceeds_grant",

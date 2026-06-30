@@ -3,10 +3,11 @@
   "version": "v0",
   "spec_owner": "RGE-Bench authors",
   "vectors_file": "vectors.json",
-  "vectors_digest": "sha256:575fe0769153c9f366fa7711c0c4243b6350cb54d5aa36b30459dad91dc67881",
+  "vectors_digest": "sha256:00f0feda78b35d911d2372646e7e759b61cfb41ae9c38a96fb34fd6263f34fd3",
   "digest_method": "sha256 over canonical JSON of the `vectors` array: json.dumps(doc['vectors'], sort_keys=True, separators=(',', ':')) encoded utf-8 (NOT the SHA of the vectors.json file bytes)",
-  "vector_count": 55,
+  "vector_count": 60,
   "axes": [
+    "coverage_honesty",
     "delegated_scope",
     "format_equivalence",
     "hard_soft_digest",

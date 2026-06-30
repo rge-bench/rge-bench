@@ -22,6 +22,7 @@ proof that all dimensions are clean.
 | transition concern | RGE-Bench axis | What the axis checks |
 | --- | --- | --- |
 | Is there enough evidence to judge this dimension? | `sufficiency` | A valid record with complete coverage can support a positive conclusion. Missing or partial coverage stays incomplete. |
+| Did every declared case actually produce a resolvable result? | `coverage_honesty` | A declared expected set bounds confirmation: not-run, errored, or missing-result cases are incomplete; explicit failures may refute. |
 | How strong is the observation source? | `source_class_ceiling` | A claim cannot exceed the evidentiary ceiling of the source that captured the observation. |
 | Does the observed content match the declared claim? | `recompute` | The reviewer recomputes from retained inputs and ignores prose that is not backed by observed content. |
 | Do equivalent records survive envelope changes? | `format_equivalence` | Semantic equality is tested separately from the carrier shape. |

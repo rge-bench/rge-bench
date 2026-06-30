@@ -68,6 +68,22 @@ def _incomplete_visibility(inp):
     return "observed" if inp.get("observation") == "present" else "incomplete"
 
 
+def _coverage_honesty(inp):
+    # Confirmation requires a declared expected case set and a passing retained result for every
+    # declared case. Missing / errored / missing-result cases block confirmation; an explicit
+    # failure can still refute.
+    declared = inp.get("declared_cases")
+    results = inp.get("case_results")
+    if not isinstance(declared, list) or not declared or not isinstance(results, dict):
+        return "invalid"
+    states = [results.get(case_id, "not_run") for case_id in declared]
+    if any(state == "failed" for state in states):
+        return "refuted"
+    if all(state == "passed" for state in states):
+        return "confirmed"
+    return "incomplete"
+
+
 def _delegated_scope(inp):
     # a delegation grants a scope; the used scope must stay within it. authorization narrows,
     # never widens. an empty grant authorizes nothing (absent != permission, fail closed).
@@ -118,6 +134,7 @@ AXES = {
     "format_equivalence": _format_equivalence,
     "tamper_fail_closed": _tamper_fail_closed,
     "incomplete_visibility": _incomplete_visibility,
+    "coverage_honesty": _coverage_honesty,
     "delegated_scope": _delegated_scope,
     "hard_soft_digest": _hard_soft_digest,
     "retained_replay": _retained_replay,
