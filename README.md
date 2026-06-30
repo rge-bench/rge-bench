@@ -25,6 +25,8 @@ vectors from **candidate** to **conformance**. The kit needs nothing outside thi
 - `checker.py`: the commodity scorer, per-axis pass/partial/fail, **no aggregate score**.
 - `ref_example.py`: a clean-room worked example implementation.
 - `run.sh`: example impl -> checker.
+- `scripts/check_contract_edges.py`: non-corpus checks for language-neutral edge semantics surfaced by
+  independent reproduction.
 - `PROFILE-MAPPING.md`: how the axes can anchor the evidence-reviewability layer under a lifecycle
   profile without replacing that profile.
 - `REPRODUCTIONS.md`: reported independent reproductions and the remaining candidate edges.
@@ -51,6 +53,22 @@ reproduction is independent.
 eleven axes (`base` minimal axis vectors, `ca_*` coding-agent vectors, and `cov.*` coverage-honesty
 vectors). The version stays `v0` until an external party reproduces the vectors; the count growing does not
 make it `v1`.
+
+## Contract edge semantics
+
+The rules below are intentionally language-neutral. An independent implementation should not inherit Python,
+JVM, JavaScript, or YAML library defaults for boundary cases:
+
+- A digest field is **present** only when it is a non-empty JSON string. Missing keys, explicit `null`, and
+  `""` all fail closed as missing for digest-gated axes.
+- When a rule says an input is missing, an absent key and an explicit `null` both count as missing. If the
+  rule expects an array, a non-array value is invalid rather than an empty set.
+- Semantic equality for JSON-like values ignores object key order and preserves array order. JSON numbers
+  compare by numeric value rather than host boxed type, so `1` and `1.0` are equivalent for
+  `format_equivalence` if all other semantic fields match.
+
+These clarifications came from the first independent reproduction report and do not change the current
+`vectors_digest`; they pin how future edge vectors should be interpreted.
 
 ## Axes (eleven; literature-anchored, with the rule and the outcome vocabulary)
 
