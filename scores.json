@@ -1,5 +1,6 @@
 {
   "axes": [
+    "coverage_honesty",
     "delegated_scope",
     "format_equivalence",
     "hard_soft_digest",
@@ -13,6 +14,11 @@
   ],
   "matrix": {
     "ref_example": {
+      "coverage_honesty": {
+        "reproduced": 5,
+        "status": "pass",
+        "total": 5
+      },
       "delegated_scope": {
         "reproduced": 6,
         "status": "pass",
@@ -65,5 +71,5 @@
       }
     }
   },
-  "vectors_digest": "sha256:575fe0769153c9f366fa7711c0c4243b6350cb54d5aa36b30459dad91dc67881"
+  "vectors_digest": "sha256:00f0feda78b35d911d2372646e7e759b61cfb41ae9c38a96fb34fd6263f34fd3"
 }
