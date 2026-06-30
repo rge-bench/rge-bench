@@ -27,6 +27,7 @@ vectors from **candidate** to **conformance**. The kit needs nothing outside thi
 - `run.sh`: example impl -> checker.
 - `PROFILE-MAPPING.md`: how the axes can anchor the evidence-reviewability layer under a lifecycle
   profile without replacing that profile.
+- `REPRODUCTIONS.md`: reported independent reproductions and the remaining candidate edges.
 
 ## Reproduce in one contract
 
@@ -88,6 +89,9 @@ author's own clean-room example, not an external reproduction.)
 
 Reproduction is digest-scoped: this 60-vector corpus, including `coverage_honesty`, needs reproduction
 against the `vectors_digest` below. A match against an earlier digest does not graduate this corpus.
+The historical 55-vector digest has one reported independent reproduction; see
+[`REPRODUCTIONS.md`](REPRODUCTIONS.md). The historical result is recorded separately from the current
+60-vector reproduction gate and from contract-clarification work surfaced by that run.
 
 ## Neutrality
 
