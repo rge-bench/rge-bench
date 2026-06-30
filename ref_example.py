@@ -13,6 +13,7 @@ Run: python3 ref_example.py
 
 import json
 import os
+from numbers import Number
 
 KIT = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,6 +32,27 @@ _STRENGTH = {
     "observed_in_path": 4,
     "independently_confirmed": 5,
 }
+
+
+def _present_string(value):
+    return isinstance(value, str) and value != ""
+
+
+def _json_semantic_equal(left, right):
+    """Language-neutral equality for JSON-like semantic values.
+
+    Dict key order is ignored; array order is preserved; JSON numbers compare by
+    numeric value rather than host boxed type, so 1 and 1.0 are equivalent.
+    """
+    if isinstance(left, dict) and isinstance(right, dict):
+        return set(left) == set(right) and all(_json_semantic_equal(left[key], right[key]) for key in left)
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(_json_semantic_equal(a, b) for a, b in zip(left, right))
+    if isinstance(left, bool) or isinstance(right, bool):
+        return left is right
+    if isinstance(left, Number) and isinstance(right, Number):
+        return left == right
+    return left == right
 
 
 def _sufficiency(inp):
@@ -56,12 +78,16 @@ def _recompute(inp):
 
 def _format_equivalence(inp):
     # envelope shape is metadata; equivalence is over semantic fields, normalized across shapes
-    return "equivalent" if inp.get("a", {}).get("semantic") == inp.get("b", {}).get("semantic") else "distinct"
+    return (
+        "equivalent"
+        if _json_semantic_equal(inp.get("a", {}).get("semantic"), inp.get("b", {}).get("semantic"))
+        else "distinct"
+    )
 
 
 def _tamper_fail_closed(inp):
     stored, recomputed = inp.get("stored_digest"), inp.get("recomputed_digest")
-    return "accepted" if stored and recomputed and stored == recomputed else "rejected"
+    return "accepted" if _present_string(stored) and _present_string(recomputed) and stored == recomputed else "rejected"
 
 
 def _incomplete_visibility(inp):
@@ -88,7 +114,7 @@ def _delegated_scope(inp):
     # a delegation grants a scope; the used scope must stay within it. authorization narrows,
     # never widens. an empty grant authorizes nothing (absent != permission, fail closed).
     granted, used = inp.get("granted"), inp.get("used")
-    if granted is None or used is None:
+    if not isinstance(granted, list) or not isinstance(used, list):
         return "invalid"
     return "within_grant" if set(used) <= set(granted) else "exceeds_grant"
 
@@ -97,7 +123,7 @@ def _hard_soft_digest(inp):
     # hard integrity is the gate: any mismatch or missing hard digest fails closed and the soft
     # (semantic-equivalence) digest is never consulted. soft sits BESIDE hard, never rescues it.
     hs, hr = inp.get("hard_stored"), inp.get("hard_recomputed")
-    if not hs or not hr or hs != hr:
+    if not _present_string(hs) or not _present_string(hr) or hs != hr:
         return "rejected_hard"
     return "soft_equivalent" if inp.get("soft_a") == inp.get("soft_b") else "soft_divergent"
 

@@ -14,3 +14,7 @@ python3 checker.py
 echo
 echo "== provenance check (content-address pin) =="
 python3 scripts/check_provenance.py
+
+echo
+echo "== contract-edge check (non-corpus probes) =="
+python3 scripts/check_contract_edges.py
