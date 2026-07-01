@@ -12,14 +12,16 @@ party, from records + coverage + source-class alone, recompute and honestly conc
 It is a **runnable conformance fixture, not a general theory of truth**: content-addressed vectors plus a commodity
 checker that grades **per axis, never a single scalar cleanliness score**. The axes encode what an honest
 conclusion is allowed to rest on, so **the source class and the coverage of a record bound what can be
-concluded from it** (an unobserved surface reads as incomplete, never clean; integrity fails closed). And it
+concluded from it** (an unobserved surface reads as incomplete, never clean; integrity fails closed). A digest
 stays **candidate, not conformance, until a different author or organisation reproduces the vectors from
-inputs alone**. You run it rather than take it on trust.
+inputs alone**. The current 60-vector digest has that reproduction evidence; future digest changes need fresh
+reproduction. You run it rather than take it on trust.
 
 This kit exists so a **different author or organisation** can implement the spec and reproduce the vectors
 independently. Two independent, interoperable implementations are the RFC bar for spec maturity; an
-external-party reproduction (a different author/org, not the kit's author) is the step that graduates these
-vectors from **candidate** to **conformance**. The kit needs nothing outside this directory.
+external-party reproduction (a different author/org, not the kit's author) is the step that graduates a
+specific digest from **candidate** to **conformance**. The current 60-vector digest has one reported
+independent reproduction. The kit needs nothing outside this directory.
 
 - `vectors.json`: the spec-owned vectors (content-addressed; `vectors_digest` below).
 - `checker.py`: the commodity scorer, per-axis pass/partial/fail, **no aggregate score**.
@@ -29,7 +31,7 @@ vectors from **candidate** to **conformance**. The kit needs nothing outside thi
   independent reproduction.
 - `PROFILE-MAPPING.md`: how the axes can anchor the evidence-reviewability layer under a lifecycle
   profile without replacing that profile.
-- `REPRODUCTIONS.md`: reported independent reproductions and the remaining candidate edges.
+- `REPRODUCTIONS.md`: reported independent reproductions and the remaining contract edges.
 
 ## Reproduce in one contract
 
@@ -51,8 +53,8 @@ reproduction is independent.
 ```
 `expected` is the outcome a correct reviewer must reach from `inputs` alone. v0 has 60 vectors across the
 eleven axes (`base` minimal axis vectors, `ca_*` coding-agent vectors, and `cov.*` coverage-honesty
-vectors). The version stays `v0` until an external party reproduces the vectors; the count growing does not
-make it `v1`.
+vectors). The version stays `v0` because the contract surface remains v0; vector count changes or
+reproductions do not by themselves make it `v1`.
 
 ## Contract edge semantics
 
@@ -105,29 +107,31 @@ each `expected` from `inputs`, imports nothing from this kit, and matches the pe
 step that graduates the vectors from candidate to conformance. (Within this kit, `ref_example.py` is the
 author's own clean-room example, not an external reproduction.)
 
-Reproduction is digest-scoped: this 60-vector corpus, including `coverage_honesty`, needs reproduction
-against the `vectors_digest` below. A match against an earlier digest does not graduate this corpus.
-The historical 55-vector digest has one reported independent reproduction; see
-[`REPRODUCTIONS.md`](REPRODUCTIONS.md). The historical result is recorded separately from the current
-60-vector reproduction gate and from contract-clarification work surfaced by that run.
+Reproduction is digest-scoped: this 60-vector corpus, including `coverage_honesty`, has one reported
+independent reproduction against the `vectors_digest` below. A match against an earlier digest would not
+graduate this corpus; the historical 55-vector digest is recorded separately. See
+[`REPRODUCTIONS.md`](REPRODUCTIONS.md) for both reproductions and for contract-clarification work surfaced
+by the first run.
 
 ## Neutrality
 
 Neutrality here rests on what this repository demonstrably enforces, not on a claim about any private bench:
 
 - the axes derive from the literature (anchors above), not from any one product's feature list;
-- there is **no scalar / blended score** and so no "winner" — you read the per-axis matrix;
+- there is **no scalar / blended score** and so no "winner"; you read the per-axis matrix;
 - reference implementations are **scored, never blessed**; `ref_example.py` is the author's own clean-room
   example, explicitly *not* an external reproduction;
-- the vectors stay **candidate, not conformance**, until a different author or organisation reproduces them
-  from inputs alone — the bench does not certify itself.
+- a digest stays **candidate, not conformance**, until a different author or organisation reproduces it from
+  inputs alone; the current 60-vector digest has one reported independent reproduction, and the bench does
+  not certify itself.
 
 ## Claim ceiling
 
 Measures the **reviewability of evidence**, not agent safety, correctness, or compliance. A passing vector
 means "this evidence is reviewer-gradeable on this axis", never "the agent is safe / governed / compliant".
-No scalar winner. Candidate, not conformance, until an external party reproduces the vectors. Every claim in
-this kit is something you recompute from the bytes, not something you take on the kit's word.
+No scalar winner. The current digest has reported independent reproduction, but that is a digest-scoped
+conformance claim only. Every claim in this kit is something you recompute from the bytes, not something you
+take on the kit's word.
 
 ## Provenance
 
@@ -138,7 +142,7 @@ Recompute it that exact way to match. Snapshot of the canonical RGE-Bench v0 vec
 it, so an external reproduction is over the same bytes.
 
 A machine-readable manifest is in [`provenance.json`](provenance.json) (digest, vector count, axis list,
-family layout, license split, and the candidate-not-conformance non-claim). `scripts/check_provenance.py`
+family layout, license split, and the digest-scoped conformance non-claim). `scripts/check_provenance.py`
 recomputes the digest from `vectors.json` and fails closed if the manifest is stale; it runs in `run.sh`
 and CI.
 

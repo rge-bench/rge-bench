@@ -21,12 +21,21 @@
   ],
   "families": {
     "base": "minimal vectors that define each axis",
-    "ca_": "coding-agent vectors that exercise each axis on file/command/tool/network/pack evidence"
+    "ca_": "coding-agent vectors that exercise each axis on file/command/tool/network/pack evidence",
+    "cov.": "coverage-honesty vectors that exercise declared-case pass/fail/not-run/error/missing-result semantics"
   },
   "license": {
     "code": "Apache-2.0",
     "vectors_and_docs": "CC-BY-4.0"
   },
-  "maturity": "candidate",
-  "non_claims": "This manifest attests the provenance and content-address of the spec-owned vector SET only. It is NOT a claim about any agent's behavior, safety, or compliance, and NOT an external-party reproduction. The vectors stay 'candidate' until a different author or organisation reproduces them from inputs alone. The vectors are spec-owned and independently producible: any program that emits the same canonical bytes yields the same digest, so no single generator is the required path."
+  "maturity": "digest-scoped externally reproduced",
+  "external_reproduction": {
+    "reproducer": "JM-Lab",
+    "stack": "Spring Boot 4 / Jackson 3",
+    "artifact": "https://github.com/JM-Lab/rge-bench-java",
+    "report": "https://github.com/JM-Lab/spring-ai-playground/discussions/31#discussioncomment-17498110",
+    "date": "2026-07-01",
+    "result": "60/60 vectors reproduced; all eleven axes pass"
+  },
+  "non_claims": "This manifest attests the provenance and content-address of the spec-owned vector SET only. It is NOT a claim about any agent's behavior, safety, or compliance. The current digest has one reported independent reproduction by a different author/org; future vector changes require fresh reproduction under the new digest. The vectors are spec-owned and independently producible: any program that emits the same canonical bytes yields the same digest, so no single generator is the required path."
 }
