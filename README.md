@@ -118,7 +118,7 @@ by the first run.
 Neutrality here rests on what this repository demonstrably enforces, not on a claim about any private bench:
 
 - the axes derive from the literature (anchors above), not from any one product's feature list;
-- there is **no scalar / blended score** and so no "winner" — you read the per-axis matrix;
+- there is **no scalar / blended score** and so no "winner"; you read the per-axis matrix;
 - reference implementations are **scored, never blessed**; `ref_example.py` is the author's own clean-room
   example, explicitly *not* an external reproduction;
 - a digest stays **candidate, not conformance**, until a different author or organisation reproduces it from
