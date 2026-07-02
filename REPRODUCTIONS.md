@@ -28,9 +28,18 @@ README contract, importing nothing from this kit. It reproduces the current
 insertion-order serialization yields a different digest, which is the
 declare-the-canonicalization point surfacing in the provenance pin.
 
-## What this establishes
+## Current status
 
-The current v0 corpus (60 vectors, 11 axes,
+The corpus moved to 62 vectors on 2026-07-02
+(`sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95`): two `source_class_ceiling`
+vectors were added that pin the issuer-vantage boundary (an issuer-signed record supports
+`asserted_signed`; recomputing it does not raise its vantage to `independently_confirmed`). Per the
+digest-scoping rule above, the 62-vector digest is **candidate** until a fresh independent reproduction
+lands. The maintained rerun path recorded below applies.
+
+## What the 60-vector reproduction establishes
+
+The prior v0 corpus (60 vectors, 11 axes,
 `sha256:00f0feda78b35d911d2372646e7e759b61cfb41ae9c38a96fb34fd6263f34fd3`) was
 independently reproduced by a different author on a different implementation
 stack, from its declared inputs and expected outcomes alone. Per this kit's
