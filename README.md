@@ -153,13 +153,13 @@ Zenodo archive: concept DOI `10.5281/zenodo.20842502`; v0.1.1 version DOI
 
 ## License
 
-RGE-Bench uses an explicit dual-license layout, so GitHub may show the repository license as `Other`.
-That is expected; the intended split is:
+RGE-Bench uses an explicit dual-license layout. The root `LICENSE` file carries the Apache-2.0 text
+(the code license) so the repository license is machine-detectable; the split itself is unchanged:
 
 | material | license |
 | --- | --- |
 | Code (`checker.py`, `ref_example.py`, `run.sh`, CI helpers) | Apache-2.0 |
 | Vectors, spec, and docs (`vectors.json`, `README.md`, `PROFILE-MAPPING.md`) | CC-BY-4.0 |
 
-Copyright 2026 RGE-Bench authors. Full canonical texts live in `LICENSES/`; see `LICENSE` for the
+Copyright 2026 RGE-Bench authors. Full canonical texts live in `LICENSES/`; see `LICENSING.md` for the
 human-readable split. CC-BY-4.0 reuse requires attribution to RGE-Bench.
