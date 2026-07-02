@@ -34,7 +34,7 @@ The current v0 corpus (60 vectors, 11 axes,
 `sha256:00f0feda78b35d911d2372646e7e759b61cfb41ae9c38a96fb34fd6263f34fd3`) was
 independently reproduced by a different author on a different implementation
 stack, from its declared inputs and expected outcomes alone. Per this kit's
-acceptance criteria, external-party reproduction of the vectors from inputs is
+acceptance criteria, reproduction by a different author or organisation of the vectors from inputs is
 the step that moves a corpus from candidate to reproduced. The `coverage_honesty`
 axis reproduced with the intended reading: failed maps to refuted, all-passed to
 confirmed, not-run or errored or missing-result to incomplete, and a missing
@@ -57,6 +57,14 @@ asserted by `scripts/check_contract_edges.py`:
 The 2026-07-01 reproduction confirmed these three edges unchanged and surfaced no
 new divergence. They do not change the current `vectors_digest`; they pin how
 future edge vectors will be interpreted.
+
+## Maintained rerun path
+
+JM-Lab has offered to rerun `JM-Lab/rge-bench-java` against future corpus or axis
+changes. Treat that as a fresh-digest gate, not as permission to churn the
+corpus: any new `vectors_digest` starts unreproduced until that rerun, or another
+independent implementation, matches it from inputs alone or reports a concrete
+divergence.
 
 ## Version label
 
