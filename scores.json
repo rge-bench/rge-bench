@@ -15,24 +15,24 @@
   "matrix": {
     "ref_example": {
       "coverage_honesty": {
-        "reproduced": 5,
-        "status": "pass",
-        "total": 5
-      },
-      "delegated_scope": {
         "reproduced": 6,
         "status": "pass",
         "total": 6
       },
-      "format_equivalence": {
-        "reproduced": 3,
+      "delegated_scope": {
+        "reproduced": 9,
         "status": "pass",
-        "total": 3
+        "total": 9
+      },
+      "format_equivalence": {
+        "reproduced": 6,
+        "status": "pass",
+        "total": 6
       },
       "hard_soft_digest": {
-        "reproduced": 5,
+        "reproduced": 6,
         "status": "pass",
-        "total": 5
+        "total": 6
       },
       "incomplete_visibility": {
         "reproduced": 6,
@@ -65,11 +65,11 @@
         "total": 6
       },
       "tamper_fail_closed": {
-        "reproduced": 5,
+        "reproduced": 6,
         "status": "pass",
-        "total": 5
+        "total": 6
       }
     }
   },
-  "vectors_digest": "sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95"
+  "vectors_digest": "sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb"
 }

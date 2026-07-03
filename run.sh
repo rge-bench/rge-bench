@@ -16,5 +16,9 @@ echo "== provenance check (content-address pin) =="
 python3 scripts/check_provenance.py
 
 echo
-echo "== contract-edge check (non-corpus probes) =="
+echo "== contract-edge check (edge probes) =="
 python3 scripts/check_contract_edges.py
+
+echo
+echo "== v1 release policy check =="
+python3 scripts/check_v1_release_policy.py
