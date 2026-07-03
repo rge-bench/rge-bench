@@ -1,8 +1,8 @@
 {
   "bench": "RGE-Bench",
-  "version": "v0",
+  "version": "v1-candidate",
   "profile": "rge-bench.fixture-json-sort-v1",
-  "note": "Spec-owned vectors. Each vector is recomputable from `inputs` alone; `expected` is the outcome a correct reviewer must reach FROM the inputs. A reference impl imports nothing from this bench and recomputes from inputs. The bench scores reviewability of evidence PER AXIS, with NO aggregate score.",
+  "note": "v1 candidate: the externally reproduced v0 corpus plus language-neutral contract-edge vectors surfaced by the first independent implementation.",
   "axes": {
     "sufficiency": "a valid record is not sufficient without coverage",
     "source_class_ceiling": "who attested caps the maximum supportable claim",
@@ -899,6 +899,149 @@
       },
       "expected": "undeclared_effect",
       "non_claims": "the tool surface is part of the declared interface; an undeclared socket is an inconsistency signal"
+    },
+    {
+      "vector_id": "tmp.edge_empty_digest_rejected",
+      "axis": "tamper_fail_closed",
+      "property": "empty digest strings fail closed as missing",
+      "inputs": {
+        "stored_digest": "",
+        "recomputed_digest": ""
+      },
+      "expected": "rejected",
+      "non_claims": "Pins present vs empty-string semantics for digest-gated integrity only; it does not define a cryptographic digest grammar."
+    },
+    {
+      "vector_id": "hsd.edge_empty_hard_rejected",
+      "axis": "hard_soft_digest",
+      "property": "empty hard digests fail hard before soft comparison",
+      "inputs": {
+        "hard_stored": "",
+        "hard_recomputed": "",
+        "soft_a": "x",
+        "soft_b": "x"
+      },
+      "expected": "rejected_hard",
+      "non_claims": "Pins that a missing hard binding cannot be rescued by a matching soft projection."
+    },
+    {
+      "vector_id": "dsc.edge_null_granted_invalid",
+      "axis": "delegated_scope",
+      "property": "explicit null grant is missing, not an empty permission set",
+      "inputs": {
+        "granted": null,
+        "used": [
+          "read"
+        ]
+      },
+      "expected": "invalid",
+      "non_claims": "Pins null-vs-absent semantics for scope records; it does not infer delegation intent."
+    },
+    {
+      "vector_id": "dsc.edge_null_used_invalid",
+      "axis": "delegated_scope",
+      "property": "explicit null used scope is missing",
+      "inputs": {
+        "granted": [
+          "read"
+        ],
+        "used": null
+      },
+      "expected": "invalid",
+      "non_claims": "Pins null-vs-absent semantics for used scope only."
+    },
+    {
+      "vector_id": "dsc.edge_non_array_granted_invalid",
+      "axis": "delegated_scope",
+      "property": "non-array grant is invalid rather than empty",
+      "inputs": {
+        "granted": "read",
+        "used": [
+          "read"
+        ]
+      },
+      "expected": "invalid",
+      "non_claims": "Pins array-shape failure for delegated scope; it does not validate individual scope string syntax."
+    },
+    {
+      "vector_id": "cov.edge_non_array_declared_cases_invalid",
+      "axis": "coverage_honesty",
+      "property": "non-array declared case set is invalid rather than empty",
+      "inputs": {
+        "declared_cases": "case-a",
+        "case_results": {
+          "case-a": "passed"
+        }
+      },
+      "expected": "invalid",
+      "non_claims": "Pins array-shape failure for coverage declarations; it does not define a test-case identity grammar."
+    },
+    {
+      "vector_id": "fmt.edge_numeric_semantic_equivalent",
+      "axis": "format_equivalence",
+      "property": "JSON numbers compare by numeric value across host boxed types",
+      "inputs": {
+        "a": {
+          "shape": "json",
+          "semantic": {
+            "n": 1
+          }
+        },
+        "b": {
+          "shape": "yaml",
+          "semantic": {
+            "n": 1.0
+          }
+        }
+      },
+      "expected": "equivalent",
+      "non_claims": "Pins semantic equality for JSON-like numbers; it does not require a specific host-language numeric representation."
+    },
+    {
+      "vector_id": "fmt.edge_object_key_order_equivalent",
+      "axis": "format_equivalence",
+      "property": "object key order is not semantic drift",
+      "inputs": {
+        "a": {
+          "shape": "json",
+          "semantic": {
+            "p": "1",
+            "q": "2"
+          }
+        },
+        "b": {
+          "shape": "yaml",
+          "semantic": {
+            "q": "2",
+            "p": "1"
+          }
+        }
+      },
+      "expected": "equivalent",
+      "non_claims": "Pins semantic object equality only; canonical byte serialization remains separately specified for digests."
+    },
+    {
+      "vector_id": "fmt.edge_array_order_distinct",
+      "axis": "format_equivalence",
+      "property": "array order is preserved by semantic equality",
+      "inputs": {
+        "a": {
+          "shape": "json",
+          "semantic": [
+            "read",
+            "write"
+          ]
+        },
+        "b": {
+          "shape": "yaml",
+          "semantic": [
+            "write",
+            "read"
+          ]
+        }
+      },
+      "expected": "distinct",
+      "non_claims": "Pins array-order sensitivity for semantic values; it does not rank the importance of array elements."
     }
   ]
 }

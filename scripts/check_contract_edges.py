@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Assert language-neutral contract-edge semantics without changing vectors."""
+"""Assert language-neutral contract-edge semantics directly."""
 
 import os
 import sys

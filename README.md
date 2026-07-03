@@ -1,4 +1,4 @@
-# RGE-Bench external reproduction kit (v0)
+# RGE-Bench external reproduction kit (v1 candidate)
 
 [![DOI](https://zenodo.org/badge/1280018754.svg)](https://doi.org/10.5281/zenodo.20842502)
 [![CI](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml)
@@ -14,22 +14,24 @@ checker that grades **per axis, never a single scalar cleanliness score**. The a
 conclusion is allowed to rest on, so **the source class and the coverage of a record bound what can be
 concluded from it** (an unobserved surface reads as incomplete, never clean; integrity fails closed). A digest
 stays **candidate, not conformance, until a different author or organisation reproduces the vectors from
-inputs alone**. The current 62-vector digest has that reproduction evidence: JM-Lab's Spring/Jackson
-checker reproduced it from inputs alone, byte-for-byte against the pinned digest. You run it rather than
-take it on trust.
+inputs alone**. The prior 62-vector v0 digest has that reproduction evidence: JM-Lab's Spring/Jackson
+checker reproduced it from inputs alone, byte-for-byte against the pinned digest. The current 71-vector
+v1-candidate digest is awaiting the same fresh-digest gate. You run it rather than take it on trust.
 
 This kit exists so a **different author or organisation** can implement the spec and reproduce the vectors
 independently. Two independent, interoperable implementations are the RFC bar for spec maturity; an
 external-party reproduction (a different author/org, not the kit's author) is the step that graduates a
-specific digest from **candidate** to **conformance**. The current 62-vector digest has one reported
-independent reproduction. The kit needs nothing outside this directory.
+specific digest from **candidate** to **conformance**. The latest reproduced digest is the prior 62-vector
+v0 corpus; the current v1-candidate digest is not reproduced yet. The kit needs nothing outside this
+directory.
 
 - `vectors.json`: the spec-owned vectors (content-addressed; `vectors_digest` below).
 - `checker.py`: the commodity scorer, per-axis pass/partial/fail, **no aggregate score**.
 - `ref_example.py`: a clean-room worked example implementation.
 - `run.sh`: example impl -> checker.
-- `scripts/check_contract_edges.py`: non-corpus checks for language-neutral edge semantics surfaced by
+- `scripts/check_contract_edges.py`: direct checks for language-neutral edge semantics surfaced by
   independent reproduction.
+- `VERSIONING.md`: version-label and fresh-digest stability policy.
 - `PROFILE-MAPPING.md`: how the axes can anchor the evidence-reviewability layer under a lifecycle
   profile without replacing that profile.
 - `REPRODUCTIONS.md`: reported independent reproductions and the remaining contract edges.
@@ -52,10 +54,9 @@ reproduction is independent.
 ```json
 { "vector_id", "axis", "property", "inputs", "expected", "non_claims" }
 ```
-`expected` is the outcome a correct reviewer must reach from `inputs` alone. v0 has 62 vectors across the
-eleven axes (`base` minimal axis vectors, `ca_*` coding-agent vectors, and `cov.*` coverage-honesty
-vectors). The version stays `v0` because the contract surface remains v0; vector count changes or
-reproductions do not by themselves make it `v1`.
+`expected` is the outcome a correct reviewer must reach from `inputs` alone. The v1 candidate has 71
+vectors across the eleven axes: the externally reproduced v0 62-vector corpus plus nine contract-edge
+vectors (`*.edge_*`) that promote previously prose-only semantics into oracle-bearing corpus behavior.
 
 ## Contract edge semantics
 
@@ -70,8 +71,23 @@ JVM, JavaScript, or YAML library defaults for boundary cases:
   compare by numeric value rather than host boxed type, so `1` and `1.0` are equivalent for
   `format_equivalence` if all other semantic fields match.
 
-These clarifications came from the first independent reproduction report and do not change the current
-`vectors_digest`; they pin how future edge vectors should be interpreted.
+These clarifications came from the first independent reproduction report. They were prose-only checks in
+v0; the v1 candidate makes them part of the corpus and therefore creates a new candidate digest.
+
+## Version and stability policy
+
+RGE-Bench versions name the contract surface, not the amount of attention a digest has received. Vector
+count changes and external reproductions do not by themselves create a new major version. A new
+`vectors_digest` starts candidate until a different author or organisation reproduces that exact digest
+from inputs alone.
+
+The latest reproduced digest is v0 with 62 vectors:
+`sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95`.
+The current v1 candidate has 71 vectors:
+`sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
+It is not v1 conformance until JM-Lab/rge-bench-java or another independent implementation reruns against
+that exact digest and matches the per-axis matrix. See [`VERSIONING.md`](VERSIONING.md) and
+[`REPRODUCTIONS.md`](REPRODUCTIONS.md).
 
 ## Axes (eleven; literature-anchored, with the rule and the outcome vocabulary)
 
@@ -108,9 +124,9 @@ each `expected` from `inputs`, imports nothing from this kit, and matches the pe
 step that graduates the vectors from candidate to conformance. (Within this kit, `ref_example.py` is the
 author's own clean-room example, not an external reproduction.)
 
-Reproduction is digest-scoped: the current 62-vector corpus has one reported independent reproduction. A
-match against an earlier digest would not graduate this corpus; earlier 55-vector and 60-vector digests are
-recorded separately. See
+Reproduction is digest-scoped: the prior 62-vector v0 corpus has one reported independent reproduction.
+The current 71-vector v1-candidate corpus does not. A match against an earlier digest would not graduate
+this corpus; earlier 55-vector, 60-vector, and 62-vector digests are recorded separately. See
 [`REPRODUCTIONS.md`](REPRODUCTIONS.md) for both reproductions and for contract-clarification work surfaced
 by the first run.
 
@@ -123,24 +139,24 @@ Neutrality here rests on what this repository demonstrably enforces, not on a cl
 - reference implementations are **scored, never blessed**; `ref_example.py` is the author's own clean-room
   example, explicitly *not* an external reproduction;
 - a digest stays **candidate, not conformance**, until a different author or organisation reproduces it from
-  inputs alone; the current 62-vector digest has one reported independent reproduction, and the bench does
-  not certify itself.
+  inputs alone; the current v1-candidate digest is awaiting that fresh rerun, and the bench does not certify
+  itself.
 
 ## Claim ceiling
 
 Measures the **reviewability of evidence**, not agent safety, correctness, or compliance. A passing vector
 means "this evidence is reviewer-gradeable on this axis", never "the agent is safe / governed / compliant".
-No scalar winner. Reproduction status is digest-scoped: the prior 60-vector digest has reported independent
-reproduction, and so does the current 62-vector digest. Every claim in this kit is something you recompute
-from the bytes, not something you take on the kit's word.
+No scalar winner. Reproduction status is digest-scoped: the prior 60-vector and 62-vector v0 digests have
+reported independent reproduction; the current 71-vector v1 candidate does not yet. Every claim in this kit
+is something you recompute from the bytes, not something you take on the kit's word.
 
 ## Provenance
 
-`vectors_digest: sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95`. This is `sha256`
+`vectors_digest: sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`. This is `sha256`
 over the **canonical JSON of the `vectors` array** (`json.dumps(doc["vectors"], sort_keys=True,
 separators=(",", ":"))` encoded UTF-8), NOT the SHA of the `vectors.json` file bytes (which differs).
-Recompute it that exact way to match. Snapshot of the canonical RGE-Bench v0 vector set; the digest pins
-it, so an external reproduction is over the same bytes.
+Recompute it that exact way to match. Snapshot of the canonical RGE-Bench v1-candidate vector set; the
+digest pins it, so an external reproduction is over the same bytes.
 
 A machine-readable manifest is in [`provenance.json`](provenance.json) (digest, vector count, axis list,
 family layout, license split, and the digest-scoped conformance non-claim). `scripts/check_provenance.py`
