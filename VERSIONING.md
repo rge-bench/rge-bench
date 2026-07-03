@@ -4,11 +4,11 @@ RGE-Bench versions name the contract surface, not the amount of attention a
 digest has received. A vector count change, a documentation clarification, or an
 external reproduction does not by itself make a new major version.
 
-## Current candidate
+## Current version
 
-The current repository state is `v1-candidate`: the externally reproduced v0
-62-vector corpus plus nine language-neutral contract-edge vectors surfaced by
-the first independent implementation:
+The current repository state is `v1`: the externally reproduced v0 62-vector
+corpus plus nine language-neutral contract-edge vectors surfaced by the first
+independent implementation:
 
 - empty digest strings fail closed as missing;
 - explicit `null` and non-array values fail as missing or invalid where the
@@ -16,21 +16,19 @@ the first independent implementation:
 - semantic equality ignores object key order, preserves array order, and treats
   JSON numbers by numeric value rather than host boxed type.
 
-The v1 candidate digest is
+The v1 digest is
 `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
-It is not externally reproduced until JM-Lab/rge-bench-java or another
-independent implementation reruns against that exact digest from inputs alone
-and matches the per-axis matrix.
+JM-Lab/rge-bench-java reproduced that exact digest from inputs alone on
+2026-07-03 with checker commit
+[`cd788eb`](https://github.com/JM-Lab/rge-bench-java/commit/cd788eb9453eb8f13c4d910d968b0776b25e7f76).
 
 ## Stable labels
 
 - `v0`: first reproduced contract surface. The latest reproduced v0 digest is
   the 62-vector corpus,
   `sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95`.
-- `v1-candidate`: proposed contract-surface release that promotes the
-  previously prose-only contract edges into oracled vectors.
-- `v1`: only after the v1-candidate digest is independently reproduced, or the
-  candidate is revised and that revised digest is independently reproduced.
+- `v1`: reproduced contract-surface release that promotes the previously
+  prose-only contract edges into oracled vectors.
 
 ## Change rules
 

@@ -1,8 +1,8 @@
 {
   "bench": "RGE-Bench",
-  "version": "v1-candidate",
+  "version": "v1",
   "profile": "rge-bench.fixture-json-sort-v1",
-  "note": "v1 candidate: the externally reproduced v0 corpus plus language-neutral contract-edge vectors surfaced by the first independent implementation.",
+  "note": "v1: the externally reproduced 62-vector v0 corpus plus language-neutral contract-edge vectors surfaced by the first independent implementation.",
   "axes": {
     "sufficiency": "a valid record is not sufficient without coverage",
     "source_class_ceiling": "who attested caps the maximum supportable claim",

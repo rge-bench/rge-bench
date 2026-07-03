@@ -1,6 +1,6 @@
 {
   "bench": "RGE-Bench",
-  "version": "v1-candidate",
+  "version": "v1",
   "spec_owner": "RGE-Bench authors",
   "vectors_file": "vectors.json",
   "vectors_digest": "sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb",
@@ -28,16 +28,27 @@
     "code": "Apache-2.0",
     "vectors_and_docs": "CC-BY-4.0"
   },
-  "maturity": "candidate; awaiting external reproduction of this v1 candidate digest",
-  "non_claims": "This manifest attests the provenance and content-address of the spec-owned v1 candidate vector set only. It is NOT a claim about any agent behavior, safety, compliance, or current external reproduction. The prior v0 digest has independent reproduction; this candidate digest requires a fresh digest-scoped reproduction before any conformance claim.",
-  "prior_external_reproduction": {
+  "maturity": "digest-scoped externally reproduced",
+  "non_claims": "This manifest attests the provenance and content-address of the spec-owned v1 vector set only. It is NOT a claim about any agent behavior, safety, or compliance. The current digest has one reported independent reproduction by a different author/org; future vector changes require fresh reproduction under the new digest.",
+  "external_reproduction": {
     "reproducer": "JM-Lab",
     "stack": "Spring Boot 4 / Jackson 3",
-    "artifact": "https://github.com/JM-Lab/rge-bench-java",
-    "report": "https://github.com/JM-Lab/spring-ai-playground/discussions/31#discussioncomment-17519180",
+    "artifact": "https://github.com/JM-Lab/rge-bench-java/commit/cd788eb9453eb8f13c4d910d968b0776b25e7f76",
+    "report": "https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-4877514161",
     "date": "2026-07-03",
-    "result": "62/62 vectors reproduced; all eleven axes pass; checker code unchanged (issuer-vantage vectors read per the documented ceiling ranking)",
+    "checker_commit": "cd788eb9453eb8f13c4d910d968b0776b25e7f76",
+    "result": "71/71 vectors reproduced; all eleven axes pass; contract-edge semantics implemented from README text after the initial typed-JVM mismatch surfaced the drift",
     "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1"
   },
-  "candidate_reproduction_gate": "This v1 candidate digest is not externally reproduced until JM-Lab/rge-bench-java or another independent implementation reruns against this exact vectors_digest from inputs alone and matches the per-axis matrix."
+  "prior_external_reproductions": [
+    {
+      "reproducer": "JM-Lab",
+      "stack": "Spring Boot 4 / Jackson 3",
+      "artifact": "https://github.com/JM-Lab/rge-bench-java",
+      "report": "https://github.com/JM-Lab/spring-ai-playground/discussions/31#discussioncomment-17519180",
+      "date": "2026-07-03",
+      "result": "62/62 vectors reproduced; all eleven axes pass; checker code unchanged (issuer-vantage vectors read per the documented ceiling ranking)",
+      "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1"
+    }
+  ]
 }
