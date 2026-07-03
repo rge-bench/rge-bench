@@ -14,16 +14,15 @@ checker that grades **per axis, never a single scalar cleanliness score**. The a
 conclusion is allowed to rest on, so **the source class and the coverage of a record bound what can be
 concluded from it** (an unobserved surface reads as incomplete, never clean; integrity fails closed). A digest
 stays **candidate, not conformance, until a different author or organisation reproduces the vectors from
-inputs alone**. The current 62-vector digest is **candidate**: it extends the reproduced 60-vector corpus with two
-source-class vectors and needs fresh reproduction (the prior 60-vector digest has that evidence). You run
-it rather than take it on trust.
+inputs alone**. The current 62-vector digest has that reproduction evidence: JM-Lab's Spring/Jackson
+checker reproduced it from inputs alone, byte-for-byte against the pinned digest. You run it rather than
+take it on trust.
 
 This kit exists so a **different author or organisation** can implement the spec and reproduce the vectors
 independently. Two independent, interoperable implementations are the RFC bar for spec maturity; an
 external-party reproduction (a different author/org, not the kit's author) is the step that graduates a
-specific digest from **candidate** to **conformance**. The prior 60-vector digest has one reported
-independent reproduction; the current 62-vector digest awaits its own. The kit needs nothing outside this
-directory.
+specific digest from **candidate** to **conformance**. The current 62-vector digest has one reported
+independent reproduction. The kit needs nothing outside this directory.
 
 - `vectors.json`: the spec-owned vectors (content-addressed; `vectors_digest` below).
 - `checker.py`: the commodity scorer, per-axis pass/partial/fail, **no aggregate score**.
@@ -109,9 +108,9 @@ each `expected` from `inputs`, imports nothing from this kit, and matches the pe
 step that graduates the vectors from candidate to conformance. (Within this kit, `ref_example.py` is the
 author's own clean-room example, not an external reproduction.)
 
-Reproduction is digest-scoped: the prior 60-vector corpus, including `coverage_honesty`, has one reported
-independent reproduction; the current 62-vector digest is candidate until a fresh reproduction lands. A
-match against an earlier digest does not graduate this corpus; earlier digests are recorded separately. See
+Reproduction is digest-scoped: the current 62-vector corpus has one reported independent reproduction. A
+match against an earlier digest would not graduate this corpus; earlier 55-vector and 60-vector digests are
+recorded separately. See
 [`REPRODUCTIONS.md`](REPRODUCTIONS.md) for both reproductions and for contract-clarification work surfaced
 by the first run.
 
@@ -124,16 +123,16 @@ Neutrality here rests on what this repository demonstrably enforces, not on a cl
 - reference implementations are **scored, never blessed**; `ref_example.py` is the author's own clean-room
   example, explicitly *not* an external reproduction;
 - a digest stays **candidate, not conformance**, until a different author or organisation reproduces it from
-  inputs alone; the prior 60-vector digest has one reported independent reproduction, the current 62-vector
-  digest is candidate, and the bench does not certify itself.
+  inputs alone; the current 62-vector digest has one reported independent reproduction, and the bench does
+  not certify itself.
 
 ## Claim ceiling
 
 Measures the **reviewability of evidence**, not agent safety, correctness, or compliance. A passing vector
 means "this evidence is reviewer-gradeable on this axis", never "the agent is safe / governed / compliant".
 No scalar winner. Reproduction status is digest-scoped: the prior 60-vector digest has reported independent
-reproduction, the current digest is candidate. Every claim in this kit is something you recompute from the bytes, not something you
-take on the kit's word.
+reproduction, and so does the current 62-vector digest. Every claim in this kit is something you recompute
+from the bytes, not something you take on the kit's word.
 
 ## Provenance
 
