@@ -6,6 +6,29 @@ external reproduction does not by itself make a new major version.
 
 ## Current version
 
+The current repository state is **`v2-candidate`**: 90 vectors across twelve axes.
+Digest `sha256:56d4d41e09cd673881ffbf68a88e5ad96aa06cdd600258701d2fa8d3bf39abf9`.
+
+**No external reproduction. It does not inherit v1's.** Three changes each independently require a
+candidate label under the rules below, and this release makes all three:
+
+- a **new axis**, `claim_support`, which grades what an observer's report licenses given the claim kind,
+  the observer class and its declared probe set;
+- a **new outcome vocabulary** on that axis, including `inconclusive_no_coverage`, anchored on AR4SI's
+  inconclusive tier rather than coined;
+- **narrowed contract-surface semantics** on `source_class_ceiling`, which drops `boundary_observed` and
+  `third_party_observed` and now ranks origin only.
+
+The defect this closes: claim kind was not an input to any of v1's 71 vectors on any of its 11 axes, so
+one total order over source classes was applied to occurrence and absence alike. For an absence claim
+that order can run backwards — a neutral third party outside the action path is blinded by a free routing
+choice, while an observer at a vantage the subject cannot write to is not.
+
+JM-Lab's v1 reproduction read `source_class_ceiling` per the old five-class ladder and is therefore scoped
+to the v1 digest.
+
+## Previous version
+
 The current repository state is `v1`: the externally reproduced v0 62-vector
 corpus plus nine language-neutral contract-edge vectors surfaced by the first
 independent implementation:
@@ -28,7 +51,13 @@ JM-Lab/rge-bench-java reproduced that exact digest from inputs alone on
   the 62-vector corpus,
   `sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95`.
 - `v1`: reproduced contract-surface release that promotes the previously
-  prose-only contract edges into oracled vectors.
+  prose-only contract edges into oracled vectors. The latest reproduced v1
+  digest is the 71-vector corpus,
+  `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
+- `v2-candidate`: **candidate, not reproduced.** Splits the origin question
+  from the vantage question across two axes. No conformance claim attaches to
+  this digest until a different author or organisation reproduces it from
+  inputs alone.
 
 ## Change rules
 

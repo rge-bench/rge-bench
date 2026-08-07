@@ -17,13 +17,14 @@ from numbers import Number
 
 KIT = os.path.dirname(os.path.abspath(__file__))
 
-# source-class ceiling ranks (RGE-Bench's proposed ordering; see README, anchor 2606.04193)
+# ORIGIN ceiling ranks (RGE-Bench's proposed ordering; see README, anchor 2606.04193).
+# v2-candidate: the two vantage classes left this ladder. It ranks WHO ASSERTS, and the strengths
+# above `observed_at_receiver` are therefore reachable by no origin class at all — which is the
+# point. Where a fact was observed is graded by `claim_support`.
 _CEILING = {
     "producer_reported": 1,
     "issuer_attested": 2,
     "receiver_receipt": 3,
-    "boundary_observed": 4,
-    "third_party_observed": 5,
 }
 _STRENGTH = {
     "asserted": 1,
@@ -91,7 +92,65 @@ def _tamper_fail_closed(inp):
 
 
 def _incomplete_visibility(inp):
+    # Unchanged in v2-candidate. It grades whether an observation was MADE. Whether the resulting
+    # silence SUPPORTS an absence claim is a different question with a different input set; see
+    # `_claim_support`.
     return "observed" if inp.get("observation") == "present" else "incomplete"
+
+
+# Which observer classes the SUBJECT can blind without privilege. The question is reach, not
+# interest: a third party outside the action path sees only what reaches its artifact, so a subject
+# acting on another path blinds it with a free routing choice. Only an observer at a vantage the
+# observed process cannot write to sits on the other side.
+_SUBJECT_CONTROLLABLE = {
+    "producer_reported": True,
+    "receiver_receipt": True,
+    "boundary_observed": True,
+    "third_party_observed": True,
+    "independently_observed": False,
+}
+
+
+def _claim_support(inp):
+    """Precedence is contract surface. The numbered steps match the README, in this order."""
+    claim = inp.get("claim") or {}
+    observer = inp.get("observer") or {}
+    observation = inp.get("observation") or {}
+    kind = claim.get("kind")
+
+    # 0. fail closed on vocabulary the reader cannot type
+    if observer.get("class") not in _SUBJECT_CONTROLLABLE or kind not in ("occurrence", "absence"):
+        return "invalid"
+    is_absence = kind == "absence"
+
+    # 1. an undeclared probe set outranks an uncovered surface: a reader cannot tell a covered
+    #    silence from an uncovered one, so the absence claim is unjudgeable rather than weak
+    declared = observer.get("declared_probe_set")
+    if declared is None:
+        if is_absence:
+            return "invalid"
+    # 2. a surface outside the declared set is uncovered, before anything is asked about the class
+    elif claim.get("surface") not in declared:
+        return "inconclusive_no_coverage"
+
+    # 3. a self-reported gap removes absence support for that window, and only absence
+    if observation.get("observation_gap") and is_absence:
+        return "inconclusive_no_coverage"
+
+    # 4. occurrence: any class can support it at its ceiling
+    if not is_absence:
+        return "supported" if observation.get("saw_event") else "unsupported"
+
+    # 5. an event the observer did see refutes the claim, whatever its blinding cost
+    if observation.get("saw_event"):
+        return "contradicted"
+
+    # 6. silence is bounded by blinding cost; independently enforced routing is the escape
+    if _SUBJECT_CONTROLLABLE[observer["class"]] and not observer.get("routing_enforced_by"):
+        return "inconclusive_no_coverage"
+
+    # 7. silence from an observer the subject cannot blind, within its declared probe set
+    return "supported"
 
 
 def _coverage_honesty(inp):
@@ -160,6 +219,7 @@ AXES = {
     "format_equivalence": _format_equivalence,
     "tamper_fail_closed": _tamper_fail_closed,
     "incomplete_visibility": _incomplete_visibility,
+    "claim_support": _claim_support,
     "coverage_honesty": _coverage_honesty,
     "delegated_scope": _delegated_scope,
     "hard_soft_digest": _hard_soft_digest,

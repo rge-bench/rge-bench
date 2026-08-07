@@ -17,6 +17,12 @@ RGE-Bench can then test whether a reviewer can recompute bounded conclusions
 from records, coverage, and source class without treating one clean dimension as
 proof that all dimensions are clean.
 
+> **Changed in `v2-candidate`.** `boundary_observed` and `third_party_observed` are no longer values
+> of `source_class_ceiling`; that axis ranks **origin** only. They are observer classes on the new
+> `claim_support` axis, so a format now maps to both a *who asserts* value and a *where observed*
+> value. A format that never says where its facts were observed maps to "not stated", which is a
+> finding rather than a gap in this table.
+
 ## Mapping to a three-record transition profile
 
 | transition concern | RGE-Bench axis | What the axis checks |
@@ -75,20 +81,21 @@ Two rules from the axis do all the work here. A ceiling caps the claim rather th
 record. And signing, hash-chaining, or time-anchoring raise tamper-evidence, never vantage: recomputing
 a record confirms what its issuer recorded, it does not upgrade who observed it.
 
-| format (public source) | what the record is, per its own docs | source class | ceiling (max claim) |
-| --- | --- | --- | --- |
-| in-toto `agent-decision/v0.1`, proposed predicate ([in-toto/attestation#554](https://github.com/in-toto/attestation/issues/554)) | DSSE-signed record of the authorization decision the agent runtime reports | `issuer_attested` | `asserted_signed` |
-| MCP tool-call execution record, SEP-2828 shape, with published vector suites ([vaaraio/vaara `conformance/sep2828`](https://github.com/vaaraio/vaara/tree/main/conformance/sep2828)) | an in-path proxy or server signs its own decision and outcome record; the published checker recomputes digests and the decision from the record | `issuer_attested` | `asserted_signed` |
-| AAPR v1 audit chain ([sammysltd/MakerChecker#66](https://github.com/sammysltd/MakerChecker/issues/66), `docs/audit-spec.md`) | hash-chained events a system records about its own actions, with a signed export bundle | `producer_reported` (chain); `issuer_attested` (signed export) | `asserted`; `asserted_signed` |
-| GuardrailDecision / action-chain records ([safal207/ibex-agent-verification](https://github.com/safal207/ibex-agent-verification)) | framework-recorded decision and action records, with explicit verification-level labels in the profile itself | `producer_reported` | `asserted` |
-| MCP `evidenceRef` ([experimental-ext-tool-annotations](https://github.com/modelcontextprotocol/experimental-ext-tool-annotations), trust-annotations draft) | a pointer (`type`/`digest`/`canonicalization`), not a record: it enables local re-derivation of whatever it references | inherits the referenced record's class | inherits |
-| observed-effect v0, boundary carrier ([Rul1an/observed-effect-v0](https://github.com/Rul1an/observed-effect-v0)) | an observer below the harness emits the record; the observer is not the component whose behaviour it describes | `boundary_observed` | `observed_in_path` |
-| gateway replay pack ([Rul1an/gateway-evidence-replay](https://github.com/Rul1an/gateway-evidence-replay)) | replay of captured gateway evidence; replay confirms recomputability and is agnostic to who captured | inherits the capture's class | inherits |
+| format (public source) | what the record is, per its own docs | origin class (`source_class_ceiling`) | ceiling (max claim) | observer class (`claim_support`) |
+| --- | --- | --- | --- | --- |
+| in-toto `agent-decision/v0.1`, proposed predicate ([in-toto/attestation#554](https://github.com/in-toto/attestation/issues/554)) | DSSE-signed record of the authorization decision the agent runtime reports | `issuer_attested` | `asserted_signed` | not stated |
+| MCP tool-call execution record, SEP-2828 shape, with published vector suites ([vaaraio/vaara `conformance/sep2828`](https://github.com/vaaraio/vaara/tree/main/conformance/sep2828)) | an in-path proxy or server signs its own decision and outcome record; the published checker recomputes digests and the decision from the record | `issuer_attested` | `asserted_signed` | `boundary_observed` (in-path proxy) |
+| AAPR v1 audit chain ([sammysltd/MakerChecker#66](https://github.com/sammysltd/MakerChecker/issues/66), `docs/audit-spec.md`) | hash-chained events a system records about its own actions, with a signed export bundle | `producer_reported` (chain); `issuer_attested` (signed export) | `asserted`; `asserted_signed` | `producer_reported` |
+| GuardrailDecision / action-chain records ([safal207/ibex-agent-verification](https://github.com/safal207/ibex-agent-verification)) | framework-recorded decision and action records, with explicit verification-level labels in the profile itself | `producer_reported` | `asserted` | `producer_reported` |
+| MCP `evidenceRef` ([experimental-ext-tool-annotations](https://github.com/modelcontextprotocol/experimental-ext-tool-annotations), trust-annotations draft) | a pointer (`type`/`digest`/`canonicalization`), not a record: it enables local re-derivation of whatever it references | inherits the referenced record's class | inherits | inherits |
+| observed-effect v0, boundary carrier ([Rul1an/observed-effect-v0](https://github.com/Rul1an/observed-effect-v0)) | an observer below the harness emits the record; the observer is not the component whose behaviour it describes | `boundary_observed` | `observed_in_path` | `independently_observed` |
+| gateway replay pack ([Rul1an/gateway-evidence-replay](https://github.com/Rul1an/gateway-evidence-replay)) | replay of captured gateway evidence; replay confirms recomputability and is agnostic to who captured | inherits the capture's class | inherits | inherits |
 
 Two consequences are worth stating plainly. First, none of the issuer-side formats above reach
 `independently_confirmed` on this axis, including the ones with the strongest signing and anchoring.
 That is not a defect of those formats; it is what an issuer vantage supports, and several of the
-formats say so themselves in their own non-claims. Second, the observed-effect row is capped too: a
-boundary observer operated by the same organisation as the agent supports `observed_in_path`, and
+formats say so themselves in their own non-claims. Second, the observed-effect row is capped too, and `v2-candidate` splits how. Its **origin** ceiling
+is unchanged; its **observer class** is `independently_observed`, which is what lets its silence
+support an absence claim at all. A same-organisation boundary observer supports `observed_in_path`, and
 `independently_confirmed` requires an observer that a different party operates. The ceiling applies to
 every row, including formats by this kit's author.
