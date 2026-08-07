@@ -51,6 +51,56 @@ CASES = [
         },
         "equivalent",
     ),
+    # claim_support: the two ways a probe set can be "not useful" are not the same answer.
+    (
+        "an explicitly empty probe set is DECLARED and covers nothing",
+        "claim_support",
+        {
+            "claim": {"kind": "absence", "surface": "network_connect"},
+            "observer": {"class": "independently_observed", "declared_probe_set": []},
+            "observation": {"saw_event": False, "observation_gap": False},
+        },
+        "inconclusive_no_coverage",
+    ),
+    (
+        "a null probe set is UNDECLARED and makes the absence claim unjudgeable",
+        "claim_support",
+        {
+            "claim": {"kind": "absence", "surface": "network_connect"},
+            "observer": {"class": "independently_observed", "declared_probe_set": None},
+            "observation": {"saw_event": False, "observation_gap": False},
+        },
+        "invalid",
+    ),
+    (
+        "a missing observer object is untypeable, not permissive",
+        "claim_support",
+        {
+            "claim": {"kind": "absence", "surface": "network_connect"},
+            "observation": {"saw_event": False, "observation_gap": False},
+        },
+        "invalid",
+    ),
+    (
+        "an absent saw_event flag is not a sighting",
+        "claim_support",
+        {
+            "claim": {"kind": "occurrence", "surface": "network_connect"},
+            "observer": {"class": "independently_observed", "declared_probe_set": ["network_connect"]},
+            "observation": {},
+        },
+        "unsupported",
+    ),
+    (
+        "an absent observation_gap flag does not manufacture a gap",
+        "claim_support",
+        {
+            "claim": {"kind": "absence", "surface": "network_connect"},
+            "observer": {"class": "independently_observed", "declared_probe_set": ["network_connect"]},
+            "observation": {"saw_event": False},
+        },
+        "supported",
+    ),
 ]
 
 

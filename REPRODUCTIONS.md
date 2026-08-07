@@ -1,5 +1,30 @@
 # Independent Reproductions
 
+## v2-candidate — no reproduction yet
+
+Digest `sha256:56d4d41e09cd673881ffbf68a88e5ad96aa06cdd600258701d2fa8d3bf39abf9`, 90 vectors, twelve axes. Published 2026-08-07.
+
+**Nothing here has been reproduced by anyone but the author.** `ref_example.py` is the author's own
+clean-room example and has never counted. The kit's own rule applies to its own release: candidate until
+a different author or organisation recomputes every `expected` from `inputs` alone.
+
+What changed, so a reproducer knows where to look:
+
+- **`claim_support` is new** (20 vectors). Its precedence order is contract surface and is numbered in the
+  README; the earlier JVM run showed unstated ordering is exactly where a typed reimplementation diverges,
+  so expect that to be the friction point again. The steps that discriminate by outcome each have a
+  vector; the steps that would produce the same outcome by different routes deliberately do not, because a
+  vector that cannot fail for the right reason is not an oracle.
+- **An explicitly empty `declared_probe_set` and a `null` one are different answers** — covered-nothing
+  versus undeclared. Both are pinned in `scripts/check_contract_edges.py`.
+- **`source_class_ceiling` narrowed to three origin classes.** `scc.thirdparty_confirmed` and
+  `scc.ca_boundary_within` are gone; `scc.receiver_vantage_overclaim` is new and pins that no origin class
+  reaches a vantage strength.
+- **`incomplete_visibility` is semantically unchanged.** Only its `non_claims` text moved.
+
+The v1 reproduction below **does not carry over**: it read the five-class ladder this release narrows.
+
+
 RGE-Bench treats external reproduction as a separate claim from authorship. A
 reported reproduction means a different author or organisation recomputed a
 specific `vectors_digest` from `inputs` alone and matched the expected per-axis

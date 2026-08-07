@@ -1,21 +1,22 @@
 {
   "bench": "RGE-Bench",
-  "version": "v1",
+  "version": "v2-candidate",
   "profile": "rge-bench.fixture-json-sort-v1",
   "note": "v1: the externally reproduced 62-vector v0 corpus plus language-neutral contract-edge vectors surfaced by the first independent implementation.",
-  "axes": {
-    "sufficiency": "a valid record is not sufficient without coverage",
-    "source_class_ceiling": "who attested caps the maximum supportable claim",
-    "recompute": "the verdict is recomputed from records, not asserted; prose is ignored",
-    "format_equivalence": "shape-different but semantically-same records group as equivalent",
-    "tamper_fail_closed": "any digest mismatch or missing digest fails closed",
-    "incomplete_visibility": "absent / not-checked observation surfaces as incomplete, never clean",
-    "coverage_honesty": "a declared expected set plus retained per-case results bounds confirmation; absent or unresolved cases are incomplete, explicit failures may refute",
-    "delegated_scope": "a delegation grant caps the used scope; authorization narrows, never widens",
-    "hard_soft_digest": "hard integrity is the gate; the soft equivalence digest sits beside it and never rescues a hard failure",
-    "retained_replay": "the verdict is the recompute over retained records, not the carrier; a carrier over absent records is incomplete",
-    "mcp_description_code": "a tool's declared interface is checked against its code-evident effects; prose is ignored"
-  },
+  "axes": [
+    "claim_support",
+    "coverage_honesty",
+    "delegated_scope",
+    "format_equivalence",
+    "hard_soft_digest",
+    "incomplete_visibility",
+    "mcp_description_code",
+    "recompute",
+    "retained_replay",
+    "source_class_ceiling",
+    "sufficiency",
+    "tamper_fail_closed"
+  ],
   "vectors": [
     {
       "vector_id": "suff.valid_complete",
@@ -71,17 +72,6 @@
       },
       "expected": "exceeds_ceiling",
       "non_claims": "the claim is capped, not the record rejected"
-    },
-    {
-      "vector_id": "scc.thirdparty_confirmed",
-      "axis": "source_class_ceiling",
-      "property": "a third-party observation may carry independently_confirmed",
-      "inputs": {
-        "source_class": "third_party_observed",
-        "claim": "independently_confirmed"
-      },
-      "expected": "within_ceiling",
-      "non_claims": "ceiling ordering is RGE-Bench's proposed ranking, not a standard"
     },
     {
       "vector_id": "scc.issuer_signed_within",
@@ -264,7 +254,7 @@
         "observation": "present"
       },
       "expected": "observed",
-      "non_claims": "observed means watched, not that the result is good"
+      "non_claims": "observed means watched, not that the result is good; this axis does not grade whether silence is SUPPORTED, only whether an observation was made \u2014 see claim_support"
     },
     {
       "vector_id": "vis.not_checked",
@@ -274,7 +264,7 @@
         "observation": "not_checked"
       },
       "expected": "incomplete",
-      "non_claims": "not_checked is a visible gap, not a pass"
+      "non_claims": "not_checked is a visible gap, not a pass; this axis does not grade whether silence is SUPPORTED, only whether an observation was made \u2014 see claim_support"
     },
     {
       "vector_id": "vis.absent",
@@ -284,7 +274,7 @@
         "observation": "absent"
       },
       "expected": "incomplete",
-      "non_claims": "absent != clean"
+      "non_claims": "absent != clean; this axis does not grade whether silence is SUPPORTED, only whether an observation was made \u2014 see claim_support"
     },
     {
       "vector_id": "cov.complete_all_pass",
@@ -453,15 +443,15 @@
       "non_claims": "the claim is capped, not the record rejected"
     },
     {
-      "vector_id": "scc.ca_boundary_within",
+      "vector_id": "scc.receiver_vantage_overclaim",
       "axis": "source_class_ceiling",
-      "property": "coding agent: a boundary-observed run may carry observed_in_path",
+      "property": "the top origin class still cannot reach a vantage strength",
       "inputs": {
-        "source_class": "boundary_observed",
-        "claim": "observed_in_path"
+        "source_class": "receiver_receipt",
+        "claim": "independently_confirmed"
       },
-      "expected": "within_ceiling",
-      "non_claims": "ceiling ordering is RGE-Bench's proposed ranking, not a standard"
+      "expected": "exceeds_ceiling",
+      "non_claims": "the ceiling ranks who asserts, never where the fact was observed; a claim resting on a vantage is graded by claim_support"
     },
     {
       "vector_id": "tmp.ca_tampered_pack",
@@ -493,7 +483,7 @@
         "observation": "absent"
       },
       "expected": "incomplete",
-      "non_claims": "network egress is high-blast-radius; an unobserved surface is a gap, not a pass"
+      "non_claims": "network egress is high-blast-radius; an unobserved surface is a gap, not a pass; this axis does not grade whether silence is SUPPORTED, only whether an observation was made \u2014 see claim_support"
     },
     {
       "vector_id": "vis.ca_commands_not_checked",
@@ -503,7 +493,7 @@
         "observation": "not_checked"
       },
       "expected": "incomplete",
-      "non_claims": "not_checked is a visible gap, not a pass"
+      "non_claims": "not_checked is a visible gap, not a pass; this axis does not grade whether silence is SUPPORTED, only whether an observation was made \u2014 see claim_support"
     },
     {
       "vector_id": "vis.ca_mcp_observed",
@@ -513,7 +503,7 @@
         "observation": "present"
       },
       "expected": "observed",
-      "non_claims": "observed means the surface was watched, not that the result is good"
+      "non_claims": "observed means the surface was watched, not that the result is good; this axis does not grade whether silence is SUPPORTED, only whether an observation was made \u2014 see claim_support"
     },
     {
       "vector_id": "suff.ca_valid_full",
@@ -1042,6 +1032,474 @@
       },
       "expected": "distinct",
       "non_claims": "Pins array-order sensitivity for semantic values; it does not rank the importance of array elements."
+    },
+    {
+      "vector_id": "cs.absence_boundary_unenforced",
+      "axis": "claim_support",
+      "property": "silence from a boundary the subject can route around licenses nothing",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "boundary_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "not a failed claim; the question was not reachable from this vantage"
+    },
+    {
+      "vector_id": "cs.absence_independently_observed",
+      "axis": "claim_support",
+      "property": "silence from an observer the subject cannot blind without privilege, within its probe set",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "supported",
+      "non_claims": "supported within the declared probe set only; says nothing about surfaces outside it"
+    },
+    {
+      "vector_id": "cs.absence_boundary_routing_enforced",
+      "axis": "claim_support",
+      "property": "independently enforced routing restores absence support to a boundary observer",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "boundary_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ],
+          "routing_enforced_by": "cluster_network_policy_denies_direct_egress"
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "supported",
+      "non_claims": "the enforcement is an input the record declares; this axis does not verify that it holds"
+    },
+    {
+      "vector_id": "cs.absence_third_party_routing_enforced",
+      "axis": "claim_support",
+      "property": "and to a third party, so the class is not a caste",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "settlement"
+        },
+        "observer": {
+          "class": "third_party_observed",
+          "declared_probe_set": [
+            "settlement"
+          ],
+          "routing_enforced_by": "custodian_contract_admits_no_other_settlement_rail"
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "supported",
+      "non_claims": "same declared-input caveat as the boundary case"
+    },
+    {
+      "vector_id": "cs.absence_third_party_out_of_path",
+      "axis": "claim_support",
+      "property": "a neutral party outside the path cannot support absence",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "settlement"
+        },
+        "observer": {
+          "class": "third_party_observed",
+          "declared_probe_set": [
+            "settlement"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "neutrality is a property of interest, not of reach; the same class supports occurrence at full strength"
+    },
+    {
+      "vector_id": "cs.absence_producer_reported",
+      "axis": "claim_support",
+      "property": "the subject's own silence about itself licenses nothing",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "producer_reported",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "not an accusation; a producer-reported occurrence is still good evidence"
+    },
+    {
+      "vector_id": "cs.absence_surface_outside_probe_set",
+      "axis": "claim_support",
+      "property": "a surface outside the declared probe set is uncovered, whatever the class",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "io_uring_submit"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "names a gap in the probe set, not a defect in the observer"
+    },
+    {
+      "vector_id": "cs.absence_reported_observation_gap",
+      "axis": "claim_support",
+      "property": "a self-reported gap removes absence support for that window",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": true
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "reporting a gap is more honest than hiding one and is still not coverage"
+    },
+    {
+      "vector_id": "cs.absence_undeclared_probe_set",
+      "axis": "claim_support",
+      "property": "no declared probe set makes an absence claim unjudgeable, not merely weak",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed"
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "invalid",
+      "non_claims": "invalid means the reader cannot tell a covered silence from an uncovered one"
+    },
+    {
+      "vector_id": "cs.occurrence_receiver_receipt",
+      "axis": "claim_support",
+      "property": "occurrence is supportable from a class that cannot support absence",
+      "inputs": {
+        "claim": {
+          "kind": "occurrence",
+          "surface": "settlement"
+        },
+        "observer": {
+          "class": "receiver_receipt",
+          "declared_probe_set": [
+            "settlement"
+          ]
+        },
+        "observation": {
+          "saw_event": true,
+          "observation_gap": false
+        }
+      },
+      "expected": "supported",
+      "non_claims": "supports that it was seen, not that the set of such events is complete"
+    },
+    {
+      "vector_id": "cs.occurrence_unseen_is_unsupported",
+      "axis": "claim_support",
+      "property": "an occurrence claim with no event seen is unsupported, not inconclusive",
+      "inputs": {
+        "claim": {
+          "kind": "occurrence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "unsupported",
+      "non_claims": "unsupported is a verdict on this claim, not a statement that nothing happened"
+    },
+    {
+      "vector_id": "cs.absence_against_an_observed_event",
+      "axis": "claim_support",
+      "property": "an absence claim against an event the observer saw is contradicted",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": true,
+          "observation_gap": false
+        }
+      },
+      "expected": "contradicted",
+      "non_claims": "contradicted is the only outcome here that is a finding about the world"
+    },
+    {
+      "vector_id": "cs.edge_undeclared_probe_set_precedes_uncovered_surface",
+      "axis": "claim_support",
+      "property": "an undeclared probe set is invalid even when the surface would also be uncovered",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "io_uring_submit"
+        },
+        "observer": {
+          "class": "independently_observed"
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "invalid",
+      "non_claims": "step order is contract surface: no declared set outranks an uncovered surface"
+    },
+    {
+      "vector_id": "cs.edge_probe_set_precedes_contradiction",
+      "axis": "claim_support",
+      "property": "a surface outside the probe set is uncovered even when an event was seen",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "io_uring_submit"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": true,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "an event seen outside the declared set does not contradict a claim the observer could not cover"
+    },
+    {
+      "vector_id": "cs.edge_contradiction_precedes_blinding_cost",
+      "axis": "claim_support",
+      "property": "an observed event contradicts an absence claim before the class is consulted",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "boundary_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": true,
+          "observation_gap": false
+        }
+      },
+      "expected": "contradicted",
+      "non_claims": "a blindable observer that DID see the event still refutes the claim"
+    },
+    {
+      "vector_id": "cs.edge_gap_does_not_sink_occurrence",
+      "axis": "claim_support",
+      "property": "a reported gap removes absence support only",
+      "inputs": {
+        "claim": {
+          "kind": "occurrence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "boundary_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": true,
+          "observation_gap": true
+        }
+      },
+      "expected": "supported",
+      "non_claims": "the asymmetry cuts both ways: a gap cannot unsee what was seen"
+    },
+    {
+      "vector_id": "cs.edge_undeclared_probe_set_does_not_sink_occurrence",
+      "axis": "claim_support",
+      "property": "no declared probe set invalidates absence only",
+      "inputs": {
+        "claim": {
+          "kind": "occurrence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed"
+        },
+        "observation": {
+          "saw_event": true,
+          "observation_gap": false
+        }
+      },
+      "expected": "supported",
+      "non_claims": "a probe set bounds what silence means; it does not bound what a sighting means"
+    },
+    {
+      "vector_id": "cs.edge_unknown_observer_class_is_invalid",
+      "axis": "claim_support",
+      "property": "an observer class the reader cannot type yields no answer",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "kernel_ish",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "invalid",
+      "non_claims": "fail closed: an untypeable basis is invalid, never supported and never merely weak"
+    },
+    {
+      "vector_id": "cs.edge_unknown_claim_kind_is_invalid",
+      "axis": "claim_support",
+      "property": "a claim kind outside occurrence/absence yields no answer",
+      "inputs": {
+        "claim": {
+          "kind": "plausible",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "invalid",
+      "non_claims": "the axis grades two claim kinds; a third is a contract violation, not a weak claim"
+    },
+    {
+      "vector_id": "cs.edge_statement_prose_is_ignored",
+      "axis": "claim_support",
+      "property": "the claim's prose statement is not read",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect",
+          "statement": "the subject definitely never opened a socket, verified manually"
+        },
+        "observer": {
+          "class": "boundary_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "prose cannot raise a verdict; the same record without the sentence reaches the same outcome"
     }
   ]
 }

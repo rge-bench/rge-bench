@@ -1,4 +1,4 @@
-# RGE-Bench external reproduction kit (v1)
+# RGE-Bench external reproduction kit (v2-candidate)
 
 [![DOI](https://zenodo.org/badge/1280018754.svg)](https://doi.org/10.5281/zenodo.20842502)
 [![CI](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml)
@@ -14,15 +14,18 @@ checker that grades **per axis, never a single scalar cleanliness score**. The a
 conclusion is allowed to rest on, so **the source class and the coverage of a record bound what can be
 concluded from it** (an unobserved surface reads as incomplete, never clean; integrity fails closed). A digest
 stays **candidate, not conformance, until a different author or organisation reproduces the vectors from
-inputs alone**. The current 71-vector v1 digest has that reproduction evidence: JM-Lab's Spring/Jackson
-checker reproduced it from inputs alone, byte-for-byte against the pinned digest. You run it rather than
-take it on trust.
+inputs alone**. The 71-vector **v1** digest has that evidence: JM-Lab's Spring/Jackson checker reproduced
+it from inputs alone, byte-for-byte against the pinned digest.
+
+**The current 90-vector `v2-candidate` digest does not, and does not inherit v1's.** It adds an axis and
+an outcome vocabulary and narrows another axis, which `VERSIONING.md` requires be re-reproduced rather
+than carried over. Read it as a proposal until someone else runs it.
 
 This kit exists so a **different author or organisation** can implement the spec and reproduce the vectors
 independently. Two independent, interoperable implementations are the RFC bar for spec maturity; an
 external-party reproduction (a different author/org, not the kit's author) is the step that graduates a
-specific digest from **candidate** to **conformance**. The current 71-vector v1 digest has one reported
-independent reproduction. The kit needs nothing outside this directory.
+specific digest from **candidate** to **conformance**. v1 has one reported independent reproduction;
+`v2-candidate` has none. The kit needs nothing outside this directory.
 
 - `vectors.json`: the spec-owned vectors (content-addressed; `vectors_digest` below).
 - `checker.py`: the commodity scorer, per-axis pass/partial/fail, **no aggregate score**.
@@ -53,9 +56,10 @@ reproduction is independent.
 ```json
 { "vector_id", "axis", "property", "inputs", "expected", "non_claims" }
 ```
-`expected` is the outcome a correct reviewer must reach from `inputs` alone. v1 has 71
-vectors across the eleven axes: the externally reproduced v0 62-vector corpus plus nine contract-edge
-vectors (`*.edge_*`) that promote previously prose-only semantics into oracle-bearing corpus behavior.
+`expected` is the outcome a correct reviewer must reach from `inputs` alone. `v2-candidate` has 90
+vectors across twelve axes: the externally reproduced v0 62-vector corpus, nine contract-edge vectors
+(`*.edge_*`) that promote previously prose-only semantics into oracle-bearing corpus behavior, and the
+`claim_support` axis with the narrowed origin ceiling described below.
 
 ## Contract edge semantics
 
@@ -81,32 +85,78 @@ count changes and external reproductions do not by themselves create a new major
 `vectors_digest` starts candidate until a different author or organisation reproduces that exact digest
 from inputs alone.
 
-The current reproduced digest is v1 with 71 vectors:
+The current digest is `v2-candidate` with 90 vectors:
+`sha256:56d4d41e09cd673881ffbf68a88e5ad96aa06cdd600258701d2fa8d3bf39abf9`. **It has no external reproduction.**
+
+The last reproduced digest is v1 with 71 vectors:
 `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
 JM-Lab/rge-bench-java reproduced that exact digest from inputs alone after first surfacing the expected
-typed-JVM drift on the newly oracled edge vectors. See [`VERSIONING.md`](VERSIONING.md) and
-[`REPRODUCTIONS.md`](REPRODUCTIONS.md).
+typed-JVM drift on the newly oracled edge vectors. That reproduction read `source_class_ceiling` per the
+old five-class ladder, which `v2-candidate` narrows, so it is scoped to v1 and does not travel. See
+[`VERSIONING.md`](VERSIONING.md) and [`REPRODUCTIONS.md`](REPRODUCTIONS.md).
 
-## Axes (eleven; literature-anchored, with the rule and the outcome vocabulary)
+## Axes (twelve; literature-anchored, with the rule and the outcome vocabulary)
 
 | axis | rule (recompute from `inputs`) | outcomes | anchor |
 | --- | --- | --- | --- |
 | `sufficiency` | `sufficient` iff `record_valid` AND `coverage == "complete"`; else `incomplete` | sufficient / incomplete | Beyond Task Success 2604.19818; Evidence-Tracing 2606.04990 |
-| `source_class_ceiling` | rank `claim` strength vs the `source_class` ceiling; `within_ceiling` iff strength <= ceiling, else `exceeds_ceiling`; `invalid` if either is unknown | within_ceiling / exceeds_ceiling / invalid | Notarized Agents 2606.04193 |
+| `source_class_ceiling` | **origin only.** Rank `claim` strength vs the `source_class` ceiling; `within_ceiling` iff strength <= ceiling, else `exceeds_ceiling`; `invalid` if either is unknown | within_ceiling / exceeds_ceiling / invalid | Notarized Agents 2606.04193 |
 | `recompute` | `match` iff `set(observed) <= set(declared)`; else `mismatch`. The `description` prose is ignored | match / mismatch | format-agnostic recompute |
 | `format_equivalence` | `equivalent` iff `a.semantic == b.semantic` (the envelope `shape` is metadata, excluded); else `distinct` | equivalent / distinct | semantic-digest / equivalence-index |
 | `tamper_fail_closed` | `accepted` iff `stored_digest` and `recomputed_digest` are both present and equal; else `rejected` (missing digest fails closed) | accepted / rejected | integrity discipline |
-| `incomplete_visibility` | `observed` iff `observation == "present"`; else `incomplete` (absent / not-checked is never clean) | observed / incomplete | Evidence-Tracing 2606.04990 |
+| `incomplete_visibility` | `observed` iff `observation == "present"`; else `incomplete` (absent / not-checked is never clean). **Grades whether an observation was made, never whether the resulting silence is supported** | observed / incomplete | Evidence-Tracing 2606.04990 |
 | `coverage_honesty` | Given `declared_cases` and retained `case_results`, `refuted` if any declared case explicitly failed; `confirmed` only if every declared case passed; `incomplete` for any not-run, errored, or missing-result case; `invalid` if the declared set is missing. Partial evidence can refute but never confirm | confirmed / refuted / incomplete / invalid | OTel GenAI eval/test telemetry coverage-honesty |
 | `delegated_scope` | `within_grant` iff `set(used) <= set(granted)`; else `exceeds_grant`; `invalid` if either is missing. An empty grant authorizes nothing; sub-delegation may narrow, never widen | within_grant / exceeds_grant / invalid | Agent delegation receipts draft-nelson-...; Partial Evidence Bench 2605.05379 |
 | `hard_soft_digest` | `rejected_hard` if the hard digest is missing or mismatched (fail closed, soft never consulted); else `soft_equivalent` iff `soft_a == soft_b`, else `soft_divergent` | rejected_hard / soft_equivalent / soft_divergent | C2PA hard/soft binding |
 | `retained_replay` | `rejected_carrier` if `carrier_valid` is false (an invalid carrier cannot support replay); else `incomplete` if `records_retained` is false (a valid carrier over absent records); else `replayed_match` iff `set(replayed) == set(recorded)`, else `replayed_mismatch`. Carrier validity is a precondition, not the verdict | replayed_match / replayed_mismatch / incomplete / rejected_carrier | gateway-path replay; SLSA VSA / SCITT |
+| `claim_support` | **vantage.** Given `claim.kind`, `claim.surface`, `observer.class`, its `declared_probe_set` and any `routing_enforced_by`, and the `observation`, decide what this observer's report licenses. Precedence below is contract surface | supported / unsupported / contradicted / inconclusive_no_coverage / invalid | blinding cost (ARMO 2026-05-22); AR4SI `draft-ietf-rats-ar4si`; kernel vantage AgentSight 2508.02736 |
 | `mcp_description_code` | `undeclared_effect` if `code_effects` exceeds `declared_interface`; `over_declared` if the interface declares effects the code never exercises; else `consistent`. When both hold, `undeclared_effect` takes precedence (pinned). The `description` prose is ignored | consistent / undeclared_effect / over_declared | MCP description-code inconsistency 2606.04769 |
 
-Ceiling order (RGE-Bench's proposed ranking, not a standard): `producer_reported` (1) < `issuer_attested`
-(2) < `receiver_receipt` (3) < `boundary_observed` (4) < `third_party_observed` (5). Claim strength:
-`asserted` (1) < `asserted_signed` (2) < `observed_at_receiver` (3) < `observed_in_path` (4) <
-`independently_confirmed` (5).
+### Two questions, two axes (changed in `v2-candidate`)
+
+Until v1 one ordinal ladder answered two different questions: **who asserts this** and **where was it
+observed**. A single total order cannot be right for both, because it is applied to every claim and the
+right order depends on what is being claimed. So they are split.
+
+**`source_class_ceiling` — origin.** Ceiling order (RGE-Bench's proposed ranking, not a standard):
+`producer_reported` (1) < `issuer_attested` (2) < `receiver_receipt` (3). Claim strength: `asserted` (1) <
+`asserted_signed` (2) < `observed_at_receiver` (3) < `observed_in_path` (4) < `independently_confirmed`
+(5). The two strengths above the top of the ladder are reachable by **no origin class at all**, which is
+the statement the narrowing makes: origin never licenses a vantage claim.
+
+**`claim_support` — vantage.** Observer classes, taken from
+[`source-class-v0`](https://github.com/Rul1an/source-class-v0) rather than coined here:
+`producer_reported`, `receiver_receipt`, `boundary_observed`, `third_party_observed`,
+`independently_observed`. A class this reader cannot type yields `invalid`, fail-closed.
+
+**`blinding_cost` is derived, never declared.** A producer cannot assert that it is hard to blind. The
+predicate is computed from the class and from `routing_enforced_by`: an observer the subject can blind
+without privilege cannot support an absence claim *unless* its routing is enforced by a party the subject
+does not control. That escape is why this is a typing and not a demotion — the class is not a caste.
+
+Note that `producer_reported` and `receiver_receipt` appear on **both** lists. That is not an error: a
+party that asserts is also a party that saw. It is precisely why one ordinal axis over the union cannot
+work, since the same value sits at different heights depending on which question is asked.
+
+### `claim_support` precedence (contract surface; each step has a vector where the outcomes discriminate)
+
+0. `observer.class` untypeable, or `claim.kind` outside `occurrence`/`absence` → `invalid`
+1. no `declared_probe_set` and `kind == absence` → `invalid` — a reader cannot tell a covered silence
+   from an uncovered one, so the claim is unjudgeable rather than weak. This outranks step 2.
+2. `declared_probe_set` present and `claim.surface` not in it → `inconclusive_no_coverage`
+3. `observation.observation_gap` and `kind == absence` → `inconclusive_no_coverage`
+4. `kind == occurrence` → `supported` if `saw_event`, else `unsupported`
+5. `kind == absence` and `saw_event` → `contradicted`
+6. `kind == absence` and the subject can blind this observer (see above) → `inconclusive_no_coverage`
+7. otherwise → `supported`
+
+An explicitly empty `declared_probe_set` is **declared and covers nothing** (step 2); a `null` or absent
+one is **undeclared** (step 1). The two are different answers on purpose.
+
+**On `inconclusive_no_coverage`.** Borrowed rather than coined: AR4SI
+([`draft-ietf-rats-ar4si`](https://datatracker.ietf.org/doc/draft-ietf-rats-ar4si/)) reserves a tier for an
+appraisal that is *inconclusive rather than a pass or a fail*, and that is this outcome's shape. It is not
+a weaker `unsupported`; it says the question was not reachable from this vantage.
 
 ## Scoring (per-axis; NO aggregate score, by design)
 
@@ -122,7 +172,8 @@ each `expected` from `inputs`, imports nothing from this kit, and matches the pe
 step that graduates the vectors from candidate to conformance. (Within this kit, `ref_example.py` is the
 author's own clean-room example, not an external reproduction.)
 
-Reproduction is digest-scoped: the current 71-vector v1 corpus has one reported independent reproduction.
+Reproduction is digest-scoped: the 71-vector v1 corpus has one reported independent reproduction and the
+current 90-vector `v2-candidate` corpus has none.
 A match against an earlier digest would not graduate this corpus; earlier 55-vector, 60-vector, and
 62-vector digests are recorded separately. See
 [`REPRODUCTIONS.md`](REPRODUCTIONS.md) for both reproductions and for contract-clarification work surfaced
@@ -137,15 +188,15 @@ Neutrality here rests on what this repository demonstrably enforces, not on a cl
 - reference implementations are **scored, never blessed**; `ref_example.py` is the author's own clean-room
   example, explicitly *not* an external reproduction;
 - a digest stays **candidate, not conformance**, until a different author or organisation reproduces it from
-  inputs alone; the current v1 digest has one reported independent reproduction, and the bench does not
-  certify itself.
+  inputs alone; v1 has one reported independent reproduction, `v2-candidate` has none, and the bench does
+  not certify itself.
 
 ## Claim ceiling
 
 Measures the **reviewability of evidence**, not agent safety, correctness, or compliance. A passing vector
 means "this evidence is reviewer-gradeable on this axis", never "the agent is safe / governed / compliant".
-No scalar winner. Reproduction status is digest-scoped: the prior 60-vector and 62-vector v0 digests have
-reported independent reproduction, and so does the current 71-vector v1 digest. Every claim in this kit is
+No scalar winner. Reproduction status is digest-scoped: the 60-vector and 62-vector v0 digests and the
+71-vector v1 digest have reported independent reproduction; the current `v2-candidate` digest does not. Every claim in this kit is
 something you recompute from the bytes, not something you take on the kit's word.
 
 ## Provenance
