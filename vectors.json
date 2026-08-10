@@ -454,6 +454,28 @@
       "non_claims": "the ceiling ranks who asserts, never where the fact was observed; a claim resting on a vantage is graded by claim_support"
     },
     {
+      "vector_id": "scc.edge_unknown_source_class_is_invalid",
+      "axis": "source_class_ceiling",
+      "property": "an origin class the reader cannot type yields no ranking",
+      "inputs": {
+        "source_class": "trusted_vendor",
+        "claim": "asserted"
+      },
+      "expected": "invalid",
+      "non_claims": "fail closed: an untypeable origin is invalid, never within_ceiling by default"
+    },
+    {
+      "vector_id": "scc.edge_unknown_claim_strength_is_invalid",
+      "axis": "source_class_ceiling",
+      "property": "a claim strength outside the vocabulary yields no ranking",
+      "inputs": {
+        "source_class": "issuer_attested",
+        "claim": "probably_fine"
+      },
+      "expected": "invalid",
+      "non_claims": "the ceiling ranks a declared strength; an undeclared one is a contract violation"
+    },
+    {
       "vector_id": "tmp.ca_tampered_pack",
       "axis": "tamper_fail_closed",
       "property": "coding agent: an evidence pack whose body was altered after hashing -> rejected",

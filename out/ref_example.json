@@ -68,6 +68,8 @@
     "rpl.replay_match": "replayed_match",
     "rpl.replay_mismatch": "replayed_mismatch",
     "scc.ca_self_report_overclaim": "exceeds_ceiling",
+    "scc.edge_unknown_claim_strength_is_invalid": "invalid",
+    "scc.edge_unknown_source_class_is_invalid": "invalid",
     "scc.issuer_recompute_overclaim": "exceeds_ceiling",
     "scc.issuer_signed_within": "within_ceiling",
     "scc.producer_asserted": "within_ceiling",
