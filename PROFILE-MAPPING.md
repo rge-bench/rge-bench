@@ -89,12 +89,25 @@ a record confirms what its issuer recorded, it does not upgrade who observed it.
 | GuardrailDecision / action-chain records ([safal207/ibex-agent-verification](https://github.com/safal207/ibex-agent-verification)) | framework-recorded decision and action records, with explicit verification-level labels in the profile itself | `producer_reported` | `asserted` | `producer_reported` |
 | MCP `evidenceRef` ([experimental-ext-tool-annotations](https://github.com/modelcontextprotocol/experimental-ext-tool-annotations), trust-annotations draft) | a pointer (`type`/`digest`/`canonicalization`), not a record: it enables local re-derivation of whatever it references | inherits the referenced record's class | inherits | inherits |
 | observed-effect v0, boundary carrier ([Rul1an/observed-effect-v0](https://github.com/Rul1an/observed-effect-v0)) | an observer below the harness emits the record; the observer is not the component whose behaviour it describes | `boundary_observed` | `observed_in_path` | `independently_observed` |
+| MCP audit record contract, SEP-3004 shape, **proposed** ([modelcontextprotocol#3004](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/3004)) | a minimal protected core plus type-keyed `extensions` under one digest, sorted-JSON canonicalization, an append-only hash chain, a verification procedure, and a separate attestation manifest for the part that is not wire-observable | `producer_reported` (chain); `issuer_attested` (attestation manifest) | `asserted`; `asserted_signed` | **not stated, by design** |
 | gateway replay pack ([Rul1an/gateway-evidence-replay](https://github.com/Rul1an/gateway-evidence-replay)) | replay of captured gateway evidence; replay confirms recomputability and is agnostic to who captured | inherits the capture's class | inherits | inherits |
 
 Two consequences are worth stating plainly. First, none of the issuer-side formats above reach
 `independently_confirmed` on this axis, including the ones with the strongest signing and anchoring.
 That is not a defect of those formats; it is what an issuer vantage supports, and several of the
-formats say so themselves in their own non-claims. Second, the observed-effect row is capped too, and `v2-candidate` splits how. Its **origin** ceiling
+formats say so themselves in their own non-claims. Second, the SEP-3004 row is the clearest case of why the two columns had to be split at all, and its
+"not stated" is a design choice rather than an omission. That contract deliberately keeps the record
+core agnostic about what any given evidence proves, and pushes domain guarantees into registered
+extension types (`caller-governance`, `runtime-security`, `admission-control`). So it answers whether
+the audit history is internally intact, with real rigour: a published canonical rule, known-answer
+digests that independent implementations reproduce from the specification text, and a runnable vector
+set. What no registration carries today is the observer column. A record can be intact, ordered, and
+signed, and still leave a reader with no way to tell whether the silence in it was covered.
+
+That is not a criticism of the contract. It is the layering the contract asks for, and the axis split
+here is what a registration would have to fill in to answer it.
+
+Third, the observed-effect row is capped too, and `v2-candidate` splits how. Its **origin** ceiling
 is unchanged; its **observer class** is `independently_observed`, which is what lets its silence
 support an absence claim at all. A same-organisation boundary observer supports `observed_in_path`, and
 `independently_confirmed` requires an observer that a different party operates. The ceiling applies to
