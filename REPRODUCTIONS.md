@@ -2,9 +2,17 @@
 
 ## v2-candidate — no reproduction yet
 
-Digest `sha256:56d4d41e09cd673881ffbf68a88e5ad96aa06cdd600258701d2fa8d3bf39abf9`, 90 vectors, twelve axes. Published 2026-08-07.
+Digest `sha256:6ccf05935ebe6e21e74215590a764ad14fa6434e801332092e74c44468b0ded1`, 92 vectors, twelve axes. Published 2026-08-07.
 
-**Nothing here has been reproduced by anyone but the author.** `ref_example.py` is the author's own
+**Nothing here has been reproduced by anyone but the author.**
+
+**Two vectors were added on 2026-08-10 and the digest moved with them.** A mutation-adequacy
+check over the whole corpus (`scripts/check_rule_liveness.py`) found that `source_class_ceiling`
+declared an `invalid` outcome no vector exercised: deleting the unknown-class and
+unknown-strength guard from a conforming implementation reproduced the previous digest. That is
+a hole in the contract rather than a gap in confidence, so `scc.edge_unknown_source_class_is_invalid`
+and `scc.edge_unknown_claim_strength_is_invalid` close it. Anyone who started against the
+90-vector digest `sha256:56d4d41e…` should move to the current one. `ref_example.py` is the author's own
 clean-room example and has never counted. The kit's own rule applies to its own release: candidate until
 a different author or organisation recomputes every `expected` from `inputs` alone.
 

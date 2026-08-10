@@ -6,10 +6,13 @@ external reproduction does not by itself make a new major version.
 
 ## Current version
 
-The current repository state is **`v2-candidate`**: 90 vectors across twelve axes.
-Digest `sha256:56d4d41e09cd673881ffbf68a88e5ad96aa06cdd600258701d2fa8d3bf39abf9`.
+The current repository state is **`v2-candidate`**: 92 vectors across twelve axes.
+Digest `sha256:6ccf05935ebe6e21e74215590a764ad14fa6434e801332092e74c44468b0ded1`.
 
-**No external reproduction. It does not inherit v1's.** Three changes each independently require a
+**No external reproduction. It does not inherit v1's.** The digest moved once on 2026-08-10, when a
+corpus-wide mutation-adequacy check found a declared `source_class_ceiling` outcome that no vector
+exercised; two vectors closed it. A digest that moves before anyone has reproduced it costs nothing,
+which is the argument for running that check before asking rather than after. Three changes each independently require a
 candidate label under the rules below, and this release makes all three:
 
 - a **new axis**, `claim_support`, which grades what an observer's report licenses given the claim kind,
