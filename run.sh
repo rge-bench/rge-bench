@@ -20,5 +20,9 @@ echo "== contract-edge check (edge probes) =="
 python3 scripts/check_contract_edges.py
 
 echo
+echo "== rule-liveness check (every declared step decides a vector) =="
+python3 scripts/check_rule_liveness.py
+
+echo
 echo "== release policy check =="
 python3 scripts/check_release_policy.py
