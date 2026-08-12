@@ -66,7 +66,7 @@ POLICIES = {
         "required_reproductions_phrase": "current v1, 71 vectors / 11 axes",
     },
     "v2-candidate": {
-        "vector_count": 92,
+        "vector_count": 95,
         "reproduced": False,
         "maturity_prefix": "candidate",
         "edge_vectors": V2_EDGE_VECTORS,
@@ -77,7 +77,7 @@ POLICIES = {
             "v2-candidate conformance",
         ],
         "required_doc_phrases": [
-            "**The current 92-vector `v2-candidate` digest does not, and does not inherit v1's.**",
+            "**The current 95-vector `v2-candidate` digest does not, and does not inherit v1's.**",
         ],
         "required_reproductions_phrase": "## v2-candidate — no reproduction yet",
     },

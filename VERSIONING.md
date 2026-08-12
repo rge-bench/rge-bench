@@ -6,8 +6,8 @@ external reproduction does not by itself make a new major version.
 
 ## Current version
 
-The current repository state is **`v2-candidate`**: 92 vectors across twelve axes.
-Digest `sha256:6ccf05935ebe6e21e74215590a764ad14fa6434e801332092e74c44468b0ded1`.
+The current repository state is **`v2-candidate`**: 95 vectors across twelve axes.
+Digest `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`.
 
 **No external reproduction. It does not inherit v1's.** The digest moved once on 2026-08-10, when a
 corpus-wide mutation-adequacy check found a declared `source_class_ceiling` outcome that no vector
