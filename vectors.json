@@ -476,6 +476,39 @@
       "non_claims": "the ceiling ranks a declared strength; an undeclared one is a contract violation"
     },
     {
+      "vector_id": "scc.producer_signed_exceeds",
+      "axis": "source_class_ceiling",
+      "property": "a signed assertion exceeds what a producer-reported origin can carry",
+      "inputs": {
+        "source_class": "producer_reported",
+        "claim": "asserted_signed"
+      },
+      "expected": "exceeds_ceiling",
+      "non_claims": "pins producer_reported strictly below issuer_attested: the same claim is within_ceiling for an issuer and over it for a producer, which no vector using independently_confirmed can show, since that strength is over every ceiling"
+    },
+    {
+      "vector_id": "scc.issuer_receiver_vantage_exceeds",
+      "axis": "source_class_ceiling",
+      "property": "a receiver-vantage observation exceeds what an issuer-attested origin can carry",
+      "inputs": {
+        "source_class": "issuer_attested",
+        "claim": "observed_at_receiver"
+      },
+      "expected": "exceeds_ceiling",
+      "non_claims": "pins issuer_attested strictly below receiver_receipt; the accepting twin is scc.receiver_vantage_within, identical but for the origin class"
+    },
+    {
+      "vector_id": "scc.receiver_vantage_within",
+      "axis": "source_class_ceiling",
+      "property": "a receiver-vantage observation is within what a receiver-receipt origin can carry",
+      "inputs": {
+        "source_class": "receiver_receipt",
+        "claim": "observed_at_receiver"
+      },
+      "expected": "within_ceiling",
+      "non_claims": "the accepting twin of scc.issuer_receiver_vantage_exceeds and the only within_ceiling case receiver_receipt has; a flattened ladder returns within here too, so this vector alone cannot discriminate and is not offered as doing so"
+    },
+    {
       "vector_id": "tmp.ca_tampered_pack",
       "axis": "tamper_fail_closed",
       "property": "coding agent: an evidence pack whose body was altered after hashing -> rejected",

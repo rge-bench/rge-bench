@@ -61,9 +61,9 @@
         "total": 6
       },
       "source_class_ceiling": {
-        "reproduced": 8,
+        "reproduced": 11,
         "status": "pass",
-        "total": 8
+        "total": 11
       },
       "sufficiency": {
         "reproduced": 6,
@@ -77,5 +77,5 @@
       }
     }
   },
-  "vectors_digest": "sha256:6ccf05935ebe6e21e74215590a764ad14fa6434e801332092e74c44468b0ded1"
+  "vectors_digest": "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0"
 }

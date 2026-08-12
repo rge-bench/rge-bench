@@ -2,7 +2,7 @@
 
 ## v2-candidate — no reproduction yet
 
-Digest `sha256:6ccf05935ebe6e21e74215590a764ad14fa6434e801332092e74c44468b0ded1`, 92 vectors, twelve axes. Published 2026-08-07.
+Digest `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`, 95 vectors, twelve axes. Published 2026-08-07.
 
 **Nothing here has been reproduced by anyone but the author.**
 

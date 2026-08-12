@@ -17,7 +17,7 @@ stays **candidate, not conformance, until a different author or organisation rep
 inputs alone**. The 71-vector **v1** digest has that evidence: JM-Lab's Spring/Jackson checker reproduced
 it from inputs alone, byte-for-byte against the pinned digest.
 
-**The current 92-vector `v2-candidate` digest does not, and does not inherit v1's.** It adds an axis and
+**The current 95-vector `v2-candidate` digest does not, and does not inherit v1's.** It adds an axis and
 an outcome vocabulary and narrows another axis, which `VERSIONING.md` requires be re-reproduced rather
 than carried over. Read it as a proposal until someone else runs it.
 
@@ -85,8 +85,8 @@ count changes and external reproductions do not by themselves create a new major
 `vectors_digest` starts candidate until a different author or organisation reproduces that exact digest
 from inputs alone.
 
-The current digest is `v2-candidate` with 92 vectors:
-`sha256:6ccf05935ebe6e21e74215590a764ad14fa6434e801332092e74c44468b0ded1`. **It has no external reproduction.**
+The current digest is `v2-candidate` with 95 vectors:
+`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`. **It has no external reproduction.**
 
 The last reproduced digest is v1 with 71 vectors:
 `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
@@ -173,7 +173,7 @@ step that graduates the vectors from candidate to conformance. (Within this kit,
 author's own clean-room example, not an external reproduction.)
 
 Reproduction is digest-scoped: the 71-vector v1 corpus has one reported independent reproduction and the
-current 92-vector `v2-candidate` corpus has none.
+current 95-vector `v2-candidate` corpus has none.
 A match against an earlier digest would not graduate this corpus; earlier 55-vector, 60-vector, and
 62-vector digests are recorded separately. See
 [`REPRODUCTIONS.md`](REPRODUCTIONS.md) for both reproductions and for contract-clarification work surfaced
