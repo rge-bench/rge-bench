@@ -56,8 +56,8 @@ reproduction is independent.
 ```json
 { "vector_id", "axis", "property", "inputs", "expected", "non_claims" }
 ```
-`expected` is the outcome a correct reviewer must reach from `inputs` alone. `v2-candidate` has 90
-vectors across twelve axes: the externally reproduced v0 62-vector corpus, nine contract-edge vectors
+`expected` is the outcome a correct reviewer must reach from `inputs` alone. `v2-candidate` has 95
+vectors across twelve axes: the externally reproduced v0 62-vector corpus, nineteen contract-edge vectors
 (`*.edge_*`) that promote previously prose-only semantics into oracle-bearing corpus behavior, and the
 `claim_support` axis with the narrowed origin ceiling described below.
 
@@ -123,6 +123,21 @@ right order depends on what is being claimed. So they are split.
 `asserted_signed` (2) < `observed_at_receiver` (3) < `observed_in_path` (4) < `independently_confirmed`
 (5). The two strengths above the top of the ladder are reachable by **no origin class at all**, which is
 the statement the narrowing makes: origin never licenses a vantage claim.
+
+**A note on the field name, because this repository is one of several places it is in use.** Three
+vocabularies in this project already spell it the same way and rank different things.
+[`source-class-v0`](https://github.com/Rul1an/source-class-v0) types seven classes and says of itself
+that it is typing, not ranking. Here, `source_class_ceiling` ranks three of those values as *origin*.
+`claim_support` uses five of them as observer classes for *vantage*. Adjacent work carries a standing
+ladder under the same name, running from a self-report to a registered-independent issuer. At least one
+proposal decomposing independence carries both a `source_class` and a `relationship_class`, and puts the
+issuer-standing value in the first while the second carries the stake claim.
+
+We know what conflation costs because v1 paid it: the ceiling ranked origin and vantage together, mixing
+`producer_reported` and `issuer_attested` with `third_party_observed` and `boundary_observed`.
+Separating them took a release, a narrowed axis, a new one (`claim_support`), and a digest that
+deliberately did not inherit v1's reproduction. If you are mapping this corpus onto another vocabulary,
+map on what the field ranks rather than on what it is called.
 
 **`claim_support` — vantage.** Observer classes, taken from
 [`source-class-v0`](https://github.com/Rul1an/source-class-v0) rather than coined here:
@@ -201,7 +216,7 @@ something you recompute from the bytes, not something you take on the kit's word
 
 ## Provenance
 
-`vectors_digest: sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`. This is `sha256`
+`vectors_digest: sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`. This is `sha256`
 over the **canonical JSON of the `vectors` array** (`json.dumps(doc["vectors"], sort_keys=True,
 separators=(",", ":"))` encoded UTF-8), NOT the SHA of the `vectors.json` file bytes (which differs).
 Recompute it that exact way to match. Snapshot of the canonical RGE-Bench v1 vector set; the
