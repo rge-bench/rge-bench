@@ -21,6 +21,12 @@ flipping an arbitrary operator, so a surviving mutant names the rule an implemen
 instead of naming a line. Generic operators would generate mostly-equivalent noise over rules this
 small; the field's direction is domain-specific operators for the same reason.
 
+**An ordinal rule is not omitted, it is re-ordered.** Deletion is the wrong operator for a ladder,
+because the ordering lives in a table that a comparison reads rather than in a branch a mutant can
+cut, and every deletion mutant for `source_class_ceiling` stayed killed while its ceiling map was
+inverted. Ordinal axes therefore also carry permutation mutants: flatten to the top, flatten to the
+bottom, invert. `source_class_ceiling` is the only such axis in this corpus today.
+
 **Equivalent mutants are declared, never inferred.** Deciding mutant equivalence is undecidable in
 general, so a tool cannot discard them for you and a corpus that silently counts them as failures
 teaches its maintainers to ignore the check. `EQUIVALENT` below lists each one with the reason it
@@ -192,6 +198,28 @@ MUTANTS: dict[str, list[tuple[str, str, str]]] = {
             "claim strength must not exceed the origin ceiling",
             'return "within_ceiling" if strength <= ceiling else "exceeds_ceiling"',
             'return "within_ceiling" if True else "exceeds_ceiling"',
+        ),
+        # The three below permute the ladder instead of deleting a rule. The ordering of the origin
+        # classes is a declared rule that lives in a table read by a comparison, not in a branch, so
+        # the one-mutant-per-branch habit above generates nothing that can see it: both mutants
+        # above stay killed under an inverted ceiling map, and the axis scored 100% while ranking a
+        # producer self-report above a receiver receipt. Flattening upward and downward are the two
+        # collapses, and inversion is the permutation that keeps three distinct ranks, so a corpus
+        # that kills all three pins the order rather than the mere existence of a comparison.
+        (
+            "the ceiling ladder ranks origin classes, flattened to the highest",
+            '_CEILING = {\n    "producer_reported": 1,\n    "issuer_attested": 2,\n    "receiver_receipt": 3,\n}',
+            '_CEILING = {\n    "producer_reported": 3,\n    "issuer_attested": 3,\n    "receiver_receipt": 3,\n}',
+        ),
+        (
+            "the ceiling ladder ranks origin classes, flattened to the lowest",
+            '_CEILING = {\n    "producer_reported": 1,\n    "issuer_attested": 2,\n    "receiver_receipt": 3,\n}',
+            '_CEILING = {\n    "producer_reported": 1,\n    "issuer_attested": 1,\n    "receiver_receipt": 1,\n}',
+        ),
+        (
+            "the ceiling ladder is ordered, not merely three-valued: inverted",
+            '_CEILING = {\n    "producer_reported": 1,\n    "issuer_attested": 2,\n    "receiver_receipt": 3,\n}',
+            '_CEILING = {\n    "producer_reported": 3,\n    "issuer_attested": 2,\n    "receiver_receipt": 1,\n}',
         ),
     ],
     "format_equivalence": [
