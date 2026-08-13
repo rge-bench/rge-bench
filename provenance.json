@@ -56,5 +56,17 @@
       "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1"
     }
   ],
-  "candidate_reproduction_gate": "No conformance claim attaches to this digest until a different author or organisation recomputes every `expected` from `inputs` alone and reports a match. v1's reproduction is scoped to the v1 digest and does not carry over: it read source_class_ceiling per the five-class ladder this release narrows."
+  "candidate_reproduction_gate": "No conformance claim attaches to this digest until a different author or organisation recomputes every `expected` from `inputs` alone and reports a match. v1's reproduction is scoped to the v1 digest and does not carry over: it read source_class_ceiling per the five-class ladder this release narrows.",
+  "admission": {
+    "mode": "vendor_owned",
+    "admitting_parties": [
+      "RGE-Bench authors"
+    ],
+    "signatures_required": 1,
+    "rule": "ADMISSION.md",
+    "rule_digest": "sha256:f5e50ea1f20e1a1ee3419832956d57f9edfa677a45d7770d007bbaeaf8a2cd86",
+    "may_be_a_conformance_bar": false,
+    "withdrawn": [],
+    "non_claims": "Declares who may admit a vector and under which rule text. It does not claim the rule is externally governed, that any vector has been independently admitted, or that the corpus is fit to be a pass-or-fail bar; `may_be_a_conformance_bar` is false precisely because `mode` is vendor_owned."
+  }
 }
