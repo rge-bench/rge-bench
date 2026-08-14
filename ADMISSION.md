@@ -81,6 +81,26 @@ A corpus MUST NOT be another interface's pass-or-fail bar while it is vendor-own
 published, run, and cited as one vendor's public test set that happens to be independently runnable.
 That sentence is vaaraio's own conclusion about his corpus and it applies to ours identically.
 
+The machine-readable form of all of this is the `admission` object in `provenance.json`: `mode`, the
+parties who may admit, how many signatures a vector needs, the content-address of the rule text in
+force, and `may_be_a_conformance_bar`, which is the sentence above as a boolean a consumer can read
+without parsing prose. `scripts/check_provenance.py` reads it rather than trusting it: it recomputes
+`rule_digest` over this file's raw bytes, pins `rule` to this file by name so the digest cannot be
+satisfied by content-addressing some other file in the repo, requires at least as many admitting
+parties as signatures, and refuses any corpus that declares itself usable as a pass-or-fail bar while
+requiring fewer than two signatures — the last regardless of `mode`, because otherwise the one MUST
+NOT in this document is bypassed by editing one string. Unknown keys are rejected, since a
+misspelled key that silently does nothing is the failure this block exists to prevent.
+
+What that buys, stated at its actual size: a consumer can tell which rule text a corpus admitted
+under, and a corpus cannot quietly contradict the bar rule. It does not make the declaration true. A
+party can still write `multi_party` and list two names that are the same person. **The field is a
+statement whose internal consistency is checked, not an attestation that anyone verified the
+statement**, and the difference is the same recomputability-versus-admissibility line this document
+opens with. A field nobody reads is not a rule, which is the failure this document's A2 exists to
+catch one level down; a field that is read but only for self-consistency is a weaker thing than an
+audited one, and it is the weaker thing that is shipping here.
+
 ## Disagreement and withdrawal
 
 **Two independent implementations that disagree on a vector make it disputed.** A disputed vector is
@@ -91,12 +111,50 @@ on its own instead of waiting for someone to spot it".
 was withdrawn, and which digest it was withdrawn at. A corpus that quietly drops its mistakes cannot
 be audited on the thing it exists to audit.
 
-## The residual, stated rather than solved
+## The residual: one half has a known answer, the other does not
 
-None of this settles who picks the second implementation, or who signs the admission rule itself. That question, again in vaaraio's words, does not have a technical answer, "only a written rule with
-more than one signature on it". Anyone
-adopting this document inherits that gap, and stating it is the only honest thing available until
-somebody actually sets such a rule up.
+Two questions were left open here: who picks the second implementation, and who signs the admission
+rule itself. They are not equally open, and treating them as one gap overstated the difficulty of the
+first.
+
+**Who picks the second implementation has a standing answer, and the answer is that nobody picks.**
+RFC 6410 §2.2 sets the bar for advancing a specification to Internet Standard: "There are at least two
+independent interoperating implementations with widespread deployment and successful operational
+experience." Selection is replaced by an existence requirement, and by a public objection window: the
+IESG confirms the advancement "in an IETF-wide Last Call of at least four weeks". That formulation is
+from 2011; the underlying two-implementation rule is older, RFC 2026 §4.1.2, which required "at least
+two independent and interoperable implementations from different code bases". RFC 6410 updates RFC
+2026 and, on this criterion, **dropped the different-code-bases clause** — so a corpus that wants
+implementations sharing no code is asking for RFC 2026's bar, not RFC 6410's, and should say which.
+
+**This is an adaptation, not an import, and the difference is not cosmetic.** RFC 6410's criterion has
+four parts and the version below keeps one. Three places it does not carry:
+
+1. *Interoperation is not oracle replication.* RFC 6410 requires implementations that **interoperate**
+   — a symmetric behavioural relation between running systems exchanging data. A corpus's second
+   implementation does not interoperate with the first; it independently re-derives a verdict. Those
+   are different relations, and the second is weaker.
+2. *Deployment and operational experience are dropped entirely.* "Widespread deployment and successful
+   operational experience" is what makes RFC 6410's bar expensive. A corpus rule that keeps only
+   independence and agreement has kept the cheap half.
+3. *Granularity and standing.* RFC 6410 advances a *specification*, not a *vector*, and a vector is the
+   smaller and more numerous object — a four-week window per vector would stop a corpus moving, so any
+   window belongs to a digest. And the IETF has a standing body to run the Last Call and rule on
+   objections. A corpus without one has the rule and nobody to execute it, which is not a
+   technicality: an objection window with no one obliged to answer an objection is decoration.
+
+With those stated, the adapted rule is: a vector reaches the bar when two implementations that do not
+share an author have independently derived its expected verdict, and it stays proposed until a stated
+objection window on the digest has passed with no unresolved dispute. Borrowing the shape of a
+standards process does not borrow its weight, and a corpus that cites RFC 6410 while keeping one of
+its four criteria should not be read as having met it.
+
+**Who signs the admission rule itself remains open, and RFC 6410 does not help.** The IETF's process
+is ratified by the IETF; a rule is self-ratifying only inside a body that already exists. The honest
+position is unchanged on this half, and it is vaaraio's. His words, hedged as he hedged them: "I do
+not think that has a technical answer, only a written rule with more than one signature on it." What
+this section adds is only that the shape such a rule would take is no longer undefined. It does not
+add a signature, and nothing here should be read as one.
 
 ## Self-application: where RGE-Bench stands
 
@@ -109,7 +167,7 @@ Graded against the above at `v2-candidate`, 95 vectors, digest `sha256:ba0e3795�
 | A3 | Verdict follows from the rule, not the implementation | **Failed, and this is the weakest point.** The vectors and `ref_example.py` were authored together. An expected outcome that encodes a misreading of our own rule would reproduce perfectly and no check here would catch it. The only thing that ever has is an independent implementer reading the README instead of the code: JM-Lab's first v1 run diverged on the contract-edge semantics before it converged. That covers the v1 corpus, not this digest. |
 | A4 | Rejecting vectors are single-fault with an accepting twin | **Unmeasured.** Every axis carries both accepting and rejecting vectors, 2 to 5 distinct expected outcomes each, but that is outcome coverage rather than minimal pairing. Whether a given rejecting vector has an accepting counterpart differing in exactly one respect is not measured anywhere, and no check enforces it. An earlier draft of this row claimed a distribution across vector families that had not been measured, which is the failure this table exists to make expensive. |
 | | Admission is multi-party | **No.** One author admits every vector. There is no second signature, no admission rule prior to this document, and no withdrawal procedure. |
-| | Vendor ownership is machine-readable | **No.** No field names the admission mode. `maturity` and `external_reproduction` record whether anyone has reproduced this digest, which is the recomputability question this document opens by separating from admissibility, and `spec_owner: "RGE-Bench authors"` names a party rather than a process. Single-party admission is inferable only from prose. Adding the key is open work, and this row is the rule at the top of this file failing against its own author. |
+| | Vendor ownership is machine-readable | **Met, and it was the one open row this file could close by itself.** `provenance.json` now carries an `admission` object: `mode: "vendor_owned"`, `admitting_parties`, `signatures_required: 1`, `rule: "ADMISSION.md"`, `rule_digest`, `may_be_a_conformance_bar: false`, and an empty `withdrawn` list. `scripts/check_provenance.py` recomputes `rule_digest` over this file's bytes and fails closed on a mismatch, so the row cannot rot back into prose the way it started. What it does **not** do is upgrade anything: the mode it publishes is `vendor_owned`, which is the same fact the previous version of this row confessed, now stated where a consumer reads it instead of where a reader has to. **Prior state, kept rather than overwritten:** "No field names the admission mode... Single-party admission is inferable only from prose. Adding the key is open work, and this row is the rule at the top of this file failing against its own author." |
 
 One thing that must not be miscounted in our favour. JM-Lab has reproduced **earlier digests** of
 this corpus from inputs alone on an unrelated stack, and on the v1 run reported a mismatch before
@@ -134,5 +192,7 @@ The criteria are properties of a corpus and do not depend on this repository. Th
 `check_rule_liveness.py` is 359 lines, of which 183 are a mutant table written against literal source
 substrings of this `ref_example.py`, and the machinery assumes a single `evaluate(axis, inputs)` entry
 point and vectors carrying `vector_id`, `axis` and `inputs`. Budget the machinery and expect to
-rewrite the table per corpus. The ownership field is one key, and this corpus does not have it yet. A corpus that adopts it and publishes the grade it actually earns has done the useful thing, whatever
-the grade says.
+rewrite the table per corpus. The ownership block is cheaper: seven keys in `provenance.json` and the
+`_check_admission` function in `check_provenance.py`, which is corpus-independent apart from the
+filename it pins. A corpus that adopts it and publishes the grade it actually earns has done the
+useful thing, whatever the grade says.
