@@ -42,14 +42,39 @@ graduate a later corpus.
 It does not, by itself, make the broader contract complete or certify any agent,
 provider, product, or runtime.
 
+## What class of claim a row is
+
+**No badge here is conferred by anyone.** ACM badges are awarded by a venue's artifact-evaluation committee. This column borrows ACM's *vocabulary* to describe a claim precisely; it is a self-description under a published definition, not an ACM award.
+
+Rows describe themselves with an [ACM Artifact Review and Badging](https://www.acm.org/publications/policies/artifact-review-and-badging-current)
+class, because the distinction is easy to blur and ACM already drew it. Note the
+terms are the reverse of the common intuition: *Reproduced* means a different team
+obtained the result **using** the author's artifacts, *Replicated* means **without**
+them.
+
+Every row below is **Results Reproduced**. The checker was written independently
+and imports nothing from this kit, but it runs against the `vectors.json` published
+here, and that is an author-supplied artifact.
+
+**Replicated is not reachable here, and that is a property of conformance corpora
+rather than a shortfall of any reproducer.** ACM assumes the author-supplied
+artifact is the author's *code*, so obtaining the result without it is meaningful.
+A conformance corpus inverts that: the corpus is the artifact, and no reproduction
+can avoid using it. Anyone claiming *Replicated* against a published corpus has
+either misread the badge or not used the corpus.
+
+So the fact worth reporting has no ACM badge, and the rows state it in full rather
+than reaching for a stronger label: **an independently written implementation, run
+against author-supplied vectors, recomputing every `expected` from `inputs` alone.**
+
 ## Reported reproductions
 
-| date | reproducer | stack | digest scope | result | artifact status |
-| --- | --- | --- | --- | --- | --- |
-| 2026-06-30 | JM-Lab | Spring Boot 4 / Jackson 3 | historical v0, 55 vectors, `sha256:575fe0769153c9f366fa7711c0c4243b6350cb54d5aa36b30459dad91dc67881` | 55/55 reproduced, all ten axes pass | historical; superseded by the current-digest reproduction below |
-| 2026-07-01 | JM-Lab | Spring Boot 4 / Jackson 3 | historical v0, 60 vectors / 11 axes, `sha256:00f0feda78b35d911d2372646e7e759b61cfb41ae9c38a96fb34fd6263f34fd3` | 60/60 reproduced, all eleven axes pass, including `coverage_honesty` | superseded by the 62-vector v0 digest below |
-| 2026-07-03 | JM-Lab | Spring Boot 4 / Jackson 3 | latest reproduced v0, 62 vectors / 11 axes, `sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95` | 62/62 reproduced, all eleven axes pass; issuer-vantage vectors match the documented ceiling ranking | maintained checker: [JM-Lab/rge-bench-java](https://github.com/JM-Lab/rge-bench-java), standing log: [JM-Lab/rge-bench-java#1](https://github.com/JM-Lab/rge-bench-java/issues/1) |
-| 2026-07-03 | JM-Lab | Spring Boot 4 / Jackson 3 | current v1, 71 vectors / 11 axes, `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb` | 71/71 reproduced, all eleven axes pass; first run surfaced typed-JVM drift on the new edge vectors, then the checker implemented the declared language-neutral semantics from the contract text | maintained checker commit: [cd788eb](https://github.com/JM-Lab/rge-bench-java/commit/cd788eb9453eb8f13c4d910d968b0776b25e7f76), standing log: [JM-Lab/rge-bench-java#1](https://github.com/JM-Lab/rge-bench-java/issues/1) |
+| date | reproducer | class | stack | digest scope | result | artifact status |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-06-30 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | historical v0, 55 vectors, `sha256:575fe0769153c9f366fa7711c0c4243b6350cb54d5aa36b30459dad91dc67881` | 55/55 reproduced, all ten axes pass | historical; superseded by the current-digest reproduction below |
+| 2026-07-01 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | historical v0, 60 vectors / 11 axes, `sha256:00f0feda78b35d911d2372646e7e759b61cfb41ae9c38a96fb34fd6263f34fd3` | 60/60 reproduced, all eleven axes pass, including `coverage_honesty` | superseded by the 62-vector v0 digest below |
+| 2026-07-03 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | latest reproduced v0, 62 vectors / 11 axes, `sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95` | 62/62 reproduced, all eleven axes pass; issuer-vantage vectors match the documented ceiling ranking | maintained checker: [JM-Lab/rge-bench-java](https://github.com/JM-Lab/rge-bench-java), standing log: [JM-Lab/rge-bench-java#1](https://github.com/JM-Lab/rge-bench-java/issues/1) |
+| 2026-07-03 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | current v1, 71 vectors / 11 axes, `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb` | 71/71 reproduced, all eleven axes pass; first run surfaced typed-JVM drift on the new edge vectors, then the checker implemented the declared language-neutral semantics from the contract text | maintained checker commit: [cd788eb](https://github.com/JM-Lab/rge-bench-java/commit/cd788eb9453eb8f13c4d910d968b0776b25e7f76), standing log: [JM-Lab/rge-bench-java#1](https://github.com/JM-Lab/rge-bench-java/issues/1) |
 
 Sources: [JM-Lab reproduction thread](https://github.com/JM-Lab/spring-ai-playground/discussions/31)
 and [standing checker log](https://github.com/JM-Lab/rge-bench-java/issues/1).
