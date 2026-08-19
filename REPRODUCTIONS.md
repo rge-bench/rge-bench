@@ -44,7 +44,9 @@ provider, product, or runtime.
 
 ## What class of claim a row is
 
-Rows carry an [ACM Artifact Review and Badging](https://www.acm.org/publications/policies/artifact-review-and-badging-current)
+**No badge here is conferred by anyone.** ACM badges are awarded by a venue's artifact-evaluation committee. This column borrows ACM's *vocabulary* to describe a claim precisely; it is a self-description under a published definition, not an ACM award.
+
+Rows describe themselves with an [ACM Artifact Review and Badging](https://www.acm.org/publications/policies/artifact-review-and-badging-current)
 class, because the distinction is easy to blur and ACM already drew it. Note the
 terms are the reverse of the common intuition: *Reproduced* means a different team
 obtained the result **using** the author's artifacts, *Replicated* means **without**
