@@ -25,6 +25,10 @@ STALE_PHRASES = [
     "**The current 95-vector `v2-candidate` digest does not, and does not inherit v1's.**",
     "**It has no external reproduction.**",
     "No external reproduction. It does not inherit v1's.",
+    "which `v2-candidate` narrows",
+    "changed in `v2-candidate`",
+    "> **Changed in `v2-candidate`.**",
+    "`v2-candidate` splits how",
 ]
 
 
@@ -34,6 +38,7 @@ def main() -> int:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     reproductions = (ROOT / "REPRODUCTIONS.md").read_text(encoding="utf-8")
     versioning = (ROOT / "VERSIONING.md").read_text(encoding="utf-8")
+    profile_mapping = (ROOT / "PROFILE-MAPPING.md").read_text(encoding="utf-8")
     failures: list[str] = []
 
     if provenance.get("vectors_digest") != DIGEST:
@@ -59,11 +64,14 @@ def main() -> int:
     if "candidate_reproduction_gate" in provenance:
         failures.append("candidate_reproduction_gate must be removed once this digest is reproduced")
 
+    if "v2-candidate narrows" in json.dumps(provenance, sort_keys=True):
+        failures.append("historical reproduction scope still names the current release v2-candidate")
+
     maturity = provenance.get("maturity", "")
     if "candidate" in maturity.lower() and "no external reproduction" in maturity.lower():
         failures.append(f"stale candidate maturity remains: {maturity!r}")
 
-    surface = readme + "\n" + reproductions + "\n" + versioning
+    surface = readme + "\n" + reproductions + "\n" + versioning + "\n" + profile_mapping
     for phrase in STALE_PHRASES:
         if phrase in surface:
             failures.append(f"stale no-reproduction wording remains: {phrase!r}")

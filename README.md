@@ -92,7 +92,7 @@ The last reproduced digest is v1 with 71 vectors:
 `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
 JM-Lab/rge-bench-java reproduced that exact digest from inputs alone after first surfacing the expected
 typed-JVM drift on the newly oracled edge vectors. That reproduction read `source_class_ceiling` per the
-old five-class ladder, which `v2-candidate` narrows, so it is scoped to v1 and does not travel. See
+old five-class ladder, which `v2` narrows, so it is scoped to v1 and does not travel. See
 [`VERSIONING.md`](VERSIONING.md) and [`REPRODUCTIONS.md`](REPRODUCTIONS.md).
 
 ## Axes (twelve; literature-anchored, with the rule and the outcome vocabulary)
@@ -112,7 +112,7 @@ old five-class ladder, which `v2-candidate` narrows, so it is scoped to v1 and d
 | `claim_support` | **vantage.** Given `claim.kind`, `claim.surface`, `observer.class`, its `declared_probe_set` and any `routing_enforced_by`, and the `observation`, decide what this observer's report licenses. Precedence below is contract surface | supported / unsupported / contradicted / inconclusive_no_coverage / invalid | blinding cost (ARMO 2026-05-22); AR4SI `draft-ietf-rats-ar4si`; kernel vantage AgentSight 2508.02736 |
 | `mcp_description_code` | `undeclared_effect` if `code_effects` exceeds `declared_interface`; `over_declared` if the interface declares effects the code never exercises; else `consistent`. When both hold, `undeclared_effect` takes precedence (pinned). The `description` prose is ignored | consistent / undeclared_effect / over_declared | MCP description-code inconsistency 2606.04769 |
 
-### Two questions, two axes (changed in `v2-candidate`)
+### Two questions, two axes (changed in `v2`)
 
 Until v1 one ordinal ladder answered two different questions: **who asserts this** and **where was it
 observed**. A single total order cannot be right for both, because it is applied to every claim and the

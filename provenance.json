@@ -55,7 +55,7 @@
       "result": "71/71 vectors reproduced; all eleven axes pass; contract-edge semantics implemented from README text after the initial typed-JVM mismatch surfaced the drift",
       "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1",
       "scoped_to_digest": "sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb",
-      "does_not_travel_because": "v2-candidate narrows source_class_ceiling to origin and adds the claim_support axis and its outcome vocabulary; this run read the old five-class ladder, so the reproduction is scoped to the v1 digest"
+      "does_not_travel_because": "v2 narrows source_class_ceiling to origin and adds the claim_support axis and its outcome vocabulary; this run read the old five-class ladder, so the reproduction is scoped to the v1 digest"
     },
     {
       "reproducer": "JM-Lab",

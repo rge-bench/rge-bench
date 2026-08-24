@@ -17,7 +17,7 @@ RGE-Bench can then test whether a reviewer can recompute bounded conclusions
 from records, coverage, and source class without treating one clean dimension as
 proof that all dimensions are clean.
 
-> **Changed in `v2-candidate`.** `boundary_observed` and `third_party_observed` are no longer values
+> **Changed in `v2`.** `boundary_observed` and `third_party_observed` are no longer values
 > of `source_class_ceiling`; that axis ranks **origin** only. They are observer classes on the new
 > `claim_support` axis, so a format now maps to both a *who asserts* value and a *where observed*
 > value. A format that never says where its facts were observed maps to "not stated", which is a
@@ -107,7 +107,7 @@ signed, and still leave a reader with no way to tell whether the silence in it w
 That is not a criticism of the contract. It is the layering the contract asks for, and the axis split
 here is what a registration would have to fill in to answer it.
 
-Third, the observed-effect row is capped too, and `v2-candidate` splits how. Its **origin** ceiling
+Third, the observed-effect row is capped too, and `v2` splits how. Its **origin** ceiling
 is unchanged; its **observer class** is `independently_observed`, which is what lets its silence
 support an absence claim at all. A same-organisation boundary observer supports `observed_in_path`, and
 `independently_confirmed` requires an observer that a different party operates. The ceiling applies to
