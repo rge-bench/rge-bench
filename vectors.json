@@ -1,6 +1,6 @@
 {
   "bench": "RGE-Bench",
-  "version": "v2-candidate",
+  "version": "v2",
   "profile": "rge-bench.fixture-json-sort-v1",
   "note": "v1: the externally reproduced 62-vector v0 corpus plus language-neutral contract-edge vectors surfaced by the first independent implementation.",
   "axes": [

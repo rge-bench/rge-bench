@@ -1,6 +1,6 @@
 {
   "bench": "RGE-Bench",
-  "version": "v2-candidate",
+  "version": "v2",
   "spec_owner": "RGE-Bench authors",
   "vectors_file": "vectors.json",
   "vectors_digest": "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0",
@@ -30,9 +30,20 @@
     "code": "Apache-2.0",
     "vectors_and_docs": "CC-BY-4.0"
   },
-  "maturity": "candidate (no external reproduction of this digest)",
-  "non_claims": "This manifest attests the provenance and content-address of the spec-owned v2-candidate vector set only. It is NOT a claim about any agent behavior, safety, or compliance. This digest has NO reported independent reproduction and does not inherit v1's: a fresh reproduction under this digest is required before any conformance claim.",
-  "external_reproduction": null,
+  "maturity": "digest-scoped externally reproduced",
+  "non_claims": "This manifest attests the provenance and content-address of the spec-owned v2 vector set only. It is NOT a claim about any agent behavior, safety, or compliance. Reproduction is digest-scoped: the recorded JM-Lab run covers this digest and does not graduate any later digest.",
+  "external_reproduction": {
+    "reproducer": "JM-Lab",
+    "stack": "Spring Boot 4 / Jackson 3",
+    "artifact": "https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982",
+    "report": "https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260",
+    "date": "2026-08-24",
+    "checker_commit": "a1f7df862eec4e8480e6c3f3f4f4cec2ec334982",
+    "result": "95/95 vectors reproduced; all twelve axes pass; digest byte-for-byte; contract text only, expected never read",
+    "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1",
+    "scoped_to_digest": "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0",
+    "canonicalization_note": "v2 introduces U+2014; Python json.dumps ensure_ascii (non-ASCII as \\uXXXX) is load-bearing. A JVM serializer writing raw UTF-8 over the same sorted structure yields a different digest."
+  },
   "prior_external_reproductions": [
     {
       "reproducer": "JM-Lab",
@@ -44,7 +55,7 @@
       "result": "71/71 vectors reproduced; all eleven axes pass; contract-edge semantics implemented from README text after the initial typed-JVM mismatch surfaced the drift",
       "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1",
       "scoped_to_digest": "sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb",
-      "does_not_travel_because": "v2-candidate narrows source_class_ceiling to origin and adds the claim_support axis and its outcome vocabulary; this run read the old five-class ladder, so the reproduction is scoped to the v1 digest"
+      "does_not_travel_because": "v2 narrows source_class_ceiling to origin and adds the claim_support axis and its outcome vocabulary; this run read the old five-class ladder, so the reproduction is scoped to the v1 digest"
     },
     {
       "reproducer": "JM-Lab",
@@ -56,7 +67,6 @@
       "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1"
     }
   ],
-  "candidate_reproduction_gate": "No conformance claim attaches to this digest until a different author or organisation recomputes every `expected` from `inputs` alone and reports a match. v1's reproduction is scoped to the v1 digest and does not carry over: it read source_class_ceiling per the five-class ladder this release narrows.",
   "admission": {
     "mode": "vendor_owned",
     "admitting_parties": [
@@ -64,7 +74,7 @@
     ],
     "signatures_required": 1,
     "rule": "ADMISSION.md",
-    "rule_digest": "sha256:f5e50ea1f20e1a1ee3419832956d57f9edfa677a45d7770d007bbaeaf8a2cd86",
+    "rule_digest": "sha256:ea3a0e6a5b83fa683c11c9848443cde44f670627b4aecc5a2b324c79ec8f432c",
     "may_be_a_conformance_bar": false,
     "withdrawn": [],
     "non_claims": "Declares who may admit a vector and under which rule text. It does not claim the rule is externally governed, that any vector has been independently admitted, or that the corpus is fit to be a pass-or-fail bar; `may_be_a_conformance_bar` is false precisely because `mode` is vendor_owned."

@@ -1,4 +1,4 @@
-# RGE-Bench external reproduction kit (v2-candidate)
+# RGE-Bench external reproduction kit (v2)
 
 [![DOI](https://zenodo.org/badge/1280018754.svg)](https://doi.org/10.5281/zenodo.20842502)
 [![CI](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml)
@@ -17,15 +17,15 @@ stays **candidate, not conformance, until a different author or organisation rep
 inputs alone**. The 71-vector **v1** digest has that evidence: JM-Lab's Spring/Jackson checker reproduced
 it from inputs alone, byte-for-byte against the pinned digest.
 
-**The current 95-vector `v2-candidate` digest does not, and does not inherit v1's.** It adds an axis and
-an outcome vocabulary and narrows another axis, which `VERSIONING.md` requires be re-reproduced rather
-than carried over. Read it as a proposal until someone else runs it.
+**The current 95-vector `v2` digest has one reported independent reproduction** and does not inherit v1's.
+It adds an axis and an outcome vocabulary and narrows another axis, which `VERSIONING.md` required be
+re-reproduced rather than carried over. JM-Lab reproduced this exact digest from inputs alone.
 
 This kit exists so a **different author or organisation** can implement the spec and reproduce the vectors
 independently. Two independent, interoperable implementations are the RFC bar for spec maturity; an
 external-party reproduction (a different author/org, not the kit's author) is the step that graduates a
-specific digest from **candidate** to **conformance**. v1 has one reported independent reproduction;
-`v2-candidate` has none. The kit needs nothing outside this directory.
+specific digest from **candidate** to **conformance**. v1 and v2 each have one reported independent
+reproduction, scoped to their own digest. The kit needs nothing outside this directory.
 
 - `vectors.json`: the spec-owned vectors (content-addressed; `vectors_digest` below).
 - `checker.py`: the commodity scorer, per-axis pass/partial/fail, **no aggregate score**.
@@ -56,7 +56,7 @@ reproduction is independent.
 ```json
 { "vector_id", "axis", "property", "inputs", "expected", "non_claims" }
 ```
-`expected` is the outcome a correct reviewer must reach from `inputs` alone. `v2-candidate` has 95
+`expected` is the outcome a correct reviewer must reach from `inputs` alone. `v2` has 95
 vectors across twelve axes: the externally reproduced v0 62-vector corpus, nineteen contract-edge vectors
 (`*.edge_*`) that promote previously prose-only semantics into oracle-bearing corpus behavior, and the
 `claim_support` axis with the narrowed origin ceiling described below.
@@ -85,14 +85,14 @@ count changes and external reproductions do not by themselves create a new major
 `vectors_digest` starts candidate until a different author or organisation reproduces that exact digest
 from inputs alone.
 
-The current digest is `v2-candidate` with 95 vectors:
-`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`. **It has no external reproduction.**
+The current digest is `v2` with 95 vectors:
+`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`. JM-Lab/rge-bench-java reproduced that exact digest from inputs alone at checker commit [`a1f7df8`](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982) ([report](https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260)).
 
 The last reproduced digest is v1 with 71 vectors:
 `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
 JM-Lab/rge-bench-java reproduced that exact digest from inputs alone after first surfacing the expected
 typed-JVM drift on the newly oracled edge vectors. That reproduction read `source_class_ceiling` per the
-old five-class ladder, which `v2-candidate` narrows, so it is scoped to v1 and does not travel. See
+old five-class ladder, which `v2` narrows, so it is scoped to v1 and does not travel. See
 [`VERSIONING.md`](VERSIONING.md) and [`REPRODUCTIONS.md`](REPRODUCTIONS.md).
 
 ## Axes (twelve; literature-anchored, with the rule and the outcome vocabulary)
@@ -112,7 +112,7 @@ old five-class ladder, which `v2-candidate` narrows, so it is scoped to v1 and d
 | `claim_support` | **vantage.** Given `claim.kind`, `claim.surface`, `observer.class`, its `declared_probe_set` and any `routing_enforced_by`, and the `observation`, decide what this observer's report licenses. Precedence below is contract surface | supported / unsupported / contradicted / inconclusive_no_coverage / invalid | blinding cost (ARMO 2026-05-22); AR4SI `draft-ietf-rats-ar4si`; kernel vantage AgentSight 2508.02736 |
 | `mcp_description_code` | `undeclared_effect` if `code_effects` exceeds `declared_interface`; `over_declared` if the interface declares effects the code never exercises; else `consistent`. When both hold, `undeclared_effect` takes precedence (pinned). The `description` prose is ignored | consistent / undeclared_effect / over_declared | MCP description-code inconsistency 2606.04769 |
 
-### Two questions, two axes (changed in `v2-candidate`)
+### Two questions, two axes (changed in `v2`)
 
 Until v1 one ordinal ladder answered two different questions: **who asserts this** and **where was it
 observed**. A single total order cannot be right for both, because it is applied to every claim and the
@@ -187,8 +187,8 @@ each `expected` from `inputs`, imports nothing from this kit, and matches the pe
 step that graduates the vectors from candidate to conformance. (Within this kit, `ref_example.py` is the
 author's own clean-room example, not an external reproduction.)
 
-Reproduction is digest-scoped: the 71-vector v1 corpus has one reported independent reproduction and the
-current 95-vector `v2-candidate` corpus has none.
+Reproduction is digest-scoped: the 71-vector v1 corpus and the current 95-vector `v2` corpus each have
+one reported independent reproduction.
 A match against an earlier digest would not graduate this corpus; earlier 55-vector, 60-vector, and
 62-vector digests are recorded separately. See
 [`REPRODUCTIONS.md`](REPRODUCTIONS.md) for both reproductions and for contract-clarification work surfaced
@@ -203,7 +203,7 @@ Neutrality here rests on what this repository demonstrably enforces, not on a cl
 - reference implementations are **scored, never blessed**; `ref_example.py` is the author's own clean-room
   example, explicitly *not* an external reproduction;
 - a digest stays **candidate, not conformance**, until a different author or organisation reproduces it from
-  inputs alone; v1 has one reported independent reproduction, `v2-candidate` has none, and the bench does
+  inputs alone; v1 and v2 each have one reported independent reproduction, scoped to their own digest, and the bench does
   not certify itself.
 
 ## Claim ceiling
@@ -211,7 +211,7 @@ Neutrality here rests on what this repository demonstrably enforces, not on a cl
 Measures the **reviewability of evidence**, not agent safety, correctness, or compliance. A passing vector
 means "this evidence is reviewer-gradeable on this axis", never "the agent is safe / governed / compliant".
 No scalar winner. Reproduction status is digest-scoped: the 60-vector and 62-vector v0 digests and the
-71-vector v1 digest have reported independent reproduction; the current `v2-candidate` digest does not. Every claim in this kit is
+71-vector v1 digest and the current 95-vector `v2` digest have reported independent reproduction. Every claim in this kit is
 something you recompute from the bytes, not something you take on the kit's word.
 
 ## Provenance

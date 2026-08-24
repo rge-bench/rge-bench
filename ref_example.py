@@ -18,7 +18,7 @@ from numbers import Number
 KIT = os.path.dirname(os.path.abspath(__file__))
 
 # ORIGIN ceiling ranks (RGE-Bench's proposed ordering; see README, anchor 2606.04193).
-# v2-candidate: the two vantage classes left this ladder. It ranks WHO ASSERTS, and the strengths
+# v2: the two vantage classes left this ladder. It ranks WHO ASSERTS, and the strengths
 # above `observed_at_receiver` are therefore reachable by no origin class at all — which is the
 # point. Where a fact was observed is graded by `claim_support`.
 _CEILING = {
@@ -92,7 +92,7 @@ def _tamper_fail_closed(inp):
 
 
 def _incomplete_visibility(inp):
-    # Unchanged in v2-candidate. It grades whether an observation was MADE. Whether the resulting
+    # Unchanged in v2. It grades whether an observation was MADE. Whether the resulting
     # silence SUPPORTS an absence claim is a different question with a different input set; see
     # `_claim_support`.
     return "observed" if inp.get("observation") == "present" else "incomplete"
