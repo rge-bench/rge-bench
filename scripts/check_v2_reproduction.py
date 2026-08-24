@@ -31,6 +31,13 @@ STALE_PHRASES = [
     "`v2-candidate` splits how",
 ]
 
+REQUIRED_CURRENT_LABELS = [
+    ("README.md", "# RGE-Bench external reproduction kit (v2)"),
+    ("README.md", "### Two questions, two axes (changed in `v2`)"),
+    ("PROFILE-MAPPING.md", "> **Changed in `v2`.**"),
+    ("PROFILE-MAPPING.md", "`v2` splits how"),
+]
+
 
 def main() -> int:
     vectors_doc = json.loads((ROOT / "vectors.json").read_text(encoding="utf-8"))
@@ -75,6 +82,11 @@ def main() -> int:
     for phrase in STALE_PHRASES:
         if phrase in surface:
             failures.append(f"stale no-reproduction wording remains: {phrase!r}")
+
+    current_surfaces = {"README.md": readme, "PROFILE-MAPPING.md": profile_mapping}
+    for filename, phrase in REQUIRED_CURRENT_LABELS:
+        if phrase not in current_surfaces[filename]:
+            failures.append(f"{filename} is missing current v2 label: {phrase!r}")
 
     if "current v2, 95 vectors / 12 axes" not in reproductions:
         failures.append("REPRODUCTIONS.md must record the current v2 row (95 vectors / 12 axes)")
