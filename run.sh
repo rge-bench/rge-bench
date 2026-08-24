@@ -26,3 +26,7 @@ python3 scripts/check_rule_liveness.py
 echo
 echo "== release policy check =="
 python3 scripts/check_release_policy.py
+
+echo
+echo "== v2 reproduction guard =="
+python3 scripts/check_v2_reproduction.py

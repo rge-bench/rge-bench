@@ -65,6 +65,22 @@ POLICIES = {
         "required_doc_phrases": [],
         "required_reproductions_phrase": "current v1, 71 vectors / 11 axes",
     },
+    "v2": {
+        "vector_count": 95,
+        "reproduced": True,
+        "maturity": "digest-scoped externally reproduced",
+        "edge_vectors": V2_EDGE_VECTORS,
+        "reproduction_commit": "a1f7df862eec4e8480e6c3f3f4f4cec2ec334982",
+        "forbidden_doc_phrases": [
+            "v2-candidate — no reproduction yet",
+            "Nothing here has been reproduced by anyone but the author.",
+            "v2-candidate conformance",
+        ],
+        "required_doc_phrases": [
+            "**The current 95-vector `v2` digest has one reported independent reproduction**",
+        ],
+        "required_reproductions_phrase": "current v2, 95 vectors / 12 axes",
+    },
     "v2-candidate": {
         "vector_count": 95,
         "reproduced": False,

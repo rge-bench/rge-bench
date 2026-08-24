@@ -6,14 +6,17 @@ external reproduction does not by itself make a new major version.
 
 ## Current version
 
-The current repository state is **`v2-candidate`**: 95 vectors across twelve axes.
+The current repository state is **`v2`**: 95 vectors across twelve axes.
 Digest `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`.
 
-**No external reproduction. It does not inherit v1's.** The digest moved once on 2026-08-10, when a
+**Externally reproduced. It does not inherit v1's.** JM-Lab/rge-bench-java reproduced this exact
+digest from inputs alone on 2026-08-24 at checker commit
+[`a1f7df8`](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982)
+([report](https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260)). The digest
+moved once on 2026-08-10, when a
 corpus-wide mutation-adequacy check found a declared `source_class_ceiling` outcome that no vector
-exercised; two vectors closed it. A digest that moves before anyone has reproduced it costs nothing,
-which is the argument for running that check before asking rather than after. Three changes each independently require a
-candidate label under the rules below, and this release makes all three:
+exercised; two vectors closed it. Three changes each independently required a
+candidate label under the rules below, and this release made all three:
 
 - a **new axis**, `claim_support`, which grades what an observer's report licenses given the claim kind,
   the observer class and its declared probe set;
@@ -57,10 +60,12 @@ JM-Lab/rge-bench-java reproduced that exact digest from inputs alone on
   prose-only contract edges into oracled vectors. The latest reproduced v1
   digest is the 71-vector corpus,
   `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
-- `v2-candidate`: **candidate, not reproduced.** Splits the origin question
-  from the vantage question across two axes. No conformance claim attaches to
-  this digest until a different author or organisation reproduces it from
-  inputs alone.
+- `v2-candidate`: historical candidate label for the same 95-vector digest
+  before the 2026-08-24 JM-Lab reproduction. Splits the origin question from
+  the vantage question across two axes.
+- `v2`: reproduced contract-surface release of that digest. Latest reproduced
+  v2 digest is the 95-vector corpus,
+  `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`.
 
 ## Change rules
 
