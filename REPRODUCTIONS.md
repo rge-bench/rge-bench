@@ -56,12 +56,12 @@ Every row below is **Results Reproduced**. The checker was written independently
 and imports nothing from this kit, but it runs against the `vectors.json` published
 here, and that is an author-supplied artifact.
 
-**Replicated is not reachable here, and that is a property of conformance corpora
-rather than a shortfall of any reproducer.** ACM assumes the author-supplied
-artifact is the author's *code*, so obtaining the result without it is meaningful.
-A conformance corpus inverts that: the corpus is the artifact, and no reproduction
-can avoid using it. Anyone claiming *Replicated* against a published corpus has
-either misread the badge or not used the corpus.
+**Replicated is not established by these runs.** They use the author-supplied
+corpus, so they fit Results Reproduced: a different team obtained the same
+digest-scoped result using the author's artifacts. They do not independently
+answer the research question without those artifacts. That is a fact about
+these rows, not a claim that Replicated is impossible for every
+conformance-corpus study.
 
 So the fact worth reporting has no ACM badge, and the rows state it in full rather
 than reaching for a stronger label: **an independently written implementation, run

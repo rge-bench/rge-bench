@@ -41,6 +41,19 @@ REQUIRED_CURRENT_LABELS = [
     ("ADMISSION.md", "Graded against the above at `v2`, 95 vectors"),
 ]
 
+# Either leftover claim is a fail. Deleting only the ACM-assumes-code
+# sentence while keeping "Replicated is unreachable for corpora" must
+# still fail — that was the named false-green.
+FORBIDDEN_REPLICATION_RATIONALE = (
+    "ACM assumes the author-supplied artifact is the author's",
+    "Replicated is not reachable here, and that is a property of conformance corpora",
+    "no reproduction can avoid using it",
+)
+
+
+def _folded(text: str) -> str:
+    return " ".join(text.split())
+
 
 def main() -> int:
     vectors_doc = json.loads((ROOT / "vectors.json").read_text(encoding="utf-8"))
@@ -98,6 +111,15 @@ def main() -> int:
 
     if "current v2, 95 vectors / 12 axes" not in reproductions:
         failures.append("REPRODUCTIONS.md must record the current v2 row (95 vectors / 12 axes)")
+
+    folded_reproductions = _folded(reproductions)
+    if "not established by these runs" not in folded_reproductions:
+        failures.append(
+            "REPRODUCTIONS.md must say Replicated is not established by these runs"
+        )
+    for phrase in FORBIDDEN_REPLICATION_RATIONALE:
+        if phrase in folded_reproductions:
+            failures.append(f"false Replicated rationale remains: {phrase!r}")
 
     if failures:
         print("v2 reproduction guard failed:", file=sys.stderr)
