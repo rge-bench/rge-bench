@@ -8,6 +8,7 @@ external reproduction does not by itself make a new major version.
 
 The current repository state is **`v2`**: 95 vectors across twelve axes.
 Digest `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`.
+Profile `rge-bench/py-jsondumps/1`.
 
 **Externally reproduced. It does not inherit v1's.** JM-Lab/rge-bench-java reproduced this exact
 digest from inputs alone on 2026-08-24 at checker commit

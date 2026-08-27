@@ -4,7 +4,8 @@
   "spec_owner": "RGE-Bench authors",
   "vectors_file": "vectors.json",
   "vectors_digest": "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0",
-  "digest_method": "sha256 over canonical JSON of the `vectors` array: json.dumps(doc['vectors'], sort_keys=True, separators=(',', ':')) encoded utf-8 (NOT the SHA of the vectors.json file bytes)",
+  "canonicalization_profile": "rge-bench/py-jsondumps/1",
+  "digest_method": "sha256 over the `vectors` array under profile rge-bench/py-jsondumps/1: CPython json.dumps(doc['vectors'], sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False) encoded utf-8 (NOT the SHA of the vectors.json file bytes)",
   "vector_count": 95,
   "axes": [
     "claim_support",

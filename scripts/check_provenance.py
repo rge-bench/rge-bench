@@ -17,10 +17,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
-
-def _canonical(obj) -> bytes:
-    return json.dumps(obj, sort_keys=True, separators=(",", ":")).encode("utf-8")
+from checker import PROFILE_ID, canonical_dumps  # noqa: E402
 
 
 # The admission modes ADMISSION.md defines. An unknown mode is a failure rather than a pass, because
@@ -171,13 +170,17 @@ def main() -> int:
     manifest = json.loads((ROOT / "provenance.json").read_text(encoding="utf-8"))
 
     vectors = vectors_doc["vectors"]
-    digest = "sha256:" + hashlib.sha256(_canonical(vectors)).hexdigest()
+    digest = "sha256:" + hashlib.sha256(canonical_dumps(vectors)).hexdigest()
     count = len(vectors)
     axes = sorted({v["axis"] for v in vectors})
 
     failures: list[str] = []
     if manifest.get("vectors_digest") != digest:
         failures.append(f"vectors_digest: manifest {manifest.get('vectors_digest')} != recomputed {digest}")
+    if manifest.get("canonicalization_profile") != PROFILE_ID:
+        failures.append(
+            f"canonicalization_profile: manifest {manifest.get('canonicalization_profile')!r} != {PROFILE_ID!r}"
+        )
     if manifest.get("vector_count") != count:
         failures.append(f"vector_count: manifest {manifest.get('vector_count')} != actual {count}")
     if manifest.get("axes") != axes:

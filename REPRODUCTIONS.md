@@ -86,8 +86,8 @@ and [standing checker log](https://github.com/JM-Lab/rge-bench-java/issues/1).
 Jackson 3) is the first independent implementation of the checker written to the
 README contract, importing nothing from this kit. It has reproduced every digest
 from the 55-vector v0 through the current 95-vector `v2` corpus from inputs alone.
-The v2 run matches the pinned `vectors_digest` byte-for-byte through the kit's
-sorted-key, `ensure_ascii` recipe. Native insertion-order and raw-UTF-8
+The v2 run matches the pinned `vectors_digest` byte-for-byte through profile
+`rge-bench/py-jsondumps/1` (sorted-key, `ensure_ascii` recipe). Native insertion-order and raw-UTF-8
 serialization yield different digests, which is the declare-the-canonicalization
 point surfacing in the provenance pin.
 
