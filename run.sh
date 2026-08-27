@@ -16,6 +16,10 @@ echo "== provenance check (content-address pin) =="
 python3 scripts/check_provenance.py
 
 echo
+echo "== canonicalization profile =="
+python3 scripts/check_canonical_profile.py
+
+echo
 echo "== contract-edge check (edge probes) =="
 python3 scripts/check_contract_edges.py
 

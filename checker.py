@@ -18,9 +18,22 @@ import os
 
 BENCH = os.path.dirname(os.path.abspath(__file__))
 
+PROFILE_ID = "rge-bench/py-jsondumps/1"
 
-def _canonical(obj):
-    return json.dumps(obj, sort_keys=True, separators=(",", ":")).encode("utf-8")
+
+def canonical_dumps(obj):
+    """Serialize under profile rge-bench/py-jsondumps/1.
+
+    Code-point key sort, compact separators, ensure_ascii=True, allow_nan=False,
+    CPython float spelling (1.0 stays 1.0), UTF-8 bytes.
+    """
+    return json.dumps(
+        obj,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+        allow_nan=False,
+    ).encode("utf-8")
 
 
 def load_vectors():
@@ -29,7 +42,7 @@ def load_vectors():
 
 
 def vectors_digest(doc):
-    return "sha256:" + hashlib.sha256(_canonical(doc["vectors"])).hexdigest()
+    return "sha256:" + hashlib.sha256(canonical_dumps(doc["vectors"])).hexdigest()
 
 
 def score(vectors, outcomes_by_impl):
@@ -91,7 +104,12 @@ def main():
 
     with open(os.path.join(BENCH, "scores.json"), "w") as f:
         json.dump(
-            {"vectors_digest": vectors_digest(doc), "matrix": matrix, "axes": axes},
+            {
+                "canonicalization_profile": PROFILE_ID,
+                "vectors_digest": vectors_digest(doc),
+                "matrix": matrix,
+                "axes": axes,
+            },
             f,
             indent=2,
             sort_keys=True,

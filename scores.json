@@ -13,6 +13,7 @@
     "sufficiency",
     "tamper_fail_closed"
   ],
+  "canonicalization_profile": "rge-bench/py-jsondumps/1",
   "matrix": {
     "ref_example": {
       "claim_support": {
