@@ -141,6 +141,8 @@ def main() -> int:
     # README provenance paragraph must qualify if it still says canonical JSON.
     if "canonical JSON" in readme and EXPECTED_PROFILE not in readme:
         failures.append("README.md provenance still says canonical JSON without the profile id")
+    if "RGE-Bench v1 vector set" in readme:
+        failures.append("README.md provenance still calls the current digest a v1 vector set")
 
     for rel in CLAIM_SURFACES:
         text = (ROOT / rel).read_text(encoding="utf-8")

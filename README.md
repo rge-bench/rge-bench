@@ -219,7 +219,7 @@ something you recompute from the bytes, not something you take on the kit's word
 `vectors_digest: sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`. This is `sha256`
 over the `vectors` array under profile `rge-bench/py-jsondumps/1` (`json.dumps(doc["vectors"], sort_keys=True,
 separators=(",", ":"), ensure_ascii=True, allow_nan=False)` encoded UTF-8), NOT the SHA of the `vectors.json` file bytes (which differs).
-Recompute it that exact way to match. Snapshot of the canonical RGE-Bench v1 vector set; the
+Recompute it that exact way to match. Snapshot of the current RGE-Bench v2 vector set; the
 digest pins it, so an external reproduction is over the same bytes.
 
 A machine-readable manifest is in [`provenance.json`](provenance.json) (digest, vector count, axis list,
