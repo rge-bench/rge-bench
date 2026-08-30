@@ -145,9 +145,16 @@ def _claim_support(inp):
     if observation.get("saw_event"):
         return "contradicted"
 
-    # 6. silence is bounded by blinding cost; independently enforced routing is the escape
-    if _SUBJECT_CONTROLLABLE[observer["class"]] and not observer.get("routing_enforced_by"):
-        return "inconclusive_no_coverage"
+    # 6. silence is bounded by blinding cost; independently enforced routing is the escape.
+    #    Consulted only here, for a subject-controllable observer. Presence reuses
+    #    _present_string: absent, null, or "" is not present; a non-empty JSON string is
+    #    present; any other JSON type is invalid. Earlier steps do not consume this field.
+    if _SUBJECT_CONTROLLABLE[observer["class"]]:
+        routing = observer.get("routing_enforced_by")
+        if routing is not None and not isinstance(routing, str):
+            return "invalid"
+        if not _present_string(routing):
+            return "inconclusive_no_coverage"
 
     # 7. silence from an observer the subject cannot blind, within its declared probe set
     return "supported"

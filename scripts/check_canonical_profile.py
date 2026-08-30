@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 EXPECTED_PROFILE = "rge-bench/py-jsondumps/1"
-EXPECTED_DIGEST = "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0"
+EXPECTED_DIGEST = "sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a"
 FORBIDDEN_CLAIM_TOKENS = ("RFC 8785", "rfc 8785", "JCS", "subset of JCS", "subset of jcs")
 CLAIM_SURFACES = (
     "checker.py",

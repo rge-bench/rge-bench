@@ -88,13 +88,38 @@ MUTANTS: dict[str, list[tuple[str, str, str]]] = {
         ),
         (
             "6 blinding cost bounds silence",
-            'if _SUBJECT_CONTROLLABLE[observer["class"]] and not observer.get("routing_enforced_by"):\n        return "inconclusive_no_coverage"',
-            'if False:\n        return "inconclusive_no_coverage"',
+            '        if not _present_string(routing):\n            return "inconclusive_no_coverage"',
+            '        if False:\n            return "inconclusive_no_coverage"',
         ),
         (
             "6b independently enforced routing escape",
-            'if _SUBJECT_CONTROLLABLE[observer["class"]] and not observer.get("routing_enforced_by"):',
-            'if _SUBJECT_CONTROLLABLE[observer["class"]]:',
+            '        if not _present_string(routing):\n            return "inconclusive_no_coverage"',
+            '        if True:\n            return "inconclusive_no_coverage"',
+        ),
+        (
+            "6c malformed routing type is invalid",
+            '        if routing is not None and not isinstance(routing, str):\n            return "invalid"',
+            '        if False:\n            return "invalid"',
+        ),
+        (
+            "6d empty routing string is not present",
+            '        if not _present_string(routing):',
+            '        if routing is None:',
+        ),
+        (
+            "receiver_receipt is subject-controllable",
+            '"receiver_receipt": True,',
+            '"receiver_receipt": False,',
+        ),
+        (
+            "2b surface membership precedes the occurrence branch",
+            'elif claim.get("surface") not in declared:\n        return "inconclusive_no_coverage"',
+            'elif is_absence and claim.get("surface") not in declared:\n        return "inconclusive_no_coverage"',
+        ),
+        (
+            "an explicitly empty probe set is declared",
+            'if declared is None:\n        if is_absence:\n            return "invalid"',
+            'if not declared:\n        if is_absence:\n            return "invalid"',
         ),
     ],
     "coverage_honesty": [
@@ -190,6 +215,11 @@ MUTANTS: dict[str, list[tuple[str, str, str]]] = {
     ],
     "source_class_ceiling": [
         (
+            "removed v1 origin names are not on the ceiling",
+            '_CEILING = {\n    "producer_reported": 1,\n    "issuer_attested": 2,\n    "receiver_receipt": 3,\n}',
+            '_CEILING = {\n    "producer_reported": 1,\n    "issuer_attested": 2,\n    "receiver_receipt": 3,\n    "boundary_observed": 4,\n    "third_party_observed": 5,\n}',
+        ),
+        (
             "an unknown class or strength is invalid, not a pass",
             'if ceiling is None or strength is None:\n        return "invalid"',
             'if False:\n        return "invalid"',
@@ -236,6 +266,35 @@ MUTANTS: dict[str, list[tuple[str, str, str]]] = {
             'return "match" if True else "mismatch"',
         ),
     ],
+}
+
+# Named near-miss outcomes for the five issue-29 groups. A kill that only moves "some"
+# vector is not enough: each mutant must move its distinguishing vector to the named
+# wrong outcome, and the two no-op controls must stay put.
+NAMED_KILLS: dict[str, dict[str, str]] = {
+    "removed v1 origin names are not on the ceiling": {
+        "scc.v2_origin_boundary_observed_is_invalid": "within_ceiling",
+        "scc.v2_origin_third_party_observed_is_invalid": "within_ceiling",
+    },
+    "an explicitly empty probe set is declared": {
+        "cs.empty_probe_set_covers_nothing": "invalid",
+    },
+    "2b surface membership precedes the occurrence branch": {
+        "cs.occurrence_surface_outside_probe_set": "supported",
+    },
+    "receiver_receipt is subject-controllable": {
+        "cs.absence_receiver_receipt": "supported",
+    },
+    "6d empty routing string is not present": {
+        "cs.absence_empty_routing_is_absent": "supported",
+    },
+    "6c malformed routing type is invalid": {
+        "cs.edge_malformed_routing_type_is_invalid": "inconclusive_no_coverage",
+    },
+}
+NO_OP_CONTROLS = {
+    "cs.absence_independently_observed": "supported",
+    "scc.producer_asserted": "within_ceiling",
 }
 
 # Mutants that no vector can kill, with the reason. Deciding equivalence is undecidable in general,
@@ -313,8 +372,30 @@ def main() -> int:
                     failures.append(f"{axis} / {label!r}: mutation was a no-op")
                     continue
 
-                outcomes, raised = _outcomes(_load(mutated, f"{axis}_{index}", tmp), vectors)
+                module = _load(mutated, f"{axis}_{index}", tmp)
+                outcomes, raised = _outcomes(module, vectors)
                 moved = [vid for vid, out in baseline.items() if outcomes.get(vid) != out]
+                expected_moves = NAMED_KILLS.get(label)
+                if expected_moves:
+                    for vector_id, wrong in expected_moves.items():
+                        actual = outcomes.get(vector_id)
+                        if actual != wrong:
+                            failures.append(
+                                f"{axis} / {label!r}: {vector_id} named move expected "
+                                f"{wrong!r}, got {actual!r}"
+                            )
+                    for vector_id, keep in NO_OP_CONTROLS.items():
+                        control = next(v for v in all_vectors if v["vector_id"] == vector_id)
+                        try:
+                            actual = module.evaluate(control["axis"], control["inputs"])
+                        except Exception:  # noqa: BLE001
+                            failures.append(f"{axis} / {label!r}: no-op control {vector_id} raised")
+                            continue
+                        if actual != keep:
+                            failures.append(
+                                f"{axis} / {label!r}: no-op control {vector_id} moved to "
+                                f"{actual!r}, expected {keep!r}"
+                            )
                 if moved or raised:
                     note = f", {len(raised)} raised" if raised else ""
                     killed.append(f"{label} ({len(moved)} moved{note})")

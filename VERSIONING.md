@@ -6,18 +6,39 @@ external reproduction does not by itself make a new major version.
 
 ## Current version
 
-The current repository state is **`v2`**: 95 vectors across twelve axes.
+The current repository state is **`v3-candidate`**: 104 vectors across twelve axes.
+Digest `sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a`.
+Profile `rge-bench/py-jsondumps/1`.
+
+**No external reproduction. It does not inherit v2's.** The policy requires candidate status for a
+fresh digest; it does not force the next major number. This label is a new candidate identity, not a
+reuse of historical `v2-candidate`. The 95 original vector entries are preserved. What required the
+candidate is newly oracle-bearing contract behavior, not a new axis or outcome vocabulary:
+
+- removed v1 origin names (`boundary_observed`, `third_party_observed`) are `invalid` on
+  `source_class_ceiling` even at a strength the old five-class ladder accepted;
+- an explicit empty `declared_probe_set` is declared and covers nothing, distinct from missing or
+  `null`;
+- surface membership is decided before the occurrence branch;
+- `receiver_receipt` is subject-controllable, so a covered, gap-free, unseen absence from that
+  observer is inconclusive;
+- `routing_enforced_by` uses the existing non-empty JSON string presence rule, and a non-string
+  value is `invalid` only where step 6 consults routing.
+
+A version bump is not a published reproduction. The JM-Lab v2 run remains scoped to
+`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`.
+
+## Previous version
+
+The previous repository state is **`v2`**: 95 vectors across twelve axes.
 Digest `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`.
 Profile `rge-bench/py-jsondumps/1`.
 
-**Externally reproduced. It does not inherit v1's.** JM-Lab/rge-bench-java reproduced this exact
+**Externally reproduced. It does not inherit v1's.** JM-Lab/rge-bench-java reproduced that exact
 digest from inputs alone on 2026-08-24 at checker commit
 [`a1f7df8`](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982)
-([report](https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260)). The digest
-moved once on 2026-08-10, when a
-corpus-wide mutation-adequacy check found a declared `source_class_ceiling` outcome that no vector
-exercised; two vectors closed it. Three changes each independently required a
-candidate label under the rules below, and this release made all three:
+([report](https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260)). Three changes
+each independently required a candidate label, and v2 made all three:
 
 - a **new axis**, `claim_support`, which grades what an observer's report licenses given the claim kind,
   the observer class and its declared probe set;
@@ -26,17 +47,10 @@ candidate label under the rules below, and this release made all three:
 - **narrowed contract-surface semantics** on `source_class_ceiling`, which drops `boundary_observed` and
   `third_party_observed` and now ranks origin only.
 
-The defect this closes: claim kind was not an input to any of v1's 71 vectors on any of its 11 axes, so
-one total order over source classes was applied to occurrence and absence alike. For an absence claim
-that order can run backwards — a neutral third party outside the action path is blinded by a free routing
-choice, while an observer at a vantage the subject cannot write to is not.
-
 JM-Lab's v1 reproduction read `source_class_ceiling` per the old five-class ladder and is therefore scoped
 to the v1 digest.
 
-## Previous version
-
-The current repository state is `v1`: the externally reproduced v0 62-vector
+The earlier `v1` release is the externally reproduced v0 62-vector
 corpus plus nine language-neutral contract-edge vectors surfaced by the first
 independent implementation:
 
@@ -67,6 +81,9 @@ JM-Lab/rge-bench-java reproduced that exact digest from inputs alone on
 - `v2`: reproduced contract-surface release of that digest. Latest reproduced
   v2 digest is the 95-vector corpus,
   `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`.
+- `v3-candidate`: current candidate. Turns the five issue-29 discriminations into
+  oracle-bearing corpus behavior and makes malformed routing `invalid` only where
+  step 6 consults it. No new axis or outcome vocabulary. No inherited reproduction.
 
 ## Change rules
 

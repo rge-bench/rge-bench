@@ -1,8 +1,8 @@
 {
   "bench": "RGE-Bench",
-  "version": "v2",
+  "version": "v3-candidate",
   "profile": "rge-bench.fixture-json-sort-v1",
-  "note": "v1: the externally reproduced 62-vector v0 corpus plus language-neutral contract-edge vectors surfaced by the first independent implementation.",
+  "note": "v3-candidate: the reproduced 95-vector v2 corpus plus oracle-bearing discriminations for removed v1 origins, empty/null probe sets, uncovered occurrence, receiver-receipt blinding, and routing presence. No new axis or outcome vocabulary.",
   "axes": [
     "claim_support",
     "coverage_honesty",
@@ -1555,6 +1555,193 @@
       },
       "expected": "inconclusive_no_coverage",
       "non_claims": "prose cannot raise a verdict; the same record without the sentence reaches the same outcome"
+    },
+    {
+      "vector_id": "scc.v2_origin_boundary_observed_is_invalid",
+      "axis": "source_class_ceiling",
+      "property": "the removed v1 origin boundary_observed is invalid even at a strength the old five-class ladder accepted",
+      "inputs": {
+        "source_class": "boundary_observed",
+        "claim": "observed_in_path"
+      },
+      "expected": "invalid",
+      "non_claims": "invalid here is a typing failure, not a ranking of vantage; membership as an observer class does not re-admit this origin"
+    },
+    {
+      "vector_id": "scc.v2_origin_third_party_observed_is_invalid",
+      "axis": "source_class_ceiling",
+      "property": "the removed v1 origin third_party_observed is invalid even at a strength the old five-class ladder accepted",
+      "inputs": {
+        "source_class": "third_party_observed",
+        "claim": "independently_confirmed"
+      },
+      "expected": "invalid",
+      "non_claims": "invalid here is a typing failure, not a ranking of vantage; membership as an observer class does not re-admit this origin"
+    },
+    {
+      "vector_id": "cs.empty_probe_set_covers_nothing",
+      "axis": "claim_support",
+      "property": "an explicitly empty declared_probe_set is declared and covers nothing",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": []
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "covered-nothing is not the same answer as undeclared; the other inputs match the missing and null probe-set cases"
+    },
+    {
+      "vector_id": "cs.null_probe_set_is_undeclared",
+      "axis": "claim_support",
+      "property": "an explicit null declared_probe_set is undeclared and makes an absence claim unjudgeable",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": null
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "invalid",
+      "non_claims": "null is undeclared, not an empty set; the other inputs match the empty and missing probe-set cases"
+    },
+    {
+      "vector_id": "cs.occurrence_surface_outside_probe_set",
+      "axis": "claim_support",
+      "property": "a declared but uncovered occurrence surface is inconclusive before the occurrence branch, even when an event was seen",
+      "inputs": {
+        "claim": {
+          "kind": "occurrence",
+          "surface": "io_uring_submit"
+        },
+        "observer": {
+          "class": "independently_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": true,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "uncovered is decided before occurrence support; seeing an event outside the declared set does not make the surface covered"
+    },
+    {
+      "vector_id": "cs.absence_receiver_receipt",
+      "axis": "claim_support",
+      "property": "a covered, gap-free, unseen receiver-receipt absence is inconclusive because the subject can blind that observer",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "receiver_receipt",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ]
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "this is a benchmark model of subject-controllable observers, not a guarantee about every real receiver; independently_observed remains the non-blindable control"
+    },
+    {
+      "vector_id": "cs.absence_empty_routing_is_absent",
+      "axis": "claim_support",
+      "property": "an empty routing_enforced_by string is not present and does not restore absence support",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "boundary_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ],
+          "routing_enforced_by": ""
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "a routing identifier is a declaration used by this model, not verification that routing was enforced"
+    },
+    {
+      "vector_id": "cs.absence_null_routing_is_absent",
+      "axis": "claim_support",
+      "property": "a null routing_enforced_by value is not present and does not restore absence support",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "boundary_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ],
+          "routing_enforced_by": null
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "inconclusive_no_coverage",
+      "non_claims": "null, empty string, and a missing key are the same presence answer; a routing identifier is not proof of enforcement"
+    },
+    {
+      "vector_id": "cs.edge_malformed_routing_type_is_invalid",
+      "axis": "claim_support",
+      "property": "a non-string routing_enforced_by value is invalid where step 6 consults routing for a controllable observer",
+      "inputs": {
+        "claim": {
+          "kind": "absence",
+          "surface": "network_connect"
+        },
+        "observer": {
+          "class": "boundary_observed",
+          "declared_probe_set": [
+            "network_connect",
+            "file_open"
+          ],
+          "routing_enforced_by": 1
+        },
+        "observation": {
+          "saw_event": false,
+          "observation_gap": false
+        }
+      },
+      "expected": "invalid",
+      "non_claims": "invalid applies only on this consulted path; occurrence, already-contradicted, uncovered, and independent-observer paths do not consume the field"
     }
   ]
 }

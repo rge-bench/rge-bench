@@ -1,10 +1,25 @@
 # Independent Reproductions
 
-## v2 — reproduced
+## v3-candidate — no reproduction yet
+
+Digest `sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a`, 104 vectors, twelve axes.
+
+**The current 104-vector `v3-candidate` digest does not, and does not inherit v2's.** A version bump
+is not a published reproduction. The historical JM-Lab v2 run stays scoped to
+`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0` and is not this candidate's
+reproduction. `ref_example.py` is the author's own clean-room example and has never counted.
+
+What a reproducer needs to know: no new axis or outcome vocabulary. Nine vectors make previously
+prose-only or unpinned discriminations oracle-bearing, and step 6 now treats a non-string
+`routing_enforced_by` as `invalid` only on the consulted path. The 95 v2 vector entries are
+unchanged.
+
+## v2 — reproduced (historical)
 
 Digest `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`, 95 vectors, twelve axes. Published 2026-08-07; reproduced 2026-08-24.
 
-**This digest has one reported independent reproduction.** It does not inherit v1's.
+**This historical digest has one reported independent reproduction.** It does not inherit v1's, and it
+does not graduate the current candidate.
 
 **Two vectors were added on 2026-08-10 and the digest moved with them.** A mutation-adequacy
 check over the whole corpus (`scripts/check_rule_liveness.py`) found that `source_class_ceiling`
@@ -12,7 +27,7 @@ declared an `invalid` outcome no vector exercised: deleting the unknown-class an
 unknown-strength guard from a conforming implementation reproduced the previous digest. That is
 a hole in the contract rather than a gap in confidence, so `scc.edge_unknown_source_class_is_invalid`
 and `scc.edge_unknown_claim_strength_is_invalid` close it. Anyone who started against the
-90-vector digest `sha256:56d4d41e…` should move to the current one. `ref_example.py` is the author's own
+90-vector digest `sha256:56d4d41e…` should move to that 95-vector digest. `ref_example.py` is the author's own
 clean-room example and has never counted. The kit's own rule applies to its own release: candidate until
 a different author or organisation recomputes every `expected` from `inputs` alone.
 
@@ -75,7 +90,7 @@ against author-supplied vectors, recomputing every `expected` from `inputs` alon
 | 2026-07-01 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | historical v0, 60 vectors / 11 axes, `sha256:00f0feda78b35d911d2372646e7e759b61cfb41ae9c38a96fb34fd6263f34fd3` | 60/60 reproduced, all eleven axes pass, including `coverage_honesty` | superseded by the 62-vector v0 digest below |
 | 2026-07-03 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | latest reproduced v0, 62 vectors / 11 axes, `sha256:8603868389a18f8de6f593b03c2c9947bf145c79491f2b095e1da380b6abbc95` | 62/62 reproduced, all eleven axes pass; issuer-vantage vectors match the documented ceiling ranking | maintained checker: [JM-Lab/rge-bench-java](https://github.com/JM-Lab/rge-bench-java), standing log: [JM-Lab/rge-bench-java#1](https://github.com/JM-Lab/rge-bench-java/issues/1) |
 | 2026-07-03 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | current v1, 71 vectors / 11 axes, `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb` | 71/71 reproduced, all eleven axes pass; first run surfaced typed-JVM drift on the new edge vectors, then the checker implemented the declared language-neutral semantics from the contract text | maintained checker commit: [cd788eb](https://github.com/JM-Lab/rge-bench-java/commit/cd788eb9453eb8f13c4d910d968b0776b25e7f76), standing log: [JM-Lab/rge-bench-java#1](https://github.com/JM-Lab/rge-bench-java/issues/1) |
-| 2026-08-24 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | current v2, 95 vectors / 12 axes, `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0` | 95/95 reproduced, all twelve axes pass; contract text only, `expected` never read; U+2014 makes Python `ensure_ascii` load-bearing for the digest | maintained checker commit: [a1f7df8](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982), report: [issuecomment-5391653260](https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260), standing log: [JM-Lab/rge-bench-java#1](https://github.com/JM-Lab/rge-bench-java/issues/1) |
+| 2026-08-24 | JM-Lab | Results Reproduced | Spring Boot 4 / Jackson 3 | historical v2, 95 vectors / 12 axes, `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0` | 95/95 reproduced, all twelve axes pass; contract text only, `expected` never read; U+2014 makes Python `ensure_ascii` load-bearing for the digest | maintained checker commit: [a1f7df8](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982), report: [issuecomment-5391653260](https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260), standing log: [JM-Lab/rge-bench-java#1](https://github.com/JM-Lab/rge-bench-java/issues/1) |
 
 Sources: [JM-Lab reproduction thread](https://github.com/JM-Lab/spring-ai-playground/discussions/31)
 and [standing checker log](https://github.com/JM-Lab/rge-bench-java/issues/1).
@@ -85,11 +100,12 @@ and [standing checker log](https://github.com/JM-Lab/rge-bench-java/issues/1).
 [JM-Lab/rge-bench-java](https://github.com/JM-Lab/rge-bench-java) (Spring Boot 4 /
 Jackson 3) is the first independent implementation of the checker written to the
 README contract, importing nothing from this kit. It has reproduced every digest
-from the 55-vector v0 through the current 95-vector `v2` corpus from inputs alone.
-The v2 run matches the pinned `vectors_digest` byte-for-byte through profile
+from the 55-vector v0 through the historical 95-vector `v2` corpus from inputs alone.
+The v2 run matches that pinned digest byte-for-byte through profile
 `rge-bench/py-jsondumps/1` (sorted-key, `ensure_ascii` recipe). Native insertion-order and raw-UTF-8
 serialization yield different digests, which is the declare-the-canonicalization
-point surfacing in the provenance pin.
+point surfacing in the provenance pin. It has not been run against the current
+`v3-candidate` digest.
 
 ## Current status
 
@@ -101,9 +117,11 @@ reran the Java checker against this digest on 2026-07-03 with no checker-code ch
 corpus, pinned digest constant, and README counts changed. Per the digest-scoping rule above, the
 62-vector digest is now **reproduced**.
 
-The repository now carries a reproduced v2 digest,
-`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`,
-with 95 vectors. JM-Lab reported the v2 run on 2026-08-24: 95/95, twelve axes pass,
+The repository now carries a `v3-candidate` digest,
+`sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a`,
+with 104 vectors and no external reproduction. The historical v2 digest
+`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`
+remains reproduced and scoped to itself. JM-Lab reported that v2 run on 2026-08-24: 95/95, twelve axes pass,
 contract text only, `expected` never read, checker commit
 [`a1f7df8`](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982).
 The v1 71-vector digest remains reproduced and scoped to itself.
@@ -155,16 +173,19 @@ divergence.
 
 ## Version label
 
-The current repository state is v2. The v2 digest is
-`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`.
-JM-Lab reproduced that exact digest from inputs alone with `rge-bench-java`
-commit [`a1f7df8`](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982).
+The current repository state is `v3-candidate`. The current digest is
+`sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a`.
+It has no external reproduction. The historical v2 digest
+`sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`
+was reproduced by `rge-bench-java` commit
+[`a1f7df8`](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982).
 
 ## Claim ceiling
 
-This file records external reproduction of the current RGE-Bench v2 digest
+This file records external reproduction of the historical RGE-Bench v2 digest
 (`sha256:ba0e3795...`) and, historically, the v1 `sha256:e76982...` and v0 `sha256:860386...`,
-`sha256:00f0feda...`, and `sha256:575fe0...` digests. It is not a claim that the RGE-Bench contract is
+`sha256:00f0feda...`, and `sha256:575fe0...` digests. The current `v3-candidate` digest is not among
+them. It is not a claim that the RGE-Bench contract is
 complete, that a checked system is safe, or that any evidence source proves more
 than its source class and coverage allow. Reproduction is a claim about a digest's
 reproducibility from inputs, nothing wider.
