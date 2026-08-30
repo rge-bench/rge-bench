@@ -46,6 +46,22 @@ V2_EDGE_VECTORS.update({
     "cs.edge_unknown_claim_kind_is_invalid": ("claim_support", "invalid"),
 })
 
+V3_EDGE_VECTORS = dict(V2_EDGE_VECTORS)
+V3_EDGE_VECTORS.update({
+    "scc.v2_origin_boundary_observed_is_invalid": ("source_class_ceiling", "invalid"),
+    "scc.v2_origin_third_party_observed_is_invalid": ("source_class_ceiling", "invalid"),
+    "cs.empty_probe_set_covers_nothing": ("claim_support", "inconclusive_no_coverage"),
+    "cs.null_probe_set_is_undeclared": ("claim_support", "invalid"),
+    "cs.occurrence_surface_outside_probe_set": ("claim_support", "inconclusive_no_coverage"),
+    "cs.absence_receiver_receipt": ("claim_support", "inconclusive_no_coverage"),
+    "cs.absence_empty_routing_is_absent": ("claim_support", "inconclusive_no_coverage"),
+    "cs.absence_null_routing_is_absent": ("claim_support", "inconclusive_no_coverage"),
+    "cs.edge_malformed_routing_type_is_invalid": ("claim_support", "invalid"),
+    # Unchanged/no-op controls: these keep their v2 expected outcomes.
+    "cs.absence_independently_observed": ("claim_support", "supported"),
+    "scc.producer_asserted": ("source_class_ceiling", "within_ceiling"),
+})
+
 CLAIM_SUPPORT_OUTCOMES = {
     "supported", "unsupported", "contradicted", "inconclusive_no_coverage", "invalid",
 }
@@ -96,6 +112,20 @@ POLICIES = {
             "**The current 95-vector `v2-candidate` digest does not, and does not inherit v1's.**",
         ],
         "required_reproductions_phrase": "## v2-candidate — no reproduction yet",
+    },
+    "v3-candidate": {
+        "vector_count": 104,
+        "reproduced": False,
+        "maturity_prefix": "candidate",
+        "edge_vectors": V3_EDGE_VECTORS,
+        "forbidden_doc_phrases": [
+            "the current v3-candidate digest has one reported independent reproduction",
+            "v3-candidate conformance",
+        ],
+        "required_doc_phrases": [
+            "**The current 104-vector `v3-candidate` digest does not, and does not inherit v2's.**",
+        ],
+        "required_reproductions_phrase": "## v3-candidate — no reproduction yet",
     },
 }
 

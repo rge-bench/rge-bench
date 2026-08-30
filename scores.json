@@ -17,9 +17,9 @@
   "matrix": {
     "ref_example": {
       "claim_support": {
-        "reproduced": 20,
+        "reproduced": 27,
         "status": "pass",
-        "total": 20
+        "total": 27
       },
       "coverage_honesty": {
         "reproduced": 6,
@@ -62,9 +62,9 @@
         "total": 6
       },
       "source_class_ceiling": {
-        "reproduced": 11,
+        "reproduced": 13,
         "status": "pass",
-        "total": 11
+        "total": 13
       },
       "sufficiency": {
         "reproduced": 6,
@@ -78,5 +78,5 @@
       }
     }
   },
-  "vectors_digest": "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0"
+  "vectors_digest": "sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a"
 }

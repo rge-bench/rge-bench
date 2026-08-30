@@ -1,4 +1,4 @@
-# RGE-Bench external reproduction kit (v2)
+# RGE-Bench external reproduction kit (v3-candidate)
 
 [![DOI](https://zenodo.org/badge/1280018754.svg)](https://doi.org/10.5281/zenodo.20842502)
 [![CI](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/rge-bench/rge-bench/actions/workflows/ci.yml)
@@ -17,15 +17,17 @@ stays **candidate, not conformance, until a different author or organisation rep
 inputs alone**. The 71-vector **v1** digest has that evidence: JM-Lab's Spring/Jackson checker reproduced
 it from inputs alone, byte-for-byte against the pinned digest.
 
-**The current 95-vector `v2` digest has one reported independent reproduction** and does not inherit v1's.
-It adds an axis and an outcome vocabulary and narrows another axis, which `VERSIONING.md` required be
-re-reproduced rather than carried over. JM-Lab reproduced this exact digest from inputs alone.
+**The current 104-vector `v3-candidate` digest does not, and does not inherit v2's.**
+It turns five previously unpinned discriminations into oracle-bearing corpus behavior and makes
+malformed routing `invalid` only where step 6 consults it. No new axis or outcome vocabulary.
+The historical 95-vector `v2` digest remains reproduced and scoped to itself.
 
 This kit exists so a **different author or organisation** can implement the spec and reproduce the vectors
 independently. Two independent, interoperable implementations are the RFC bar for spec maturity; an
 external-party reproduction (a different author/org, not the kit's author) is the step that graduates a
 specific digest from **candidate** to **conformance**. v1 and v2 each have one reported independent
-reproduction, scoped to their own digest. The kit needs nothing outside this directory.
+reproduction, scoped to their own digest. The current `v3-candidate` digest does not inherit either.
+The kit needs nothing outside this directory.
 
 - `vectors.json`: the spec-owned vectors (content-addressed; `vectors_digest` below).
 - `checker.py`: the commodity scorer, per-axis pass/partial/fail, **no aggregate score**.
@@ -56,10 +58,9 @@ reproduction is independent.
 ```json
 { "vector_id", "axis", "property", "inputs", "expected", "non_claims" }
 ```
-`expected` is the outcome a correct reviewer must reach from `inputs` alone. `v2` has 95
-vectors across twelve axes: the externally reproduced v0 62-vector corpus, nineteen contract-edge vectors
-(`*.edge_*`) that promote previously prose-only semantics into oracle-bearing corpus behavior, and the
-`claim_support` axis with the narrowed origin ceiling described below.
+`expected` is the outcome a correct reviewer must reach from `inputs` alone. `v3-candidate` has 104
+vectors across twelve axes: the 95-vector v2 corpus, preserved entry-for-entry, plus nine vectors that
+make the issue-29 discriminations oracle-bearing. No new axis or outcome vocabulary.
 
 ## Contract edge semantics
 
@@ -85,10 +86,14 @@ count changes and external reproductions do not by themselves create a new major
 `vectors_digest` starts candidate until a different author or organisation reproduces that exact digest
 from inputs alone.
 
-The current digest is `v2` with 95 vectors:
+The current digest is `v3-candidate` with 104 vectors:
+`sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a`. It has no external
+reproduction and does not inherit v2's.
+
+The last reproduced digest is v2 with 95 vectors:
 `sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`. JM-Lab/rge-bench-java reproduced that exact digest from inputs alone at checker commit [`a1f7df8`](https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982) ([report](https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260)).
 
-The last reproduced digest is v1 with 71 vectors:
+The earlier reproduced v1 digest has 71 vectors:
 `sha256:e769822bc6c9e31085da7b1a17b163b9747fe0d04314fbb8685d4e612087c7cb`.
 JM-Lab/rge-bench-java reproduced that exact digest from inputs alone after first surfacing the expected
 typed-JVM drift on the newly oracled edge vectors. That reproduction read `source_class_ceiling` per the
@@ -144,10 +149,23 @@ map on what the field ranks rather than on what it is called.
 `producer_reported`, `receiver_receipt`, `boundary_observed`, `third_party_observed`,
 `independently_observed`. A class this reader cannot type yields `invalid`, fail-closed.
 
+**Subject-controllable set (benchmark model, not a real-world guarantee).** In this benchmark
+`producer_reported`, `receiver_receipt`, `boundary_observed`, and `third_party_observed` are
+subject-controllable; `independently_observed` is not. Observer/vantage vocabulary is distinct from
+the smaller `source_class_ceiling` origin vocabulary. Membership here does not re-admit a removed
+origin.
+
 **`blinding_cost` is derived, never declared.** A producer cannot assert that it is hard to blind. The
 predicate is computed from the class and from `routing_enforced_by`: an observer the subject can blind
 without privilege cannot support an absence claim *unless* its routing is enforced by a party the subject
 does not control. That escape is why this is a typing and not a demotion — the class is not a caste.
+
+**`routing_enforced_by` presence.** Consulted only at step 6, for a subject-controllable observer's
+covered, gap-free, unseen absence claim. Absent, `null`, or `""` is not present; a non-empty JSON
+string is present; any other JSON type is `invalid`. Presence uses the same non-empty JSON string
+rule as digest fields; whitespace is not trimmed. A string is a declaration used by the model, not
+verification of actual enforced routing. Occurrence, already-contradicted, uncovered, and
+independent-observer paths do not consult this field.
 
 Note that `producer_reported` and `receiver_receipt` appear on **both** lists. That is not an error: a
 party that asserts is also a party that saw. It is precisely why one ordinal axis over the union cannot
@@ -162,7 +180,8 @@ work, since the same value sits at different heights depending on which question
 3. `observation.observation_gap` and `kind == absence` → `inconclusive_no_coverage`
 4. `kind == occurrence` → `supported` if `saw_event`, else `unsupported`
 5. `kind == absence` and `saw_event` → `contradicted`
-6. `kind == absence` and the subject can blind this observer (see above) → `inconclusive_no_coverage`
+6. `kind == absence` and the subject can blind this observer (see above) → `inconclusive_no_coverage`,
+   unless `routing_enforced_by` is a non-empty JSON string; a non-string value here is `invalid`
 7. otherwise → `supported`
 
 An explicitly empty `declared_probe_set` is **declared and covers nothing** (step 2); a `null` or absent
@@ -187,11 +206,12 @@ each `expected` from `inputs`, imports nothing from this kit, and matches the pe
 step that graduates the vectors from candidate to conformance. (Within this kit, `ref_example.py` is the
 author's own clean-room example, not an external reproduction.)
 
-Reproduction is digest-scoped: the 71-vector v1 corpus and the current 95-vector `v2` corpus each have
-one reported independent reproduction.
+Reproduction is digest-scoped: the 71-vector v1 corpus and the 95-vector `v2` corpus each have
+one reported independent reproduction, scoped to those digests. The current `v3-candidate` digest
+does not inherit them.
 A match against an earlier digest would not graduate this corpus; earlier 55-vector, 60-vector, and
 62-vector digests are recorded separately. See
-[`REPRODUCTIONS.md`](REPRODUCTIONS.md) for both reproductions and for contract-clarification work surfaced
+[`REPRODUCTIONS.md`](REPRODUCTIONS.md) for those reproductions and for contract-clarification work surfaced
 by the first run.
 
 ## Neutrality
@@ -203,7 +223,8 @@ Neutrality here rests on what this repository demonstrably enforces, not on a cl
 - reference implementations are **scored, never blessed**; `ref_example.py` is the author's own clean-room
   example, explicitly *not* an external reproduction;
 - a digest stays **candidate, not conformance**, until a different author or organisation reproduces it from
-  inputs alone; v1 and v2 each have one reported independent reproduction, scoped to their own digest, and the bench does
+  inputs alone; v1 and v2 each have one reported independent reproduction, scoped to their own digest,
+  the current `v3-candidate` digest does not inherit them, and the bench does
   not certify itself.
 
 ## Claim ceiling
@@ -211,15 +232,16 @@ Neutrality here rests on what this repository demonstrably enforces, not on a cl
 Measures the **reviewability of evidence**, not agent safety, correctness, or compliance. A passing vector
 means "this evidence is reviewer-gradeable on this axis", never "the agent is safe / governed / compliant".
 No scalar winner. Reproduction status is digest-scoped: the 60-vector and 62-vector v0 digests and the
-71-vector v1 digest and the current 95-vector `v2` digest have reported independent reproduction. Every claim in this kit is
+71-vector v1 digest and the 95-vector `v2` digest have reported independent reproduction. The current
+`v3-candidate` digest does not. Every claim in this kit is
 something you recompute from the bytes, not something you take on the kit's word.
 
 ## Provenance
 
-`vectors_digest: sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0`. This is `sha256`
+`vectors_digest: sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a`. This is `sha256`
 over the `vectors` array under profile `rge-bench/py-jsondumps/1` (`json.dumps(doc["vectors"], sort_keys=True,
 separators=(",", ":"), ensure_ascii=True, allow_nan=False)` encoded UTF-8), NOT the SHA of the `vectors.json` file bytes (which differs).
-Recompute it that exact way to match. Snapshot of the current RGE-Bench v2 vector set; the
+Recompute it that exact way to match. Snapshot of the current RGE-Bench v3-candidate vector set; the
 digest pins it, so an external reproduction is over the same bytes.
 
 A machine-readable manifest is in [`provenance.json`](provenance.json) (digest, vector count, axis list,

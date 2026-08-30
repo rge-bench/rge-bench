@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Guard: the current 95-vector digest is v2 and carries the JM-Lab reproduction.
+"""Guard: the historical 95-vector v2 digest stays recorded and is not the current one.
 
-Fails while the public surface still calls this digest v2-candidate or leaves
-external_reproduction null. Does not score axes or change vectors.
+Validates the frozen JM-Lab v2 record (digest, checker, report) without requiring the
+live corpus to still be v2. Fails if that record is missing or corrupt, or if it is
+attached as the current candidate's reproduction. Does not score axes or change vectors.
 """
 
 from __future__ import annotations
 
+import copy
 import json
 import sys
 from pathlib import Path
@@ -19,31 +21,6 @@ CHECKER = "a1f7df862eec4e8480e6c3f3f4f4cec2ec334982"
 REPORT = "https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260"
 ARTIFACT = f"https://github.com/JM-Lab/rge-bench-java/commit/{CHECKER}"
 
-STALE_PHRASES = [
-    "## v2-candidate — no reproduction yet",
-    "**Nothing here has been reproduced by anyone but the author.**",
-    "**The current 95-vector `v2-candidate` digest does not, and does not inherit v1's.**",
-    "**It has no external reproduction.**",
-    "No external reproduction. It does not inherit v1's.",
-    "**No one has reproduced this digest**",
-    "`external_reproduction: null`",
-    "which `v2-candidate` narrows",
-    "changed in `v2-candidate`",
-    "> **Changed in `v2-candidate`.**",
-    "`v2-candidate` splits how",
-]
-
-REQUIRED_CURRENT_LABELS = [
-    ("README.md", "# RGE-Bench external reproduction kit (v2)"),
-    ("README.md", "### Two questions, two axes (changed in `v2`)"),
-    ("PROFILE-MAPPING.md", "> **Changed in `v2`.**"),
-    ("PROFILE-MAPPING.md", "`v2` splits how"),
-    ("ADMISSION.md", "Graded against the above at `v2`, 95 vectors"),
-]
-
-# Either leftover claim is a fail. Deleting only the ACM-assumes-code
-# sentence while keeping "Replicated is unreachable for corpora" must
-# still fail — that was the named false-green.
 FORBIDDEN_REPLICATION_RATIONALE = (
     "ACM assumes the author-supplied artifact is the author's",
     "Replicated is not reachable here, and that is a property of conformance corpora",
@@ -55,68 +32,114 @@ def _folded(text: str) -> str:
     return " ".join(text.split())
 
 
-def main() -> int:
-    vectors_doc = json.loads((ROOT / "vectors.json").read_text(encoding="utf-8"))
-    provenance = json.loads((ROOT / "provenance.json").read_text(encoding="utf-8"))
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    reproductions = (ROOT / "REPRODUCTIONS.md").read_text(encoding="utf-8")
-    versioning = (ROOT / "VERSIONING.md").read_text(encoding="utf-8")
-    profile_mapping = (ROOT / "PROFILE-MAPPING.md").read_text(encoding="utf-8")
-    admission = (ROOT / "ADMISSION.md").read_text(encoding="utf-8")
+def _historical_entry(provenance: dict) -> dict | None:
+    prior = provenance.get("prior_external_reproductions")
+    if not isinstance(prior, list):
+        return None
+    matches = [
+        entry
+        for entry in prior
+        if isinstance(entry, dict) and entry.get("scoped_to_digest") == DIGEST
+    ]
+    return matches[0] if len(matches) == 1 else None
+
+
+def historical_record_failures(provenance: dict) -> list[str]:
+    """Failures about the frozen v2 record. Independent of the live version label."""
+    failures: list[str] = []
+    historical = _historical_entry(provenance)
+    if historical is None:
+        failures.append(
+            f"prior_external_reproductions must contain exactly one record scoped to {DIGEST}"
+        )
+        return failures
+    if historical.get("checker_commit") != CHECKER:
+        failures.append(f"historical v2 checker_commit must be {CHECKER}")
+    if historical.get("report") != REPORT:
+        failures.append("historical v2 report must pin issuecomment-5391653260")
+    if historical.get("artifact") != ARTIFACT:
+        failures.append("historical v2 artifact must pin the JM-Lab checker commit URL")
+    return failures
+
+
+def attachment_failures(provenance: dict) -> list[str]:
+    """The historical run must not be claimed as the current digest's reproduction."""
+    failures: list[str] = []
+    current_digest = provenance.get("vectors_digest")
+    current = provenance.get("external_reproduction")
+    if current_digest == DIGEST:
+        failures.append(
+            "live vectors_digest is still the historical v2 digest; a new candidate must move it"
+        )
+    if isinstance(current, dict):
+        if current.get("scoped_to_digest") == DIGEST:
+            failures.append(
+                "historical v2 reproduction is attached as current external_reproduction"
+            )
+        if current.get("checker_commit") == CHECKER and current_digest != DIGEST:
+            failures.append(
+                "the v2 checker commit is attached as the current digest's reproduction"
+            )
+    return failures
+
+
+def _self_test_boundary_breaks() -> list[str]:
+    """Prove both break directions fail this guard, not only the live files."""
+    good_historical = {
+        "scoped_to_digest": DIGEST,
+        "checker_commit": CHECKER,
+        "report": REPORT,
+        "artifact": ARTIFACT,
+    }
+    candidate_digest = "sha256:" + ("ab" * 32)
+    base = {
+        "vectors_digest": candidate_digest,
+        "external_reproduction": None,
+        "prior_external_reproductions": [good_historical],
+    }
     failures: list[str] = []
 
-    if provenance.get("vectors_digest") != DIGEST:
-        failures.append(f"guard is pinned to {DIGEST}, provenance has {provenance.get('vectors_digest')}")
-    if vectors_doc.get("version") != "v2":
-        failures.append(f"vectors.json version is {vectors_doc.get('version')!r}, expected 'v2'")
-    if provenance.get("version") != "v2":
-        failures.append(f"provenance.json version is {provenance.get('version')!r}, expected 'v2'")
+    missing = copy.deepcopy(base)
+    missing["prior_external_reproductions"] = []
+    if not historical_record_failures(missing):
+        failures.append("self-test: missing historical record must fail the v2 guard")
 
-    current = provenance.get("external_reproduction")
-    if not isinstance(current, dict):
-        failures.append("external_reproduction is absent or not an object")
-    else:
-        if current.get("checker_commit") != CHECKER:
-            failures.append(f"external_reproduction.checker_commit must be {CHECKER}")
-        if current.get("report") != REPORT:
-            failures.append("external_reproduction.report must pin issuecomment-5391653260")
-        if current.get("artifact") != ARTIFACT:
-            failures.append("external_reproduction.artifact must pin the JM-Lab checker commit URL")
-        if current.get("scoped_to_digest") != DIGEST:
-            failures.append("external_reproduction.scoped_to_digest must be the current digest")
+    corrupt = copy.deepcopy(base)
+    corrupt["prior_external_reproductions"][0]["checker_commit"] = "deadbeef"
+    if not historical_record_failures(corrupt):
+        failures.append("self-test: corrupt historical checker must fail the v2 guard")
 
-    if "candidate_reproduction_gate" in provenance:
-        failures.append("candidate_reproduction_gate must be removed once this digest is reproduced")
+    attached = copy.deepcopy(base)
+    attached["external_reproduction"] = dict(good_historical)
+    if not attachment_failures(attached):
+        failures.append("self-test: old reproduction attached to the candidate must fail")
 
-    if "v2-candidate narrows" in json.dumps(provenance, sort_keys=True):
-        failures.append("historical reproduction scope still names the current release v2-candidate")
+    intact = historical_record_failures(base) + attachment_failures(base)
+    if intact:
+        failures.append(f"self-test: intact historical record must pass, got {intact}")
+    return failures
 
-    maturity = provenance.get("maturity", "")
-    if "candidate" in maturity.lower() and "no external reproduction" in maturity.lower():
-        failures.append(f"stale candidate maturity remains: {maturity!r}")
 
-    surface = readme + "\n" + reproductions + "\n" + versioning + "\n" + profile_mapping + "\n" + admission
-    for phrase in STALE_PHRASES:
-        if phrase in surface:
-            failures.append(f"stale no-reproduction wording remains: {phrase!r}")
+def main() -> int:
+    provenance = json.loads((ROOT / "provenance.json").read_text(encoding="utf-8"))
+    reproductions = (ROOT / "REPRODUCTIONS.md").read_text(encoding="utf-8")
+    failures: list[str] = []
 
-    current_surfaces = {
-        "README.md": readme,
-        "PROFILE-MAPPING.md": profile_mapping,
-        "ADMISSION.md": admission,
-    }
-    for filename, phrase in REQUIRED_CURRENT_LABELS:
-        if phrase not in current_surfaces[filename]:
-            failures.append(f"{filename} is missing current v2 label: {phrase!r}")
+    failures.extend(historical_record_failures(provenance))
+    failures.extend(attachment_failures(provenance))
+    failures.extend(_self_test_boundary_breaks())
 
-    if "current v2, 95 vectors / 12 axes" not in reproductions:
-        failures.append("REPRODUCTIONS.md must record the current v2 row (95 vectors / 12 axes)")
+    if f"historical v2, 95 vectors / 12 axes, `{DIGEST}`" not in reproductions:
+        failures.append(
+            "REPRODUCTIONS.md must record the historical v2 row (95 vectors / 12 axes) "
+            "with the frozen digest"
+        )
+    if CHECKER not in reproductions or "issuecomment-5391653260" not in reproductions:
+        failures.append("REPRODUCTIONS.md must keep the historical v2 checker and report pins")
 
     folded_reproductions = _folded(reproductions)
     if "not established by these runs" not in folded_reproductions:
-        failures.append(
-            "REPRODUCTIONS.md must say Replicated is not established by these runs"
-        )
+        failures.append("REPRODUCTIONS.md must say Replicated is not established by these runs")
     for phrase in FORBIDDEN_REPLICATION_RATIONALE:
         if phrase in folded_reproductions:
             failures.append(f"false Replicated rationale remains: {phrase!r}")
@@ -126,7 +149,7 @@ def main() -> int:
         for failure in failures:
             print(f"- {failure}", file=sys.stderr)
         return 1
-    print("v2 reproduction guard passed")
+    print("v2 reproduction guard passed: historical record intact, not attached to candidate")
     return 0
 
 

@@ -1,12 +1,12 @@
 {
   "bench": "RGE-Bench",
-  "version": "v2",
+  "version": "v3-candidate",
   "spec_owner": "RGE-Bench authors",
   "vectors_file": "vectors.json",
-  "vectors_digest": "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0",
+  "vectors_digest": "sha256:93f8ae9654eb5a16dee28d882087669cae5183e02e116ba1e8071a30594cfb6a",
   "canonicalization_profile": "rge-bench/py-jsondumps/1",
   "digest_method": "sha256 over the `vectors` array under profile rge-bench/py-jsondumps/1: CPython json.dumps(doc['vectors'], sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False) encoded utf-8 (NOT the SHA of the vectors.json file bytes)",
-  "vector_count": 95,
+  "vector_count": 104,
   "axes": [
     "claim_support",
     "coverage_honesty",
@@ -31,21 +31,24 @@
     "code": "Apache-2.0",
     "vectors_and_docs": "CC-BY-4.0"
   },
-  "maturity": "digest-scoped externally reproduced",
-  "non_claims": "This manifest attests the provenance and content-address of the spec-owned v2 vector set only. It is NOT a claim about any agent behavior, safety, or compliance. Reproduction is digest-scoped: the recorded JM-Lab run covers this digest and does not graduate any later digest.",
-  "external_reproduction": {
-    "reproducer": "JM-Lab",
-    "stack": "Spring Boot 4 / Jackson 3",
-    "artifact": "https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982",
-    "report": "https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260",
-    "date": "2026-08-24",
-    "checker_commit": "a1f7df862eec4e8480e6c3f3f4f4cec2ec334982",
-    "result": "95/95 vectors reproduced; all twelve axes pass; digest byte-for-byte; contract text only, expected never read",
-    "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1",
-    "scoped_to_digest": "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0",
-    "canonicalization_note": "v2 introduces U+2014; Python json.dumps ensure_ascii (non-ASCII as \\uXXXX) is load-bearing. A JVM serializer writing raw UTF-8 over the same sorted structure yields a different digest."
-  },
+  "maturity": "candidate; no external reproduction of this digest",
+  "non_claims": "This manifest attests the provenance and content-address of the spec-owned v3-candidate vector set only. It is NOT a claim about any agent behavior, safety, or compliance. Reproduction is digest-scoped: the recorded JM-Lab v2 run covers sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0 and does not graduate this digest.",
+  "external_reproduction": null,
+  "candidate_reproduction_gate": "A fresh digest starts candidate. The JM-Lab v2 run is scoped to sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0 and does not graduate this digest. A version bump is not a published reproduction.",
   "prior_external_reproductions": [
+    {
+      "reproducer": "JM-Lab",
+      "stack": "Spring Boot 4 / Jackson 3",
+      "artifact": "https://github.com/JM-Lab/rge-bench-java/commit/a1f7df862eec4e8480e6c3f3f4f4cec2ec334982",
+      "report": "https://github.com/JM-Lab/rge-bench-java/issues/1#issuecomment-5391653260",
+      "date": "2026-08-24",
+      "checker_commit": "a1f7df862eec4e8480e6c3f3f4f4cec2ec334982",
+      "result": "95/95 vectors reproduced; all twelve axes pass; digest byte-for-byte; contract text only, expected never read",
+      "standing_log": "https://github.com/JM-Lab/rge-bench-java/issues/1",
+      "scoped_to_digest": "sha256:ba0e3795d75c788fa48313ab462493f22d78759851d1b3275d8117051bb22fd0",
+      "does_not_travel_because": "this candidate adds oracle-bearing discriminations and treats a non-string routing_enforced_by as invalid where step 6 consults it; the v2 run never saw this digest",
+      "canonicalization_note": "v2 introduces U+2014; Python json.dumps ensure_ascii (non-ASCII as \\uXXXX) is load-bearing. A JVM serializer writing raw UTF-8 over the same sorted structure yields a different digest."
+    },
     {
       "reproducer": "JM-Lab",
       "stack": "Spring Boot 4 / Jackson 3",
@@ -75,7 +78,7 @@
     ],
     "signatures_required": 1,
     "rule": "ADMISSION.md",
-    "rule_digest": "sha256:ea3a0e6a5b83fa683c11c9848443cde44f670627b4aecc5a2b324c79ec8f432c",
+    "rule_digest": "sha256:8bc00f9d09f59c076fcaecdc2a71cf06f176caf61d654cc0bb82211fb4b9b359",
     "may_be_a_conformance_bar": false,
     "withdrawn": [],
     "non_claims": "Declares who may admit a vector and under which rule text. It does not claim the rule is externally governed, that any vector has been independently admitted, or that the corpus is fit to be a pass-or-fail bar; `may_be_a_conformance_bar` is false precisely because `mode` is vendor_owned."
