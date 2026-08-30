@@ -78,7 +78,7 @@
     ],
     "signatures_required": 1,
     "rule": "ADMISSION.md",
-    "rule_digest": "sha256:8bc00f9d09f59c076fcaecdc2a71cf06f176caf61d654cc0bb82211fb4b9b359",
+    "rule_digest": "sha256:e2e63bd19bd47e136efd4ee326d78508dcd838a02d07ac510fc7d295421b412e",
     "may_be_a_conformance_bar": false,
     "withdrawn": [],
     "non_claims": "Declares who may admit a vector and under which rule text. It does not claim the rule is externally governed, that any vector has been independently admitted, or that the corpus is fit to be a pass-or-fail bar; `may_be_a_conformance_bar` is false precisely because `mode` is vendor_owned."
