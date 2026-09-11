@@ -79,6 +79,18 @@ These clarifications came from the first independent reproduction report. They w
 v0; v1 makes them part of the corpus and therefore created a fresh digest that required a fresh
 external reproduction.
 
+The two edges below are asserted directly against `ref_example.py` by `scripts/check_contract_edges.py`.
+No vector carries them, so stating them does not move the digest; they record what the reference already
+does rather than a new rule:
+
+- `coverage_honesty` is `invalid` when `declared_cases` is an empty array, so an empty declared set never
+  confirms vacuously. It is also `invalid` when `case_results` is missing, `null`, or any JSON value other
+  than an object; an array, including `[]`, is not an object. An empty `case_results` object `{}` is
+  present: each declared case then reads as not run, so the outcome is `incomplete`.
+- `retained_replay` treats an absent or `null` `carrier_valid` as missing, and a missing carrier flag does
+  not make a carrier valid: the outcome is `rejected_carrier`, as for `false`, before `records_retained`
+  or the replayed sets are read.
+
 ## Version and stability policy
 
 RGE-Bench versions name the contract surface, not the amount of attention a digest has received. Vector

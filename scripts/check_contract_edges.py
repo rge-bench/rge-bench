@@ -27,6 +27,15 @@ def _controllable_absence(routing=_ABSENT):
     }
 
 
+def _retained_replay(carrier=_ABSENT):
+    # Records retained and replayed == recorded, so a carrier flag read as valid would
+    # fall through to replayed_match. Only the carrier flag varies.
+    inputs = {"records_retained": True, "replayed": ["read"], "recorded": ["read"]}
+    if carrier is not _ABSENT:
+        inputs["carrier_valid"] = carrier
+    return inputs
+
+
 CASES = [
     (
         "empty digest is missing",
@@ -297,6 +306,87 @@ CASES = [
             "observation": {"saw_event": False, "observation_gap": False},
         },
         "supported",
+    ),
+    # coverage_honesty shape edges no vector forces. Each input is chosen so a vacuous
+    # confirmation or a non-object read as an empty map would land on a different outcome.
+    (
+        "an empty declared case set is invalid, never a vacuous confirmation",
+        "coverage_honesty",
+        {"declared_cases": [], "case_results": {"c1": "passed"}},
+        "invalid",
+    ),
+    (
+        "a missing case_results key is invalid",
+        "coverage_honesty",
+        {"declared_cases": ["c1"]},
+        "invalid",
+    ),
+    (
+        "a null case_results is invalid",
+        "coverage_honesty",
+        {"declared_cases": ["c1"], "case_results": None},
+        "invalid",
+    ),
+    (
+        "an empty case_results array is not an object and is invalid",
+        "coverage_honesty",
+        {"declared_cases": ["c1"], "case_results": []},
+        "invalid",
+    ),
+    (
+        "a case_results array of per-case objects is not an object and is invalid",
+        "coverage_honesty",
+        {"declared_cases": ["c1"], "case_results": [{"c1": "passed"}]},
+        "invalid",
+    ),
+    (
+        "a string case_results is not an object and is invalid",
+        "coverage_honesty",
+        {"declared_cases": ["c1"], "case_results": "passed"},
+        "invalid",
+    ),
+    (
+        "an empty case_results object is present and every declared case reads not run",
+        "coverage_honesty",
+        {"declared_cases": ["c1", "c2"], "case_results": {}},
+        "incomplete",
+    ),
+    (
+        "coverage_honesty control: every declared case passed stays confirmed",
+        "coverage_honesty",
+        {"declared_cases": ["c1"], "case_results": {"c1": "passed"}},
+        "confirmed",
+    ),
+    # retained_replay: a missing carrier flag is not a valid carrier.
+    (
+        "an absent carrier_valid flag is missing and rejects the carrier",
+        "retained_replay",
+        _retained_replay(),
+        "rejected_carrier",
+    ),
+    (
+        "a null carrier_valid flag is missing and rejects the carrier",
+        "retained_replay",
+        _retained_replay(None),
+        "rejected_carrier",
+    ),
+    (
+        "a false carrier_valid flag rejects the carrier",
+        "retained_replay",
+        _retained_replay(False),
+        "rejected_carrier",
+    ),
+    (
+        "a rejected carrier is decided before records_retained is consulted",
+        "retained_replay",
+        {"carrier_valid": False, "records_retained": False, "replayed": [], "recorded": []},
+        "rejected_carrier",
+    ),
+    (
+        "retained_replay control: a true carrier_valid flag reaches the replay comparison",
+        "retained_replay",
+        _retained_replay(True),
+        "replayed_match",
     ),
 ]
 
